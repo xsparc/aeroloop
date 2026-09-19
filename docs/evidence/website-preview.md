@@ -1,9 +1,10 @@
-# Website preview checkpoint
+# Website integration checkpoint
 
 On 2026-09-20, the reusable viewer was integrated into a separate static website
 preview at `/work/aeroloop/`. The component is pinned to AeroLoop commit
 `a5734cfc2150032ee291993f955928043bca9730`, with a source allowlist, file checksums
-and Apache-2.0 license. The website change is a draft for maintainer review.
+and Apache-2.0 license. The maintainer subsequently squash-merged the website
+change and the reusable viewer; both reviewed trees reached their main branches.
 
 Three actual CPU recordings from the clean-checkout audit are displayed: seed 0
 of hover, north position-step and east force-pulse. Each selected replay requires
@@ -20,10 +21,13 @@ passed again, covering keyboard controls, accessibility, no-JavaScript evidence,
 3D rendering and four viewport sizes in light/dark themes. The staged privacy
 scan and immutable source/data hash checks passed.
 
-The website's hosted GitHub Actions jobs did not start because its Actions budget
-prevents further use. This is an outstanding hosted validation gate, despite the
-completed local checks. AeroLoop's own public PR checks passed. No budget, billing,
-production configuration or merge was changed.
+After that merge, the existing automatic Cloudflare build succeeded. The
+[post-merge audit](mvp-audit.md) passed all ten focused browser checks on the served
+page, both site-wide content audits and exact byte/hash comparisons of all 23
+public AeroLoop evidence files. These checks only read the already-served site.
 
-The implementation is ready for preview review. Maintainer review, hosted website
-validation and a release decision remain required before claiming a released MVP.
+The website's hosted GitHub Actions jobs still did not start because its Actions
+budget prevents further use. This is an outstanding hosted validation gate,
+despite the completed local and live checks. AeroLoop's own public main-branch
+checks passed. Maintainer review is complete; hosted website validation and a
+versioned release decision remain open.

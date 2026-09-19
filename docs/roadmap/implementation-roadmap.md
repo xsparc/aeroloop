@@ -12,14 +12,23 @@ Public deployment and merges are separate decisions.
 | AL-003 | Strict allowlisted export, corruption/privacy tests and accessible local replay | Verified locally |
 | AL-004 | Isaac environment smoke, recorded physics, trained hover policy, fresh reload, held-out evaluation | Verified locally: 3/3 physics checks and 20/20 trained held-out trials; public summary validated |
 | AL-005A | Reusable React/Three.js viewer with explicit frames, integrity checks and accessible controls | Verified locally: five unit checks and six browser checks |
-| AL-005B | Separate website preview PR with immutable viewer and distinct Isaac evidence | Draft prepared; local checks pass, maintainer review and hosted Actions budget gate pending |
+| AL-005B | Separate website preview PR with immutable viewer and distinct Isaac evidence | Maintainer merged; local and served-site checks pass; hosted Actions execution remains blocked |
 | AL-005C | Clean-checkout reproduction audit | Verified: fresh native build, 15/15 CPU trials, Isaac checkpoint reload again 20/20 trained vs 0/20 untrained |
+| AL-005D | Post-merge MVP evidence audit and checklist reconciliation | Verified: merged trees match, retained measurements rechecked, 10 live browser checks and 23 served artifact hashes pass |
 
 ## Next gate
 
-Review the separate website draft and resolve its hosted Actions budget gate.
-The reusable viewer, distinct Isaac evidence and clean-checkout reproduction are
-implemented and validated locally. Retain those records and finish preview review
-before a release claim. Do not add scope while these final review gates are pending.
-Reassess the plan after each retained validation result. Do not create
-unimplemented CLI commands or mark a future capability passed.
+The MVP implementation and maintainer review are complete. The
+[post-merge audit](../evidence/mvp-audit.md) records successful live integration
+checks and source/evidence continuity. No additional feature is needed to satisfy
+the current MVP design.
+
+The remaining validation item is the website's hosted Actions execution. Its
+budget currently prevents jobs from starting; rerun the existing workflows when
+capacity is restored. Local and live results remain valid but do not substitute
+for that hosted result. A versioned release requires a separate decision.
+
+Keep the current model, dependency pins, seed sets and acceptance thresholds.
+Reopen implementation for an observed defect or an approved extension, and update
+the evidence for every changed claim. Do not expand scope to fill the time while
+the hosted gate is blocked.

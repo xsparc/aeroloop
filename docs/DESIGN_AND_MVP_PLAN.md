@@ -1,6 +1,6 @@
 # AeroLoop design and MVP plan
 
-Updated: 2026-09-20. Status: implementation in progress.
+Updated: 2026-09-20. Status: MVP implemented; release validation pending.
 
 ## Scope
 
@@ -77,6 +77,11 @@ assets. Integrate a reusable React/Three.js component into the existing website 
 after inspecting its current content and deployment rules.
 
 ## Release gate
+
+The [post-merge audit](evidence/mvp-audit.md) records the implemented MVP and
+reviewed website integration. Its read-only live checks pass. The website's
+hosted Actions checks remain blocked by an execution budget; they must run before
+release validation can close. A versioned release remains a separate decision.
 
 The MVP requires tested CPU code, actual Isaac physics, genuine training/reload/
 held-out evaluation, validated public evidence and a reviewed website preview.

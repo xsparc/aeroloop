@@ -24,5 +24,6 @@ environment was reused. This checks source reproduction and saved-policy reload
 on the previously measured machine, not a second-machine or fresh-install claim.
 
 For the original installation, smoke, training and acceptance details, see
-[Isaac validation](isaac-validation.md). Website review remains a separate MVP
-gate; none of these checks authorizes deployment or establishes physical flight.
+[Isaac validation](isaac-validation.md). The subsequent
+[post-merge audit](mvp-audit.md) records completed website review and live checks,
+with hosted validation still pending. None of these results establishes physical flight.

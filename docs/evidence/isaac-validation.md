@@ -63,7 +63,8 @@ recomputed the metrics from full-resolution samples and verified checkpoint hash
 before constructing this allowlisted summary. It excludes raw logs, arbitrary metadata,
 paths and sample payloads. Hashes detect changes; they do not authenticate a producer.
 The source was a dirty working tree: the recorded task hash identifies the exact task
-file in this change. A clean-checkout reproduction remains part of the release audit.
+file in this change. The subsequent [clean-checkout reproduction](reproduction.md)
+reloaded the same checkpoints and repeated the held-out evaluation successfully.
 
 The first development reload exposed an inference-mode reset error; evaluation now
 performs seeded resets inside inference mode. The complete development and held-out
