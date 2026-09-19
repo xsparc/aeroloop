@@ -7,9 +7,9 @@
       "evidence": ["docs/evidence/validation.md"]
     },
     "isaac": {
-      "status": "blocked",
-      "versions": {"isaac_sim": "6.1.0.0", "isaac_lab": "3.0.0-EA", "isaac_lab_commit": "ae37b028ea415c91ea2bc32609efcd759ed2b974", "python": "3.12", "torch": "2.11.0"},
-      "evidence": ["docs/compatibility.md", "docs/isaac-next-stage.md"]
+      "status": "validated",
+      "versions": {"isaac_sim": "6.1.0.0", "isaac_lab": "3.0.0-EA", "isaac_lab_commit": "ae37b028ea415c91ea2bc32609efcd759ed2b974", "isaac_lab_distribution": "17.0.2", "python": "3.12.13", "torch": "2.11.0+cu128", "rsl_rl": "5.4.1"},
+      "evidence": ["docs/compatibility.md", "docs/evidence/isaac-validation.md", "docs/evidence/isaac-hover-001.json"]
     }
   }
 }

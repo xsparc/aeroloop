@@ -28,6 +28,12 @@ C++ controller against a CPU rigid body at 200 Hz; `regress` retains five seeds 
 each of three scenarios. See [model assumptions](docs/physics-model.md). These CPU
 results do not satisfy the separate Isaac physics or training gates.
 
+The optional [Isaac workflow](docs/isaac-next-stage.md) uses an isolated, pinned
+environment. Headless GPU physics and actual PPO training have run successfully:
+the saved policy passed 20/20 held-out hover trials after a fresh-process reload,
+versus 0/20 for the untrained policy. See [measured evidence](docs/evidence/isaac-validation.md)
+and the [task contract](docs/architecture/decisions/002-isaac-hover-task.md).
+
 Export one or more run directories printed by `simulate` or `regress`, then open
 the loopback URL printed by `showcase`:
 

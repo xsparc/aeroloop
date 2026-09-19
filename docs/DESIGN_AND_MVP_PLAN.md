@@ -52,8 +52,10 @@ Use a separate compatible Isaac Sim/Isaac Lab environment. Candidate versions ar
 not tested support. Check actual hardware, driver, memory and headless execution.
 No license acceptance, driver/OS changes or paid compute are implicit in this plan.
 
-Start from the registered quadcopter body-wrench task, initially 32 environments,
-without cameras. Record observation order, normalization, thrust/moment scaling,
+Use the original primitive body-wrench task described in
+[decision 002](architecture/decisions/002-isaac-hover-task.md), initially 32 environments,
+without cameras. The pinned Lab 3 release removed the older registered direct task.
+Record observation order, normalization, thrust/moment scaling,
 physics/control intervals, reset distribution and task revision. Train a hover policy,
 save it, reload it in a fresh process and compare against a fixed untrained checkpoint.
 Evaluate a fixed held-out set of 20 seeds. Target: >=16 successes with no failure
