@@ -133,3 +133,45 @@ observed_on = "2026-09-20"
 reviewed_on = "2026-09-20"
 review_due = "2026-10-20"
 decision_ref = "docs/architecture/decisions/002-isaac-hover-task.md"
+
+[[requirements]]
+id = "REQ-REUSABLE-REPLAY"
+statement = "Embed bounded, checksummed CPU replay with explicit frames and accessible optional 3D."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/replay-integration.md", "docs/architecture/overview.md"]
+implementation_refs = ["web/replay/src/index.tsx", "web/replay/src/contracts.ts", "web/replay/src/load.ts", "web/replay/src/scene.tsx"]
+verification_refs = ["web/replay/tests/contracts.test.mjs", "web/replay/tests/browser/replay.spec.mjs"]
+validation_refs = ["docs/evidence/replay-validation.md"]
+risk_refs = ["SECURITY.md", "docs/replay-integration.md"]
+
+[[work_items]]
+id = "AL-005A"
+title = "Reusable recorded physics viewer"
+status = "verified"
+requirement_ids = ["REQ-REUSABLE-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-autonomous-mvp-continuation"
+acceptance_refs = ["docs/replay-integration.md"]
+evidence_refs = ["docs/evidence/replay-validation.md"]
+
+[[work_items]]
+id = "AL-005C"
+title = "Clean-checkout physics and policy reproduction"
+status = "verified"
+requirement_ids = ["REQ-PHYSICS", "REQ-ISAAC"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-autonomous-mvp-continuation"
+acceptance_refs = ["docs/replay-integration.md"]
+evidence_refs = ["docs/evidence/reproduction.md", "docs/evidence/reproduction-001.json", "docs/evidence/isaac-reproduction-001.json"]
+
+[[work_items]]
+id = "AL-005B"
+title = "Separate static website preview"
+status = "in-progress"
+requirement_ids = ["REQ-REUSABLE-REPLAY", "REQ-ISAAC"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-autonomous-mvp-continuation"
+acceptance_refs = ["docs/replay-integration.md"]
+evidence_refs = ["docs/evidence/website-preview.md"]

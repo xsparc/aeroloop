@@ -23,3 +23,24 @@ jobs:
       - run: ctest --test-dir build -C Release --output-on-failure
       - run: python tools/aeroloop test --suite cpu
       - run: node --test web/viewer.test.mjs
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/replay/package-lock.json
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+        working-directory: web/replay
+      - run: npm test
+        working-directory: web/replay
+      - name: Prepare measured browser evidence
+        run: |
+          python tools/aeroloop simulate --scenario hover --output runs/browser
+          python tools/aeroloop simulate --scenario position-step --output runs/browser
+          python tools/aeroloop simulate --scenario lateral-force-pulse --output runs/browser
+          python tools/replay_demo.py runs/browser/cpu-hover-* runs/browser/cpu-position-step-* runs/browser/cpu-lateral-force-pulse-*
+      - run: npx playwright install --with-deps chromium
+        working-directory: web/replay
+      - run: npm run test:browser
+        working-directory: web/replay
+      - run: npm run demo:build
+        working-directory: web/replay

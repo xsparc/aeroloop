@@ -51,6 +51,13 @@ Failed trials remain exportable and visibly labeled. The preview offers playback
 keyboard scrubbing, event jumps, experiment selection and static outcome summaries.
 It loads no external scripts, assets or analytics. Press Ctrl+C to stop the preview.
 
+The [reusable React/Three.js viewer](web/replay/README.md) adds optional 3D attitude,
+verified selected-run loading, offscreen pause and a standalone demo. Hosts pin an
+immutable evidence index. A [clean-checkout audit](docs/evidence/reproduction.md)
+reproduced all fifteen CPU trials and the saved Isaac policy evaluation. The
+[website preview checkpoint](docs/evidence/website-preview.md) records integration
+validation and the remaining review boundary.
+
 See the [MVP plan](docs/DESIGN_AND_MVP_PLAN.md), [roadmap](docs/roadmap/implementation-roadmap.md),
 [architecture](docs/architecture/overview.md), [compatibility](docs/compatibility.md) and
 [security policy](SECURITY.md). Original code is licensed under Apache-2.0.
