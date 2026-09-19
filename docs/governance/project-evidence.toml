@@ -31,13 +31,13 @@ risk_refs = ["SECURITY.md", "docs/compatibility.md"]
 [[requirements]]
 id = "REQ-ISAAC"
 statement = "Execute Isaac physics, train, reload and evaluate on fixed held-out seeds."
-status = "planned"
+status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 design_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
-implementation_refs = []
-verification_refs = []
-validation_refs = []
+implementation_refs = ["src/aeroloop/isaac_hover.py", "tools/isaac_train.py", "tools/isaac.py", "tools/isaac_report.py"]
+verification_refs = ["tests/test_learning.py", "tests/test_isaac_process.py", "tests/test_isaac_report.py"]
+validation_refs = ["docs/evidence/isaac-validation.md", "docs/evidence/isaac-hover-001.json"]
 risk_refs = ["docs/compatibility.md"]
 
 [[work_items]]
@@ -45,6 +45,28 @@ id = "AL-001"
 title = "Runnable CPU foundation"
 status = "verified"
 requirement_ids = ["REQ-FOUNDATION"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-autonomous-mvp"
+acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
+evidence_refs = ["docs/evidence/validation.md"]
+
+[[requirements]]
+id = "REQ-REPLAY"
+statement = "Validate measured recordings and expose an accessible local replay without private metadata."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/overview.md", "docs/DESIGN_AND_MVP_PLAN.md"]
+implementation_refs = ["src/aeroloop/evidence.py", "src/aeroloop/server.py", "web/viewer.js"]
+verification_refs = ["tests/test_evidence.py", "tests/test_public.py", "web/viewer.test.mjs"]
+validation_refs = ["docs/evidence/validation.md"]
+risk_refs = ["SECURITY.md"]
+
+[[work_items]]
+id = "AL-003"
+title = "Validated evidence and local replay"
+status = "verified"
+requirement_ids = ["REQ-REPLAY"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-20-autonomous-mvp"
 acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
@@ -59,3 +81,55 @@ observed_on = "2026-09-20"
 reviewed_on = "2026-09-20"
 review_due = "2026-10-20"
 decision_ref = "docs/architecture/decisions/001-physics-first.md"
+
+[[research_decisions]]
+id = "RD-ISAAC-CANDIDATE"
+finding = "The 3.0.0-EA tag pairs with Isaac Sim 6.1.0.0 and Python 3.12; the isolated headless physics and small PPO pipeline checks pass."
+disposition = "monitoring"
+source_urls = ["https://github.com/isaac-sim/IsaacLab/releases/tag/v3.0.0-EA", "https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_python.html"]
+observed_on = "2026-09-20"
+reviewed_on = "2026-09-20"
+review_due = "2026-10-20"
+decision_ref = "docs/isaac-next-stage.md"
+
+[[requirements]]
+id = "REQ-PHYSICS"
+statement = "Execute the C++ controller in repeatable, measured CPU rigid-body experiments."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/physics-model.md"]
+implementation_refs = ["firmware/control_core/rate_pid.hpp", "src/aeroloop/physics.py", "src/aeroloop/simulation.py"]
+verification_refs = ["tests/cpp/rate_tests.cpp", "tests/test_physics.py"]
+validation_refs = ["docs/evidence/validation.md"]
+risk_refs = ["docs/physics-model.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-002"
+title = "Native controller and CPU physics"
+status = "verified"
+requirement_ids = ["REQ-PHYSICS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-physics-simulation"
+acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
+evidence_refs = ["docs/evidence/validation.md"]
+
+[[work_items]]
+id = "AL-004"
+title = "Isaac physics and measured hover learning"
+status = "verified"
+requirement_ids = ["REQ-ISAAC"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-isaac-installation-and-tests"
+acceptance_refs = ["docs/architecture/decisions/002-isaac-hover-task.md"]
+evidence_refs = ["docs/evidence/isaac-validation.md"]
+
+[[research_decisions]]
+id = "RD-ISAAC-TASK"
+finding = "Lab 3 removed the older direct quadcopter task; an original primitive task preserves the explicit body-wrench contract and avoids vendor asset redistribution."
+disposition = "adopted"
+source_urls = ["https://github.com/isaac-sim/IsaacLab/blob/ae37b028ea415c91ea2bc32609efcd759ed2b974/scripts/demos/quadcopter.py"]
+observed_on = "2026-09-20"
+reviewed_on = "2026-09-20"
+review_due = "2026-10-20"
+decision_ref = "docs/architecture/decisions/002-isaac-hover-task.md"
