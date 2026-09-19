@@ -135,7 +135,13 @@
 .al-plot {
   display: block;
   width: 100%;
+  height: clamp(100px, 16vw, 180px);
   margin: 8px 0;
+}
+.al-plot-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
 }
 .al-metrics {
   display: grid;

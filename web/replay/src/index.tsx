@@ -363,38 +363,39 @@ export function ReplayViewer({
         />
       </label>
       {plot && (
-        <svg
-          className="al-plot"
-          viewBox="0 0 720 140"
-          role="img"
-          aria-label="Position error over time. Plot uses display samples; summary RMSE uses full-resolution data."
-        >
-          <text x="5" y="14" fill="currentColor" fontSize="12">
-            {plot.max.toFixed(2)} m
-          </text>
-          <path
-            d="M40 20v90h640"
-            stroke="currentColor"
-            fill="none"
-            opacity=".4"
-          />
-          <polyline
-            points={plot.points}
-            stroke="#0891b2"
-            strokeWidth="2"
-            fill="none"
-          />
-          <path
-            d={`M${40 + (640 * time) / duration} 20v90`}
-            stroke="currentColor"
-          />
-          <text x="40" y="134" fill="currentColor" fontSize="12">
-            0 s
-          </text>
-          <text x="640" y="134" fill="currentColor" fontSize="12">
-            {duration} s
-          </text>
-        </svg>
+        <div>
+          <div className="al-plot-labels">
+            <span>Position error: 0 to {plot.max.toFixed(2)} m</span>
+          </div>
+          <svg
+            className="al-plot"
+            viewBox="0 0 720 120"
+            preserveAspectRatio="none"
+            role="img"
+            aria-label="Position error over time. Plot uses display samples; summary RMSE uses full-resolution data."
+          >
+            <path
+              d="M40 20v90h640"
+              stroke="currentColor"
+              fill="none"
+              opacity=".4"
+            />
+            <polyline
+              points={plot.points}
+              stroke="#0891b2"
+              strokeWidth="2"
+              fill="none"
+            />
+            <path
+              d={`M${40 + (640 * time) / duration} 20v90`}
+              stroke="currentColor"
+            />
+          </svg>
+          <div className="al-plot-labels">
+            <span>0 s</span>
+            <span>{duration} s</span>
+          </div>
+        </div>
       )}
       <div className="al-controls" aria-label="Recorded events">
         {recording?.events.map((event, i) => (
