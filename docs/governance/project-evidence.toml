@@ -50,6 +50,28 @@ approval_ref = "conversation:2026-09-20-autonomous-mvp"
 acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
 evidence_refs = ["docs/evidence/validation.md"]
 
+[[requirements]]
+id = "REQ-REPLAY"
+statement = "Validate measured recordings and expose an accessible local replay without private metadata."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/overview.md", "docs/DESIGN_AND_MVP_PLAN.md"]
+implementation_refs = ["src/aeroloop/evidence.py", "src/aeroloop/server.py", "web/viewer.js"]
+verification_refs = ["tests/test_evidence.py", "tests/test_public.py", "web/viewer.test.mjs"]
+validation_refs = ["docs/evidence/validation.md"]
+risk_refs = ["SECURITY.md"]
+
+[[work_items]]
+id = "AL-003"
+title = "Validated evidence and local replay"
+status = "verified"
+requirement_ids = ["REQ-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-autonomous-mvp"
+acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
+evidence_refs = ["docs/evidence/validation.md"]
+
 [[research_decisions]]
 id = "RD-PHYSICS"
 finding = "Standalone physics removes the PX4 execution dependency requested by the maintainer."
@@ -59,3 +81,35 @@ observed_on = "2026-09-20"
 reviewed_on = "2026-09-20"
 review_due = "2026-10-20"
 decision_ref = "docs/architecture/decisions/001-physics-first.md"
+
+[[research_decisions]]
+id = "RD-ISAAC-CANDIDATE"
+finding = "The 3.0.0-EA tag pairs with Isaac Sim 6.1.0.0 and Python 3.12; evaluate before installing the legacy candidate."
+disposition = "monitoring"
+source_urls = ["https://github.com/isaac-sim/IsaacLab/releases/tag/v3.0.0-EA", "https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_python.html"]
+observed_on = "2026-09-20"
+reviewed_on = "2026-09-20"
+review_due = "2026-10-20"
+decision_ref = "docs/isaac-next-stage.md"
+
+[[requirements]]
+id = "REQ-PHYSICS"
+statement = "Execute the C++ controller in repeatable, measured CPU rigid-body experiments."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/physics-model.md"]
+implementation_refs = ["firmware/control_core/rate_pid.hpp", "src/aeroloop/physics.py", "src/aeroloop/simulation.py"]
+verification_refs = ["tests/cpp/rate_tests.cpp", "tests/test_physics.py"]
+validation_refs = ["docs/evidence/validation.md"]
+risk_refs = ["docs/physics-model.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-002"
+title = "Native controller and CPU physics"
+status = "verified"
+requirement_ids = ["REQ-PHYSICS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-physics-simulation"
+acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
+evidence_refs = ["docs/evidence/validation.md"]

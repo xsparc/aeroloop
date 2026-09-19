@@ -1,0 +1,1 @@
+{"name":"aeroloop-replay","private":true,"type":"module","scripts":{"test":"node --test viewer.test.mjs"}}

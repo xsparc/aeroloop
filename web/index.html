@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AeroLoop — recorded physics experiments</title>
+  <link rel="stylesheet" href="viewer.css">
+  <script type="module" src="viewer.js"></script>
+</head>
+<body>
+  <header><a class="wordmark" href="./">AERO<span>LOOP</span></a><span class="eyebrow">FLIGHT CONTROL / RESEARCH PREVIEW</span></header>
+  <main>
+    <div class="intro"><div><p class="eyebrow accent">EXPERIMENT LOG / 001</p><h1>Control. Disturb.<br><span>Observe.</span></h1><p class="lede">Explore how a C++ controller responds inside a rigid-body physics model. Every trace comes from a recorded simulation.</p></div><aside class="status"><span class="status-dot"></span>Recorded simulation<p>CPU physics · ideal body wrench<br>Isaac physics and learning pending</p></aside></div>
+    <div class="workspace">
+      <section class="replay" aria-labelledby="replay-title">
+        <div class="panel-heading"><h2 id="replay-title">Flight trace</h2><span>ENU / METRES</span></div>
+        <svg id="scene" viewBox="0 0 800 430" role="img" aria-label="Isometric view of the recorded trajectory, target and current position">
+          <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#233237" stroke-width="1"/></pattern></defs>
+          <rect width="800" height="430" fill="url(#grid)"/>
+          <path d="M400 335L655 390M400 335L640 215M400 335L400 55" stroke="#5a7175" fill="none"/>
+          <text x="664" y="398" class="axis">E</text><text x="646" y="209" class="axis">N</text><text x="410" y="57" class="axis">UP</text>
+          <polyline id="whole-trail" fill="none" stroke="#739195" stroke-width="2" stroke-dasharray="4 5"/>
+          <polyline id="trail" fill="none" stroke="#f3ac68" stroke-width="3"/>
+          <g id="target"><circle r="11" fill="none" stroke="#a8c7bb" stroke-width="2"/><path d="M-16 0H16M0 -16V16" stroke="#a8c7bb"/></g>
+          <g id="drone"><path d="M-13 -8L13 8M-13 8L13 -8" stroke="#f3ac68" stroke-width="4"/><circle cx="-14" cy="-9" r="5" fill="#f3ac68"/><circle cx="14" cy="9" r="5" fill="#f3ac68"/><circle cx="-14" cy="9" r="5" fill="#f3ac68"/><circle cx="14" cy="-9" r="5" fill="#f3ac68"/><circle r="5" fill="#fff4dc"/></g>
+          <text x="28" y="395" class="axis">Schematic position view · fixed scale · 100 px / m vertically</text>
+        </svg>
+        <div class="timeline"><div class="time-label"><label for="time">Simulation elapsed time</label><output id="clock" for="time">0.00 / 0.00 s</output></div><input id="time" type="range" min="0" max="1" step="0.005" value="0" disabled><div id="events" class="events"></div></div>
+        <div class="controls"><button id="play" disabled>Play replay</button><button id="restart" disabled>Restart</button><label for="speed">Speed</label><select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select><span>● Position <span class="target-key">⊕ Target</span></span></div>
+      </section>
+      <aside class="details">
+        <label class="eyebrow" for="experiment">RECORDED EXPERIMENT</label><select id="experiment" disabled><option>Loading verified recordings…</option></select>
+        <p id="message" role="status" aria-live="polite">Checking the evidence bundle.</p>
+        <div class="metric"><span>Position RMSE</span><strong id="rmse">—</strong><small>Full-resolution measurement window</small></div>
+        <div class="metric"><span>Current target error</span><strong id="error">—</strong><small>Interpolated replay position</small></div>
+        <dl><div><dt>Controller</dt><dd>Rate PID / C++</dd></div><div><dt>Model</dt><dd>Ideal body wrench</dd></div><div><dt>Seed</dt><dd id="seed">—</dd></div><div><dt>Outcome</dt><dd id="outcome">—</dd></div><div><dt>Source</dt><dd id="revision">—</dd></div></dl>
+        <a id="record-link" href="#">Download run manifest</a>
+      </aside>
+    </div>
+    <section class="plot-panel" aria-labelledby="plot-title"><div class="panel-heading"><h2 id="plot-title">Distance to target</h2><span>FULL RUN / METRES</span></div><svg id="plot" viewBox="0 0 1000 180" role="img" aria-label="Recorded position error over simulation time"><path d="M50 15V150H980" fill="none" stroke="#5a7175"/><polyline id="error-line" fill="none" stroke="#f3ac68" stroke-width="2"/><line id="cursor" x1="50" x2="50" y1="15" y2="150" stroke="#a8c7bb"/><text id="plot-max" x="4" y="24" class="axis"></text><text x="12" y="152" class="axis">0</text><text x="50" y="174" class="axis">0 s</text><text id="plot-end" x="930" y="174" class="axis"></text></svg></section>
+    <section class="notes"><div><p class="eyebrow">WHAT THIS SHOWS</p><h2>Measured in a model.</h2><p id="summary">Choose a recording to inspect its measured outcome. The static run manifest and metrics remain available without animation.</p><noscript><p>JavaScript is required for replay. Download the <a href="index.json">bundle index</a> to find run manifests and full-resolution measurements.</p></noscript></div><div><p class="eyebrow">MODEL BOUNDARY</p><p>Perfect state, ideal thrust and body moments. No individual motor dynamics, estimator, drag or contact model. Initial conditions are already airborne. These results do not establish physical-flight performance.</p><p>Isaac physics execution, training and held-out policy evaluation remain required before the MVP is complete.</p></div></section>
+  </main><footer>AEROLOOP <span>Simulation-only control research · no live vehicle connection</span></footer>
+</body>
+</html>
