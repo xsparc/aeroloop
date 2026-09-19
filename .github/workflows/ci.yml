@@ -17,7 +17,9 @@ jobs:
           python-version: '3.12'
       - run: python tools/aeroloop check-lock
       - run: python tools/check_evidence.py
+      - run: python tools/check_public.py
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - run: cmake --build build --config Release
       - run: ctest --test-dir build -C Release --output-on-failure
       - run: python tools/aeroloop test --suite cpu
+      - run: node --test web/viewer.test.mjs

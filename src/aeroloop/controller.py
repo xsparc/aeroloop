@@ -1,6 +1,7 @@
 """Explicit C ABI bridge: each simulation owns one native rate controller."""
 import ctypes
 import os
+import sys
 from pathlib import Path
 from .contracts import ValidationError
 from .frames import vector
@@ -8,7 +9,7 @@ from .frames import vector
 
 def library_path():
     root = Path(__file__).resolve().parents[2] / "build"
-    name = "aeroloop_rate.dll" if os.name == "nt" else "libaeroloop_rate.dylib" if __import__("sys").platform == "darwin" else "libaeroloop_rate.so"
+    name = "aeroloop_rate.dll" if os.name == "nt" else "libaeroloop_rate.dylib" if sys.platform == "darwin" else "libaeroloop_rate.so"
     for path in (root / name, root / "Release" / name):
         if path.is_file():
             return path.resolve()

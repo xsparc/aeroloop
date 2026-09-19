@@ -21,3 +21,7 @@ Unblock Isaac using a licensed, compatible installation, validate startup and on
 small headless scene, then measure the 32-environment learning workload. Record exact
 package/source revisions, configuration hashes, memory peaks and retained logs.
 Reconsider a supported Isaac release pairing before installing the legacy candidate.
+
+The follow-up scan found Isaac Sim 6.1.0 and Isaac Lab v3.0.0-EA. The pinned Lab
+release explicitly selects Sim 6.1.0.0 and Python 3.12. This is the next candidate to
+assess, not a tested upgrade. See the [execution proposal](isaac-next-stage.md).

@@ -25,6 +25,14 @@ def main(argv=None):
     sim.add_argument("--output", type=Path, default=ROOT / "runs")
     suite = commands.add_parser("regress", help="run five seeds per CPU scenario and retain every outcome")
     suite.add_argument("--output", type=Path, default=ROOT / "runs")
+    export = commands.add_parser("export", help="validate recordings and export a local research preview")
+    export.add_argument("runs", nargs="+", type=Path)
+    export.add_argument("--output", required=True, type=Path)
+    verify = commands.add_parser("verify-run", help="verify checksums, conventions and recomputed metrics")
+    verify.add_argument("run", type=Path)
+    preview = commands.add_parser("showcase", help="serve an exported bundle on loopback only")
+    preview.add_argument("--bundle", required=True, type=Path)
+    preview.add_argument("--port", type=int, default=8765)
     args = parser.parse_args(argv)
     try:
         if args.command == "doctor":
@@ -50,6 +58,19 @@ def main(argv=None):
                 report = {"schema_version": 1, "trials": len(results), "passed": sum(r["status"] == "passed" for r in results), "results": results}
                 (args.output / f"regression-{uuid.uuid4().hex[:12]}.json").write_bytes(encoded(report))
             return int(any(r["status"] != "passed" for r in results))
+        elif args.command == "export":
+            from .evidence import export_bundle
+            result = export_bundle(args.runs, args.output)
+            print(f"Exported {len(result['runs'])} verified recordings; research preview, Isaac not validated.")
+        elif args.command == "verify-run":
+            from .evidence import read_run
+            read_run(args.run)
+            print("Recording checksums, contracts and full-resolution metrics verified.")
+        elif args.command == "showcase":
+            from .server import serve
+            if not 0 <= args.port <= 65535:
+                raise ValidationError("invalid preview port")
+            serve(args.bundle, args.port)
     except (OSError, ValueError) as error:
         print(f"aeroloop: {type(error).__name__}: input invalid or unavailable" if not isinstance(error, ValidationError)
               else f"aeroloop: {error}", file=sys.stderr)
