@@ -15,6 +15,14 @@ The revised MVP has three layers:
 3. A local browser replay of checksummed, measured simulation results. No network
    vehicle control or public compute service is provided.
 
+The reusable `web/replay` React component consumes the same CPU export as the
+dependency-free local replay. Hosts pin the export index hash; selected documents
+are streamed within bounds, checked and validated before display. Three.js is a
+lazy peer dependency with an original schematic mesh. Renderer coordinates are
+`(east, up, -north)`; recorded attitude is interpolated before this basis change.
+Playback pauses offscreen and on page hiding. Static text, controls and the SVG
+schematic remain independent of WebGL. See [integration acceptance](../replay-integration.md).
+
 PX4 flight execution and Pegasus transport are no longer MVP dependencies. No CPU
 result can stand in for Isaac validation. The CPU body-wrench model does not model
 propeller aerodynamics, individual motors, estimation error, contact or hardware.

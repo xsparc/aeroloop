@@ -11,11 +11,13 @@ Public deployment and merges are separate decisions.
 | AL-002 | Tested C++ rate core running in a CPU rigid-body model; hover, step and force pulse with measured outputs | Verified locally |
 | AL-003 | Strict allowlisted export, corruption/privacy tests and accessible local replay | Verified locally |
 | AL-004 | Isaac environment smoke, recorded physics, trained hover policy, fresh reload, held-out evaluation | Verified locally: 3/3 physics checks and 20/20 trained held-out trials; public summary validated |
-| AL-005 | Reusable React/Three.js viewer, separate website preview PR, reproduction audit | Planned |
+| AL-005A | Reusable React/Three.js viewer with explicit frames, integrity checks and accessible controls | Verified locally: five unit checks and six browser checks |
+| AL-005B | Separate website preview PR with immutable viewer and distinct Isaac evidence | In progress |
+| AL-005C | Clean-checkout reproduction audit | Pending |
 
 ## Next gate
 
-Prepare the reusable viewer and inspect the separate website integration target.
+Integrate the tested reusable viewer into a separate website preview.
 Include the measured Isaac learning summary without treating it as a CPU replay recording.
 Perform a clean-checkout reproduction before a release claim.
 Reassess the plan after each retained validation result. Do not create

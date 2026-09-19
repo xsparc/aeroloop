@@ -5,6 +5,11 @@ build/
 runs/
 showcase/
 node_modules/
+dist/
+demo-dist/
+web/replay/public/
+test-results/
+playwright-report/
 __pycache__/
 *.py[cod]
 *.egg-info/
