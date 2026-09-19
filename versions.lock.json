@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "cpu": {
+      "status": "validated",
+      "versions": {"python": "3.12.13", "cmake": "3.31.6", "ninja": "1.11.1.4"},
+      "evidence": ["docs/evidence/validation.md"]
+    },
+    "isaac": {
+      "status": "blocked",
+      "versions": {"isaac_sim": "5.1.0", "isaac_lab": "2.3.2", "python": "3.11"},
+      "evidence": ["docs/compatibility.md"]
+    }
+  }
+}

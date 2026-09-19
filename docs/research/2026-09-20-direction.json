@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "5999d2f",
+  "scanned_at": "2026-09-20",
+  "coverage": ["physics simulation", "Isaac compatibility", "hardware requirements", "Python native controller integration"],
+  "findings": [
+    {
+      "finding": "PX4 omission allows independent Newton-Euler rigid-body experiments; this model cannot validate real aircraft.",
+      "source_event_date": null,
+      "citations": ["https://underactuated.mit.edu/acrobot.html", "https://vnav.mit.edu/material/06-Control1-notes.pdf"],
+      "confidence": "high",
+      "relevance": "CPU controller validation",
+      "direction_alignment": "maintainer-requested physics scope",
+      "opportunity_or_risk": "fast tests with explicitly simplified actuators",
+      "engineering_cost": "bounded C++ core and Python physics harness",
+      "disposition": "adopt",
+      "roadmap_delta": "remove PX4 and Pegasus execution dependencies",
+      "verification_needed": "analytic physics invariants, convergence, scenario measurements"
+    },
+    {
+      "finding": "Isaac Sim 5.1 is unsupported and the inspected GPU falls below its published 16 GB VRAM baseline.",
+      "source_event_date": null,
+      "citations": ["https://docs.isaacsim.omniverse.nvidia.com/5.1.0/installation/requirements.html", "https://github.com/isaac-sim/IsaacLab"],
+      "confidence": "high",
+      "relevance": "Isaac remains a required MVP gate",
+      "direction_alignment": "preserve actual physics and training evidence",
+      "opportunity_or_risk": "unsupported candidate and unmeasured memory capacity",
+      "engineering_cost": "isolated installation and reduced-workload smoke test",
+      "disposition": "monitor",
+      "roadmap_delta": "keep Isaac gate blocked until measured",
+      "verification_needed": "supported pairing, startup, physics capture, training, reload and evaluation"
+    }
+  ],
+  "overall_recommendation": "Deliver CPU physics and replay incrementally while preserving the Isaac completion gate.",
+  "evidence_gaps": ["No Isaac installation or workload validated", "No physical validation", "No website integration inspected yet"]
+}
