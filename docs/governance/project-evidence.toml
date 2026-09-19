@@ -14,7 +14,7 @@ id = "OBJ-MVP"
 statement = "Deliver measured physics control, Isaac learning and inspectable replay."
 status = "active"
 source_refs = ["GOAL.md"]
-validation_refs = ["docs/evidence/validation.md"]
+validation_refs = ["docs/evidence/validation.md", "docs/evidence/mvp-audit.md"]
 
 [[requirements]]
 id = "REQ-FOUNDATION"
@@ -169,9 +169,19 @@ evidence_refs = ["docs/evidence/reproduction.md", "docs/evidence/reproduction-00
 [[work_items]]
 id = "AL-005B"
 title = "Separate static website preview"
-status = "in-progress"
+status = "verified"
 requirement_ids = ["REQ-REUSABLE-REPLAY", "REQ-ISAAC"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-20-autonomous-mvp-continuation"
 acceptance_refs = ["docs/replay-integration.md"]
-evidence_refs = ["docs/evidence/website-preview.md"]
+evidence_refs = ["docs/evidence/website-preview.md", "docs/evidence/mvp-audit.md"]
+
+[[work_items]]
+id = "AL-005D"
+title = "Post-merge MVP evidence audit"
+status = "verified"
+requirement_ids = ["REQ-FOUNDATION", "REQ-PHYSICS", "REQ-ISAAC", "REQ-REPLAY", "REQ-REUSABLE-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-post-merge-autonomous-continuation"
+acceptance_refs = ["docs/evidence/mvp-audit.md"]
+evidence_refs = ["docs/evidence/mvp-audit.md", "docs/evidence/mvp-audit-001.json", "docs/research/2026-09-20-closeout.json"]

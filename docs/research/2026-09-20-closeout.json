@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "baae7d1c6da59d26fc4177d0f0c75e6a2a281aaf",
+  "scanned_at": "2026-09-20",
+  "coverage": ["MVP acceptance evidence", "GitHub Actions budget behavior", "Cloudflare Git-triggered builds", "served recording integrity"],
+  "findings": [
+    {
+      "finding": "GitHub Actions budgets can prevent jobs from starting. A blocked job provides no test result, even when equivalent checks have passed locally.",
+      "source_event_date": null,
+      "citations": ["https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-actions/about-billing-for-github-actions"],
+      "confidence": "high",
+      "relevance": "The website's merged-commit checks have zero executed steps and a budget-block annotation.",
+      "direction_alignment": "Preserve the existing hosted validation gate without expanding MVP scope.",
+      "opportunity_or_risk": "A successful local audit must not be reported as successful hosted Actions execution.",
+      "engineering_cost": "Record the limitation and retain the existing workflows.",
+      "disposition": "no-change",
+      "roadmap_delta": "Record implementation and maintainer review as complete while retaining the hosted validation item.",
+      "verification_needed": "Rerun the existing website checks when its Actions budget permits execution."
+    },
+    {
+      "finding": "Cloudflare Workers Builds can build and deploy changes from a connected Git repository. A successful build status still needs read-only verification of the served content and evidence.",
+      "source_event_date": null,
+      "citations": ["https://developers.cloudflare.com/workers/ci-cd/builds/"],
+      "confidence": "high",
+      "relevance": "The maintainer's website merge triggered its existing successful Cloudflare build.",
+      "direction_alignment": "Validate the already-served integration within the approved MVP audit.",
+      "opportunity_or_risk": "Stale or altered recording assets can invalidate a working-looking replay.",
+      "engineering_cost": "Reuse the existing browser and content audits, and compare served file hashes.",
+      "disposition": "no-change",
+      "roadmap_delta": "Complete the post-merge evidence audit; retain versioned release as a separate decision.",
+      "verification_needed": "Check accessible replay behavior and served evidence against the reviewed immutable artifacts."
+    }
+  ],
+  "overall_recommendation": "No material direction change. Finish the existing MVP audit, retain measured CPU and Isaac results, and avoid new feature work while release validation remains pending.",
+  "evidence_gaps": ["Website GitHub Actions execution remains blocked by its budget.", "A versioned release has not been approved or created."]
+}

@@ -3,8 +3,11 @@
 A physics-based flight-control and learning laboratory with a C++ controller,
 repeatable simulation experiments and recorded browser replay.
 
-**In development.** The MVP includes Isaac Sim physics and Isaac Lab training.
-PX4 flight execution is outside the revised MVP. No physical-flight claims are made.
+**Simulation-only MVP implemented.** CPU control, Isaac Sim physics, Isaac Lab
+training and the reviewed website replay are validated in the
+[MVP audit](docs/evidence/mvp-audit.md). Hosted website validation remains blocked
+by its Actions budget; a versioned release is pending. PX4 flight execution is
+outside scope. No physical-flight claims are made.
 
 Python 3.11+ runs the dependency-free CPU tooling directly from a checkout:
 
@@ -55,8 +58,8 @@ The [reusable React/Three.js viewer](web/replay/README.md) adds optional 3D atti
 verified selected-run loading, offscreen pause and a standalone demo. Hosts pin an
 immutable evidence index. A [clean-checkout audit](docs/evidence/reproduction.md)
 reproduced all fifteen CPU trials and the saved Isaac policy evaluation. The
-[website preview checkpoint](docs/evidence/website-preview.md) records integration
-validation and the remaining review boundary.
+[website integration checkpoint](docs/evidence/website-preview.md) records local
+and served-site validation, with the remaining hosted-check limitation.
 
 See the [MVP plan](docs/DESIGN_AND_MVP_PLAN.md), [roadmap](docs/roadmap/implementation-roadmap.md),
 [architecture](docs/architecture/overview.md), [compatibility](docs/compatibility.md) and

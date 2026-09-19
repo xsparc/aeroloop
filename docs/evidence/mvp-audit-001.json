@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "kind": "mvp_implementation_audit",
+  "audited_on": "2026-09-20",
+  "source_commit": "baae7d1c6da59d26fc4177d0f0c75e6a2a281aaf",
+  "reviewed_tree_matches_main": true,
+  "public_ci": {
+    "status": "passed",
+    "url": "https://github.com/xsparc/aeroloop/actions/runs/35476116501"
+  },
+  "retained_evidence": {
+    "cpu_trials_recomputed": 15,
+    "cpu_summary_matches": true,
+    "isaac_summaries_recomputed": 2,
+    "isaac_trials_per_summary": 40,
+    "isaac_summary_matches": true,
+    "trained_successes_per_summary": 20,
+    "untrained_successes_per_summary": 0,
+    "new_gpu_execution": false,
+    "hash_basis": "git_blob_bytes_at_source_commit",
+    "sha256": {
+      "docs/evidence/reproduction-001.json": "826b34ab15b31b9a486e30dfaec53828ec9755759c28b8fc5de8127cc440a86a",
+      "docs/evidence/isaac-hover-001.json": "e872e191faae7ad2ab3c48eb933f45188defcb7b82c700ba8e9ba49f1cf42dad",
+      "docs/evidence/isaac-reproduction-001.json": "a7fe9c7a265b6effa385c1b0f98f3f3f7e75fefbc7389ce0177240b284509c76"
+    }
+  },
+  "website": {
+    "route": "/work/aeroloop/",
+    "review": "maintainer_merged",
+    "reviewed_tree_matches_main": true,
+    "viewer_source_commit": "a5734cfc2150032ee291993f955928043bca9730",
+    "automatic_cloudflare_build": "passed",
+    "local_provenance_and_trial_count_tests": 2,
+    "semantic_pages": {
+      "checked_at": "2026-09-19T23:35:20.368Z",
+      "passed": 34,
+      "total": 34
+    },
+    "production_documents": {
+      "checked_at": "2026-09-19T23:35:22.248Z",
+      "passed": 36,
+      "total": 36
+    },
+    "focused_browser_checks": {
+      "checked_at": "2026-09-19T23:35:27.268Z",
+      "passed": 10,
+      "total": 10,
+      "skipped": 0,
+      "retried": 0,
+      "browser": "chromium"
+    },
+    "served_evidence": {
+      "checked_at": "2026-09-19T23:36:46.938Z",
+      "passed": 23,
+      "total": 23,
+      "index_sha256": "75c8ed036538cd126e97ccdf0d94b552637509f3881190d1ed6e238500c65fd5",
+      "files": [
+        {
+          "path": "index.json",
+          "bytes": 2481,
+          "sha256": "75c8ed036538cd126e97ccdf0d94b552637509f3881190d1ed6e238500c65fd5",
+          "passed": true
+        },
+        {
+          "path": "replay-config.json",
+          "bytes": 88,
+          "sha256": "6158ebc66c6859d407a14c1da96e9390bcb5bebf170309d8b1da172e2c8d586f",
+          "passed": true
+        },
+        {
+          "path": "cpu-audit.json",
+          "bytes": 10802,
+          "sha256": "826b34ab15b31b9a486e30dfaec53828ec9755759c28b8fc5de8127cc440a86a",
+          "passed": true
+        },
+        {
+          "path": "isaac-hover-001.json",
+          "bytes": 11363,
+          "sha256": "e872e191faae7ad2ab3c48eb933f45188defcb7b82c700ba8e9ba49f1cf42dad",
+          "passed": true
+        },
+        {
+          "path": "LICENSE.txt",
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "passed": true
+        },
+        {
+          "path": "cpu-hover-0-e0a4e2f70dfb/config.json",
+          "bytes": 577,
+          "sha256": "2e1f645b5d1240a185fa46fef5f4d8210049ef5499904b7f1c71028ff37a4a27",
+          "passed": true
+        },
+        {
+          "path": "cpu-hover-0-e0a4e2f70dfb/events.json",
+          "bytes": 3,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "passed": true
+        },
+        {
+          "path": "cpu-hover-0-e0a4e2f70dfb/manifest.json",
+          "bytes": 811,
+          "sha256": "6c157b1e833a5630e0ca57e5cafdbb3779160afcdd799c7586d6c8e9e4b13731",
+          "passed": true
+        },
+        {
+          "path": "cpu-hover-0-e0a4e2f70dfb/metrics.json",
+          "bytes": 206,
+          "sha256": "197618b98944c3d7f810b8ef9b739f62a077b2351ce128425380a8ad743525fd",
+          "passed": true
+        },
+        {
+          "path": "cpu-hover-0-e0a4e2f70dfb/replay.json",
+          "bytes": 151276,
+          "sha256": "5ef6de4694d5cd75fc1b8d60cfe6d78043c6e6a52843b40acb75b228525423df",
+          "passed": true
+        },
+        {
+          "path": "cpu-hover-0-e0a4e2f70dfb/samples.json",
+          "bytes": 4510832,
+          "sha256": "3924593cf99178bf895d410623a2b885e5ff17a545121cf5cdcf3ea8fd459bf2",
+          "passed": true
+        },
+        {
+          "path": "cpu-lateral-force-pulse-0-cf4ecd72a0e8/config.json",
+          "bytes": 591,
+          "sha256": "b74e605f6f37747f98f08a752d34071095e645500f7e9ac05299e1dd2cdf61d3",
+          "passed": true
+        },
+        {
+          "path": "cpu-lateral-force-pulse-0-cf4ecd72a0e8/events.json",
+          "bytes": 74,
+          "sha256": "43685f0bdc9d2a69d2103a05bf0b45ee0f143a568945054c3b13b045aa26e9c1",
+          "passed": true
+        },
+        {
+          "path": "cpu-lateral-force-pulse-0-cf4ecd72a0e8/manifest.json",
+          "bytes": 839,
+          "sha256": "169545b6c7c9bd85751d17630247139eead9ba476fe7e5539c425b6584061628",
+          "passed": true
+        },
+        {
+          "path": "cpu-lateral-force-pulse-0-cf4ecd72a0e8/metrics.json",
+          "bytes": 190,
+          "sha256": "9a60eb773cc7af78e69e3585a6f7bebdf1207890cbb61ec1a25e99cc4e34134a",
+          "passed": true
+        },
+        {
+          "path": "cpu-lateral-force-pulse-0-cf4ecd72a0e8/replay.json",
+          "bytes": 155311,
+          "sha256": "29450d4192200abb33bbda5f2e58ed6796515bed1c4840d0de68e7655744e26c",
+          "passed": true
+        },
+        {
+          "path": "cpu-lateral-force-pulse-0-cf4ecd72a0e8/samples.json",
+          "bytes": 4562452,
+          "sha256": "d7d3a1d308beca112c8fc4f87a1ffe8494c4d6243c6715f4ca60fef93c50d3a4",
+          "passed": true
+        },
+        {
+          "path": "cpu-position-step-0-243f08f2b257/config.json",
+          "bytes": 585,
+          "sha256": "2dc9ae88385f287616f6593ec796b052e84447cad0669f4b62531d085478e0b4",
+          "passed": true
+        },
+        {
+          "path": "cpu-position-step-0-243f08f2b257/events.json",
+          "bytes": 76,
+          "sha256": "b6d479467c7bcd9644ebb8eba3633572bf95c22e1479e1beb69ab0794899f193",
+          "passed": true
+        },
+        {
+          "path": "cpu-position-step-0-243f08f2b257/manifest.json",
+          "bytes": 827,
+          "sha256": "ddf71d0621b5878849643292eb02ecab095e0cb2d61b52c72ff3702bcd96ed63",
+          "passed": true
+        },
+        {
+          "path": "cpu-position-step-0-243f08f2b257/metrics.json",
+          "bytes": 296,
+          "sha256": "5c7d4d1c748430feb84fd1923c32513bd6cd54c8aeb3d856b55517d039337497",
+          "passed": true
+        },
+        {
+          "path": "cpu-position-step-0-243f08f2b257/replay.json",
+          "bytes": 156677,
+          "sha256": "87aa2c7de14c7bf7d5f57ab064b2199e05ded6b84d77f8cdeda7e5f74a24a189",
+          "passed": true
+        },
+        {
+          "path": "cpu-position-step-0-243f08f2b257/samples.json",
+          "bytes": 4571490,
+          "sha256": "ff25caddcaa658f18d2a0aae543995bbbaddc2d2f3bf51cc8e9b7cc8b6fa793a",
+          "passed": true
+        }
+      ]
+    },
+    "hosted_actions": {
+      "status": "blocked",
+      "reason": "actions_budget",
+      "executed_steps": 0
+    }
+  },
+  "implementation_acceptance": "passed",
+  "release_validation": "pending_hosted_website_checks",
+  "versioned_release": "not_created",
+  "limitations": [
+    "Ideal body-wrench simulation; no physical-flight evidence.",
+    "Isaac execution and reload were measured on one machine with a reduced workload.",
+    "Recomputed summaries are retained evaluations, not additional independent trials.",
+    "Local and served-site checks do not establish successful hosted Actions execution."
+  ]
+}

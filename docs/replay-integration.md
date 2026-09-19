@@ -2,7 +2,8 @@
 
 AL-005 is split into independently reviewable changes: the reusable viewer
 (AL-005A), a separate website preview (AL-005B), and clean-checkout reproduction
-(AL-005C). This follows the approved autonomous MVP implementation scope.
+(AL-005C), followed by the post-merge evidence audit (AL-005D). This follows the
+approved autonomous MVP implementation scope.
 
 ## Viewer acceptance
 
@@ -28,8 +29,12 @@ stale asynchronous loads, GPU leaks and evidence mislabeling.
 ## Website and reproduction acceptance
 
 The website consumes an immutable copy with source revision, file checksums and
-license. Its change is reviewed separately and remains a draft PR. Check its
+license. Its change is reviewed separately through a draft PR. Check its
 repository rules, content integrity, production build, accessibility and local
 preview. Do not deploy or merge. A fresh checkout must build the native core and
 repeat all fifteen CPU scenarios before any completion claim. Retained Isaac
 measurements describe only the tested environment and fixed experiment.
+
+The maintainer has now merged both reviewed changes. See the
+[post-merge audit](evidence/mvp-audit.md) for the served-site checks and remaining
+hosted validation item. The release gate is retained without adding a new feature.
