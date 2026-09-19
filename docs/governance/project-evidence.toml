@@ -1,0 +1,61 @@
+schema_version = 1
+project = "aeroloop"
+
+[authority]
+source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation-roadmap.md", "docs/architecture/decisions/", "code-and-tests", "supporting-documentation"]
+dhf_is_authoritative = false
+
+[review]
+last_reviewed = "2026-09-20"
+review_due = "2026-10-20"
+
+[[objectives]]
+id = "OBJ-MVP"
+statement = "Deliver measured physics control, Isaac learning and inspectable replay."
+status = "active"
+source_refs = ["GOAL.md"]
+validation_refs = ["docs/evidence/validation.md"]
+
+[[requirements]]
+id = "REQ-FOUNDATION"
+statement = "Run CPU checks and report capabilities without installing or exposing host identity."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/overview.md", "docs/architecture/decisions/001-physics-first.md"]
+implementation_refs = ["src/aeroloop/cli.py", "firmware/control_core/frames.hpp"]
+verification_refs = ["tests/test_foundation.py", "tests/cpp/frame_tests.cpp"]
+validation_refs = ["docs/evidence/validation.md"]
+risk_refs = ["SECURITY.md", "docs/compatibility.md"]
+
+[[requirements]]
+id = "REQ-ISAAC"
+statement = "Execute Isaac physics, train, reload and evaluate on fixed held-out seeds."
+status = "planned"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
+implementation_refs = []
+verification_refs = []
+validation_refs = []
+risk_refs = ["docs/compatibility.md"]
+
+[[work_items]]
+id = "AL-001"
+title = "Runnable CPU foundation"
+status = "verified"
+requirement_ids = ["REQ-FOUNDATION"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-autonomous-mvp"
+acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
+evidence_refs = ["docs/evidence/validation.md"]
+
+[[research_decisions]]
+id = "RD-PHYSICS"
+finding = "Standalone physics removes the PX4 execution dependency requested by the maintainer."
+disposition = "adopted"
+source_urls = ["https://underactuated.mit.edu/acrobot.html"]
+observed_on = "2026-09-20"
+reviewed_on = "2026-09-20"
+review_due = "2026-10-20"
+decision_ref = "docs/architecture/decisions/001-physics-first.md"
