@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "kind": "cpu_reproduction_audit",
+  "date": "2026-09-20",
+  "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+  "clean_checkout": true,
+  "trials": [
+    {
+      "run_id": "cpu-hover-0-e0a4e2f70dfb",
+      "scenario": "hover",
+      "seed": 0,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.043757943230451436,
+        "position_rmse_m": 5.707529445070036e-06,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "6c157b1e833a5630e0ca57e5cafdbb3779160afcdd799c7586d6c8e9e4b13731"
+    },
+    {
+      "run_id": "cpu-hover-1-5256356dbba6",
+      "scenario": "hover",
+      "seed": 1,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.05691895617120218,
+        "position_rmse_m": 8.194432844705035e-06,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "478c13017762892117c897c3a02c05e193d1f87e5534ab2cfdcd38ad8fc5a6d8"
+    },
+    {
+      "run_id": "cpu-hover-2-7aefb1519674",
+      "scenario": "hover",
+      "seed": 2,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.07779224927770206,
+        "position_rmse_m": 1.1822072370740182e-05,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "afed1633814e50d98b9ebf036cb4b9e62b5673f0ad1be4436f60fc5ee846127e"
+    },
+    {
+      "run_id": "cpu-hover-3-92f6a1ce9759",
+      "scenario": "hover",
+      "seed": 3,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.02958554034201666,
+        "position_rmse_m": 4.218916430881355e-06,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "dd555e9627beee1a8bfbf9973427fbf54efc0f3f0414e84b8d0a75daacd31e80"
+    },
+    {
+      "run_id": "cpu-hover-4-b92d32f41268",
+      "scenario": "hover",
+      "seed": 4,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.048780292767532145,
+        "position_rmse_m": 6.411365134226124e-06,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "b383b480dca273fad5ad3e9f41e5c69d43bd936fbeea27fb658492d4c2f672cd"
+    },
+    {
+      "run_id": "cpu-lateral-force-pulse-0-cf4ecd72a0e8",
+      "scenario": "lateral-force-pulse",
+      "seed": 0,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.0861169768872179,
+        "position_rmse_m": 0.013670413833342047,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "169545b6c7c9bd85751d17630247139eead9ba476fe7e5539c425b6584061628"
+    },
+    {
+      "run_id": "cpu-lateral-force-pulse-1-db990b1c52f6",
+      "scenario": "lateral-force-pulse",
+      "seed": 1,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.0861169363119756,
+        "position_rmse_m": 0.013670405665302235,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "bd50cc69db6cf9af27bcc7722a12f631f79dbb23759f3916cf268948a6f4e6c8"
+    },
+    {
+      "run_id": "cpu-lateral-force-pulse-2-44af521aae05",
+      "scenario": "lateral-force-pulse",
+      "seed": 2,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08611698272637347,
+        "position_rmse_m": 0.013670419111116175,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "1367590d4876715e5f4fc03962f6ed2244ee71a62485e81329e27cedb70443e3"
+    },
+    {
+      "run_id": "cpu-lateral-force-pulse-3-a7912af5d95d",
+      "scenario": "lateral-force-pulse",
+      "seed": 3,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08611694119518515,
+        "position_rmse_m": 0.013670404995527602,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "700b886b1ec167a91831240e06fdb4a278419985b7d6dced4baf24d1989deafe"
+    },
+    {
+      "run_id": "cpu-lateral-force-pulse-4-499f57f47c2f",
+      "scenario": "lateral-force-pulse",
+      "seed": 4,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08611694190079176,
+        "position_rmse_m": 0.013670406012002055,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "ecf403de77200a1f238097dd7d4ed87ce95fc468fb9805fc043210e21df08a4e"
+    },
+    {
+      "run_id": "cpu-position-step-0-243f08f2b257",
+      "scenario": "position-step",
+      "seed": 0,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.9999999381827589,
+        "position_rmse_m": 0.22871286732098595,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.09
+        }
+      },
+      "manifest_sha256": "ddf71d0621b5878849643292eb02ecab095e0cb2d61b52c72ff3702bcd96ed63"
+    },
+    {
+      "run_id": "cpu-position-step-1-bc31e4296ea5",
+      "scenario": "position-step",
+      "seed": 1,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.9999999174435011,
+        "position_rmse_m": 0.22871286502648683,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.09
+        }
+      },
+      "manifest_sha256": "a2b1d07ecd86d7c20dd5d97cd3cf423e95ac771329d7884f4e3e4fb989651e44"
+    },
+    {
+      "run_id": "cpu-position-step-2-71e45bfba6d5",
+      "scenario": "position-step",
+      "seed": 2,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.9999998893304299,
+        "position_rmse_m": 0.2287128618748638,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.09
+        }
+      },
+      "manifest_sha256": "bb8826826fcc500ace443854a56dc9f8c09783c5d44ce29893a1c6466a199ea1"
+    },
+    {
+      "run_id": "cpu-position-step-3-f673a6fc5b3e",
+      "scenario": "position-step",
+      "seed": 3,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.999999989495875,
+        "position_rmse_m": 0.2287128731895455,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.09
+        }
+      },
+      "manifest_sha256": "18807331d7c47e9515fb1f3b37a915573553beb17165b0532d2fcf7f847dfda3"
+    },
+    {
+      "run_id": "cpu-position-step-4-2a71853b497f",
+      "scenario": "position-step",
+      "seed": 4,
+      "status": "passed",
+      "source_commit": "adf668eaf69df7c90cc07da9ba510c76fd0ae66e",
+      "source_dirty": false,
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 1.0000000944542424,
+        "position_rmse_m": 0.22871288525741648,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.09
+        }
+      },
+      "manifest_sha256": "4fe1e328c710381cccaf841e462095210d0db7c2d1fa86be0a2dd88538db00bb"
+    }
+  ],
+  "passed": 15,
+  "total": 15
+}
