@@ -59,3 +59,25 @@ observed_on = "2026-09-20"
 reviewed_on = "2026-09-20"
 review_due = "2026-10-20"
 decision_ref = "docs/architecture/decisions/001-physics-first.md"
+
+[[requirements]]
+id = "REQ-PHYSICS"
+statement = "Execute the C++ controller in repeatable, measured CPU rigid-body experiments."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/physics-model.md"]
+implementation_refs = ["firmware/control_core/rate_pid.hpp", "src/aeroloop/physics.py", "src/aeroloop/simulation.py"]
+verification_refs = ["tests/cpp/rate_tests.cpp", "tests/test_physics.py"]
+validation_refs = ["docs/evidence/validation.md"]
+risk_refs = ["docs/physics-model.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-002"
+title = "Native controller and CPU physics"
+status = "verified"
+requirement_ids = ["REQ-PHYSICS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-physics-simulation"
+acceptance_refs = ["docs/DESIGN_AND_MVP_PLAN.md"]
+evidence_refs = ["docs/evidence/validation.md"]
