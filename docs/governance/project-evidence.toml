@@ -165,3 +165,13 @@ roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-20-autonomous-mvp-continuation"
 acceptance_refs = ["docs/replay-integration.md"]
 evidence_refs = ["docs/evidence/reproduction.md", "docs/evidence/reproduction-001.json", "docs/evidence/isaac-reproduction-001.json"]
+
+[[work_items]]
+id = "AL-005B"
+title = "Separate static website preview"
+status = "in-progress"
+requirement_ids = ["REQ-REUSABLE-REPLAY", "REQ-ISAAC"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-autonomous-mvp-continuation"
+acceptance_refs = ["docs/replay-integration.md"]
+evidence_refs = ["docs/evidence/website-preview.md"]
