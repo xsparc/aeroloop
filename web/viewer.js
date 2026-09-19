@@ -1,0 +1,102 @@
+const ID = /^cpu-(hover|position-step|lateral-force-pulse)-\d{1,10}-[0-9a-f]{12}$/;
+const finiteVector = (v, n) => Array.isArray(v) && v.length === n && v.every(x => typeof x === "number" && Number.isFinite(x));
+export function validateReplay(data) {
+  if (!data || data.schema_version !== 1 || data.kind !== "recorded_simulation" || !ID.test(data.run_id) || !Array.isArray(data.samples) || data.samples.length < 2 || data.samples.length > 10000) throw Error("Invalid replay contract");
+  let previous = -1;
+  for (const sample of data.samples) {
+    if (!Number.isFinite(sample.time_s) || sample.time_s < 0 || sample.time_s <= previous || sample.time_s > 120 || !finiteVector(sample.position_m, 3) || !finiteVector(sample.target_m, 3) || !finiteVector(sample.quaternion_wxyz, 4) || Math.abs(Math.hypot(...sample.quaternion_wxyz)-1) > 1e-6) throw Error("Invalid replay sample");
+    previous = sample.time_s;
+  }
+  return data;
+}
+export function sampleAt(samples, time) {
+  if (!Number.isFinite(time)) throw Error("Invalid replay time");
+  let low = 0, high = samples.length-1;
+  while (low+1 < high) { const middle = (low+high)>>1; if (samples[middle].time_s <= time) low = middle; else high = middle; }
+  if (time >= samples[high].time_s) low = high;
+  const a = samples[low], b = samples[Math.min(low+1, samples.length-1)];
+  const mix = b.time_s === a.time_s ? 0 : Math.max(0, Math.min(1, (time-a.time_s)/(b.time_s-a.time_s)));
+  return {position: a.position_m.map((v,i) => v+(b.position_m[i]-v)*mix), target: a.target_m, index: low};
+}
+const distance = (a,b) => Math.hypot(...a.map((v,i)=>v-b[i]));
+const project = ([e,n,u]) => [400+100*e+75*n, 335+22*e-40*n-100*u];
+
+async function start() {
+  const $ = id => document.getElementById(id);
+  let index, replay, runMetrics, manifest, time = 0, duration = 1, playing = false, previous = null, serial = 0;
+  async function read(name, verified = true) {
+    const response = await fetch(name, {cache:"no-store"});
+    if (!response.ok) throw Error("Evidence file unavailable");
+    const text = await response.text();
+    if (text.length > 32*1024*1024) throw Error("Evidence exceeds size limit");
+    if (verified) {
+      const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+      const hash = Array.from(new Uint8Array(digest), value => value.toString(16).padStart(2,"0")).join("");
+      if (hash !== index.checksums[name]) throw Error("Evidence checksum mismatch");
+    }
+    return JSON.parse(text);
+  }
+  function pause() { playing = false; previous = null; $("play").textContent = "Play replay"; }
+  function draw() {
+    if (!replay) return;
+    const sample = sampleAt(replay.samples, time);
+    const [x,y] = project(sample.position), [tx,ty] = project(sample.target);
+    $("drone").setAttribute("transform", `translate(${x} ${y})`);
+    $("target").setAttribute("transform", `translate(${tx} ${ty})`);
+    $("trail").setAttribute("points", [...replay.samples.slice(0,sample.index+1).map(s=>project(s.position_m).join(",")), `${x},${y}`].join(" "));
+    $("cursor").setAttribute("x1", 50+930*time/duration); $("cursor").setAttribute("x2", 50+930*time/duration);
+    $("time").value = time; $("clock").textContent = `${time.toFixed(2)} / ${duration.toFixed(2)} s`;
+    $("error").textContent = `${distance(sample.position,sample.target).toFixed(3)} m`;
+  }
+  function saveState() { history.replaceState(null,"",`#run=${$("experiment").selectedIndex}&t=${time.toFixed(2)}`); }
+  async function choose(entry, initialTime = 0) {
+    const request = ++serial; pause(); replay = null;
+    $("play").disabled = $("restart").disabled = $("time").disabled = true;
+    $("message").textContent = "Verifying recording checksums…";
+    const [r,m,e,f] = await Promise.all(["replay.json","metrics.json","events.json","manifest.json"].map(name=>read(`${entry.run_id}/${name}`)));
+    if (request !== serial) return;
+    validateReplay(r);
+    if (r.run_id !== entry.run_id || f.run_id !== entry.run_id || f.fixture !== false || f.kind !== "recorded_simulation") throw Error("Recording identity mismatch");
+    replay = r; runMetrics = m; manifest = f; duration = replay.samples.at(-1).time_s;
+    time = Math.max(0,Math.min(duration,Number.isFinite(initialTime)?initialTime:0));
+    $("time").max = duration;
+    $("play").disabled = $("restart").disabled = $("time").disabled = false;
+    $("whole-trail").setAttribute("points", replay.samples.map(s=>project(s.position_m).join(",")).join(" "));
+    $("rmse").textContent = runMetrics.position_rmse_m === null ? "Unavailable" : `${runMetrics.position_rmse_m > 0 && runMetrics.position_rmse_m < .0001 ? runMetrics.position_rmse_m.toExponential(2) : runMetrics.position_rmse_m.toFixed(4)} m`;
+    $("seed").textContent = manifest.seed; $("outcome").textContent = manifest.status;
+    $("revision").textContent = `${manifest.source_commit.slice(0,8)}${manifest.source_dirty ? " + changes" : ""}`;
+    $("message").textContent = "Checksums verified · CPU simulation";
+    $("record-link").href = `${entry.run_id}/manifest.json`;
+    $("summary").textContent = `${entry.scenario.replaceAll("-"," ")}, seed ${manifest.seed}: ${manifest.status}. ${runMetrics.samples.toLocaleString()} full-resolution samples over ${duration.toFixed(1)} seconds. RMSE uses the ${runMetrics.measurement_window_s.join("–")} s measurement window. ${manifest.failure_reason ? `Failure: ${manifest.failure_reason}.` : ""}`;
+    $("events").replaceChildren();
+    for (const event of e) {
+      const button = document.createElement("button"); button.textContent = `${event.time_s}s · ${event.type.replaceAll("_"," ")}`;
+      button.addEventListener("click",()=>{pause(); time=event.time_s; draw(); saveState();}); $("events").append(button);
+    }
+    const errors = replay.samples.map(s=>distance(s.position_m,s.target_m));
+    const max = Math.max(.01,...errors)*1.1;
+    $("error-line").setAttribute("points", replay.samples.map((s,i)=>`${50+930*s.time_s/duration},${150-130*errors[i]/max}`).join(" "));
+    $("plot-max").textContent = max.toFixed(2); $("plot-end").textContent = `${duration} s`;
+    draw();
+  }
+  function fail(error) { pause(); replay=null; $("play").disabled=$("restart").disabled=$("time").disabled=true; $("message").textContent = `Replay unavailable: ${error.message}`; }
+  $("play").addEventListener("click",()=>{if(!replay)return; if(playing){pause();saveState();} else{if(time>=duration)time=0;playing=true;previous=null;$("play").textContent="Pause replay";}});
+  $("restart").addEventListener("click",()=>{pause();time=0;draw();saveState();});
+  $("time").addEventListener("input",()=>{pause();time=Number($("time").value);draw();});
+  $("time").addEventListener("change",saveState);
+  $("experiment").addEventListener("change",()=>choose(index.runs[$("experiment").selectedIndex]).then(saveState).catch(fail));
+  function tick(now) { if(playing && replay){ if(previous!==null)time=Math.min(duration,time+Math.min(.1,(now-previous)/1000)*Number($("speed").value));previous=now;draw();if(time>=duration){pause();saveState();}}requestAnimationFrame(tick); }
+  requestAnimationFrame(tick);
+  try {
+    index = await read("index.json",false);
+    if(index.schema_version!==1 || index.kind!=="recorded_simulation" || index.release_status!=="research_preview" || index.isaac_validated!==false || !Array.isArray(index.runs) || !index.runs.length || index.runs.length>30 || !index.checksums || index.runs.some(r=>!ID.test(r.run_id))) throw Error("Invalid preview index");
+    $("experiment").replaceChildren();
+    for (const entry of index.runs) { const option=document.createElement("option");option.textContent=`${entry.scenario.replaceAll("-"," ")} · seed ${entry.seed}`;$("experiment").append(option); }
+    const params = new URLSearchParams(location.hash.slice(1));
+    const selected = Number(params.get("run") ?? 0);
+    $("experiment").selectedIndex = Number.isInteger(selected) && selected >= 0 && selected < index.runs.length ? selected : 0;
+    $("experiment").disabled=false;
+    await choose(index.runs[$("experiment").selectedIndex],Number(params.get("t")??0));
+  } catch(error) { fail(error); }
+}
+if (typeof document !== "undefined") start();

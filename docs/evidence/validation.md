@@ -33,3 +33,24 @@ These small hover errors reflect perfect state and ideal actuators, not aircraft
 performance. Full-resolution data, configuration, source/binary hashes and outcomes
 are retained in ignored `runs/`; they are not public source artifacts. PR checks do
 not establish Isaac, training, autopilot or real-flight behavior.
+
+## AL-003 evidence export and local replay
+
+Date: 2026-09-20.
+
+- `python tools/aeroloop test --suite cpu`: 32 tests passed, covering source hygiene,
+  corrupt checksums, forged metrics, truncated recordings, unknown metadata, fixtures,
+  path traversal, frame contracts, failed-trial retention and existing-output protection.
+- `node --test web/viewer.test.mjs`: 3 tests passed for interpolation, discontinuous
+  targets, endpoints, timestamp order and invalid pose data.
+- Three full 35 s recordings were generated and exported. Raw samples remain in the
+  bundle for metric reproduction; replay samples are reduced to approximately 20 Hz,
+  with event instants and neighboring samples retained.
+- Browser checks passed: checksum loading, scenario switching, play/pause, event jumps,
+  keyboard scrubbing and URL state. Desktop and 390 px mobile layouts were inspected.
+  No browser warnings or errors were reported during those checks.
+- Loopback HTTP checks: index returned 200; repository metadata, parent paths and
+  encoded parent paths returned 404. Server uses an explicit file allowlist and CSP.
+
+This is a dependency-free local SVG preview. The reusable React/Three.js website
+component remains AL-005. Checksums provide integrity, not source authentication.
