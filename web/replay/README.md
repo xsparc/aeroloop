@@ -65,3 +65,11 @@ recordings through physics execution. No policy training is implied by a rotor r
 CPU and Isaac flight-control replay are distinct from the hover training summary. No simulator
 executes in the browser, and these simplified models do not validate physical flight.
 This source uses the repository's Apache-2.0 license and original schematic geometry.
+# Turbulence comparison
+
+Version 3 Isaac wind recordings expose sampled wind, drag and pressure-centre
+moment alongside rotor thrust. Use **Compare reference** on a held recording
+when its same-seed attitude-only reference is in the bundle. It verifies matched
+wind, initial position and provenance before showing the reference error curve.
+The camera follows each selected drone; the SVG view fits the full trajectory.
+See [the wind workflow](../../docs/turbulence.md) for measured-recording commands.

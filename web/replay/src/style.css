@@ -231,3 +231,33 @@
     font-size: 10px;
   }
 }
+.al-replay .al-wind-intro,
+.al-replay .al-comparison {
+  border-left: 3px solid #a855f7;
+  padding: 0.7rem 1rem;
+  margin: 1rem 0;
+  background: #f5f3ff;
+}
+@media (prefers-color-scheme: dark) {
+  .al-replay .al-wind-intro,
+  .al-replay .al-comparison {
+    background: #182033;
+  }
+}
+.al-replay .al-wind-intro p,
+.al-replay .al-comparison p {
+  margin: 0.45rem 0 0;
+}
+.al-replay .al-wind-readings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.al-replay .al-wind-readings dd {
+  margin: 0.35rem 0 0;
+  font-weight: 650;
+}
+.al-replay .al-wind-readings dt {
+  font-size: 0.85rem;
+}

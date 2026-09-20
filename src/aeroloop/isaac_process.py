@@ -51,21 +51,51 @@ def run_worker(python, mode, output, options=(), timeout=3600):
     if mode == "smoke" and result.get("passed") is not True:
         raise ValidationError("Isaac physics smoke failed")
     if mode == "flight":
-        from .evidence import RUN_ID, read_run
-        rows = result.get("results")
-        if not isinstance(rows, list) or not 1 <= len(rows) <= 15 or type(result.get("trials")) is not int or result["trials"] != len(rows):
-            raise ValidationError("incomplete flight result")
-        seen, passed = set(), 0
-        for row in rows:
-            identity = row.get("run_id") if isinstance(row, dict) else None
-            if not isinstance(identity, str) or not RUN_ID.fullmatch(identity) or not identity.startswith("isaac-") or identity in seen:
-                raise ValidationError("invalid flight run identity")
-            seen.add(identity)
-            run = read_run(output / identity)
-            manifest = run["manifest.json"]
-            if manifest["run_id"] != identity or any(manifest[key] != row.get(key) for key in ("scenario", "seed", "status")) or run["metrics.json"] != row.get("metrics"):
-                raise ValidationError("flight summary disagrees with recording")
-            passed += manifest["status"] == "passed"
-        if type(result.get("passed")) is not int or result["passed"] != passed:
-            raise ValidationError("flight aggregate disagrees with outcomes")
+        validate_flight_result(output, result)
     return result
+
+
+def validate_flight_result(output, result):
+    """Verify retained flight artifacts without executing a worker."""
+    output = Path(output)
+    if result.get("schema_version") != 1 or result.get("kind") != KINDS["flight"] or result.get("backend") != "isaacsim_physx":
+        raise ValidationError("invalid flight completion artifact")
+    from .evidence import RUN_ID, read_run
+    rows = result.get("results")
+    if not isinstance(rows, list) or not 1 <= len(rows) <= 15 or type(result.get("trials")) is not int or result["trials"] != len(rows):
+        raise ValidationError("incomplete flight result")
+    seen, passed, cases, wind_runs, verified = set(), 0, set(), {}, []
+    for row in rows:
+        identity = row.get("run_id") if isinstance(row, dict) else None
+        if not isinstance(identity, str) or not RUN_ID.fullmatch(identity) or not identity.startswith("isaac-") or identity in seen:
+            raise ValidationError("invalid flight run identity")
+        seen.add(identity)
+        run = read_run(output / identity)
+        verified.append(run)
+        manifest = run["manifest.json"]
+        case = (manifest["scenario"], manifest["seed"])
+        if case in cases:
+            raise ValidationError("duplicate flight case")
+        cases.add(case)
+        if manifest["schema_version"] == 3:
+            wind_runs[case] = run
+        if manifest["run_id"] != identity or any(manifest[key] != row.get(key) for key in ("scenario", "seed", "status")) or run["metrics.json"] != row.get("metrics"):
+            raise ValidationError("flight summary disagrees with recording")
+        passed += manifest["status"] == "passed"
+    if type(result.get("passed")) is not int or result["passed"] != passed:
+        raise ValidationError("flight aggregate disagrees with outcomes")
+    if wind_runs:
+        from .wind import WIND_SCENARIOS, comparisons
+        if result.get("comparisons") != comparisons(rows):
+            raise ValidationError("wind comparison disagrees with outcomes")
+        for (_, seed), run in wind_runs.items():
+            pair = wind_runs.get((WIND_SCENARIOS[1], seed))
+            if pair is None:
+                continue
+            for key in ("source_commit", "source_dirty", "source_tree_sha256", "controller_binary_sha256", "lock_sha256"):
+                if run["manifest.json"][key] != pair["manifest.json"][key]:
+                    raise ValidationError("wind pair provenance differs")
+            common = lambda data: {k: v for k, v in data["config.json"].items() if k not in ("scenario", "horizontal_position_hold")}
+            if common(run) != common(pair):
+                raise ValidationError("wind pair configuration differs")
+    return verified

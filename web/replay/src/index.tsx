@@ -13,6 +13,8 @@ import {
 } from "react";
 import {
   sampleAt,
+  tiltDegrees,
+  validateWindPair,
   type Index,
   type Recording,
   type Vec3,
@@ -63,6 +65,9 @@ export function ReplayViewer({
     [selected, setSelected] = useState(0);
   const [recording, setRecording] = useState<Recording | null>(null),
     [time, setTime] = useState(0);
+  const [compare, setCompare] = useState(false),
+    [reference, setReference] = useState<Recording | null>(null),
+    [comparisonMessage, setComparisonMessage] = useState("");
   const [speed, setSpeed] = useState(1),
     [three, setThree] = useState(false),
     [gpuFailed, setGpuFailed] = useState(false);
@@ -105,6 +110,8 @@ export function ReplayViewer({
     const abort = new AbortController();
     setIndex(null);
     setRecording(null);
+    setReference(null);
+    setCompare(false);
     setPlaying(false);
     setMessage("Verifying recording index...");
     async function read() {
@@ -130,6 +137,8 @@ export function ReplayViewer({
     if (!index) return;
     const abort = new AbortController();
     setRecording(null);
+    setReference(null);
+    setCompare(false);
     setPlaying(false);
     setTime(0);
     setMessage("Verifying selected recording...");
@@ -157,6 +166,44 @@ export function ReplayViewer({
     void read();
     return () => abort.abort();
   }, [index, selected, baseUrl]);
+  const referenceEntry =
+    recording?.entry.scenario === "turbulence-hold"
+      ? index?.runs.find(
+          (entry) =>
+            entry.scenario === "turbulence-attitude-only" &&
+            entry.seed === recording.entry.seed,
+        )
+      : undefined;
+  useEffect(() => {
+    setReference(null);
+    setComparisonMessage("");
+    if (!compare || !referenceEntry || !recording || !index) return;
+    const abort = new AbortController();
+    const held = recording;
+    setComparisonMessage("Verifying the matching reference...");
+    loadRecording(
+      evidenceBase(baseUrl, location.href),
+      index,
+      referenceEntry,
+      abort.signal,
+    )
+      .then((result) => {
+        const paired = validateWindPair(held, result);
+        if (!abort.signal.aborted) {
+          setReference(paired);
+          setComparisonMessage(
+            "Same seed, initial position, wind samples and source verified. Reference keeps altitude and attitude control; horizontal position hold is disabled.",
+          );
+        }
+      })
+      .catch(() => {
+        if (!abort.signal.aborted)
+          setComparisonMessage(
+            "Comparison unavailable: matching evidence failed verification.",
+          );
+      });
+    return () => abort.abort();
+  }, [compare, referenceEntry, recording, index, baseUrl]);
   const duration = recording?.samples.at(-1)?.time_s ?? 0;
   useEffect(() => {
     if (!playing || !visible || !recording) return;
@@ -177,14 +224,26 @@ export function ReplayViewer({
     if (time >= duration) setPlaying(false);
   }, [time, duration]);
   const sample = recording ? sampleAt(recording.samples, time) : null;
+  const referenceSample =
+    reference && recording?.entry.scenario === "turbulence-hold"
+      ? sampleAt(reference.samples, time)
+      : null;
   const plot = useMemo(() => {
     if (!recording) return null;
     const errors = recording.samples.map((s) =>
       distance(s.position_m, s.target_m),
     );
-    const max = Math.max(0.01, ...errors) * 1.1;
+    const referenceErrors =
+      reference?.samples.map((s) => distance(s.position_m, s.target_m)) ?? [];
+    const max = Math.max(0.01, ...errors, ...referenceErrors) * 1.1;
     return {
       max,
+      referencePoints: reference?.samples
+        .map(
+          (s, i) =>
+            `${40 + (640 * s.time_s) / duration},${110 - (90 * referenceErrors[i]) / max}`,
+        )
+        .join(" "),
       points: recording.samples
         .map(
           (s, i) =>
@@ -192,14 +251,49 @@ export function ReplayViewer({
         )
         .join(" "),
     };
-  }, [recording, duration]);
+  }, [recording, reference, duration]);
   const seek = (t: number) => {
     setPlaying(false);
     setTime(t);
   };
-  const xy = sample ? project(sample.position_m) : [340, 150],
-    target = sample ? project(sample.target_m) : [340, 150];
+  const projection = useMemo(() => {
+    if (recording?.manifest.model !== "quadrotor-x-wind-v1") return project;
+    const points = recording.samples.flatMap((s) => [
+      project(s.position_m),
+      project(s.target_m),
+    ]);
+    const xs = points.map((p) => p[0]),
+      ys = points.map((p) => p[1]);
+    const left = Math.min(...xs),
+      right = Math.max(...xs),
+      top = Math.min(...ys),
+      bottom = Math.max(...ys);
+    const scale = Math.min(
+      1,
+      580 / Math.max(1, right - left),
+      240 / Math.max(1, bottom - top),
+    );
+    return (value: Vec3) => {
+      const [x, y] = project(value);
+      return [
+        360 + (x - (left + right) / 2) * scale,
+        170 + (y - (top + bottom) / 2) * scale,
+      ];
+    };
+  }, [recording]);
+  const xy = sample ? projection(sample.position_m) : [340, 150],
+    target = sample ? projection(sample.target_m) : [340, 150];
   const rotorFlight = recording?.manifest.experiment === "isaac-quadrotor";
+  const windFlight = recording?.manifest.model === "quadrotor-x-wind-v1";
+  const held = recording?.entry.scenario === "turbulence-hold";
+  const windMetrics = recording?.metrics.turbulence;
+  const referenceRmse = reference?.metrics.turbulence?.wind_position_rmse_m;
+  const reduction =
+    windMetrics?.wind_position_rmse_m != null &&
+    referenceRmse != null &&
+    referenceRmse > 0
+      ? 100 * (1 - windMetrics.wind_position_rmse_m / referenceRmse)
+      : null;
   return (
     <section ref={root} className="al-replay" aria-labelledby={`${id}-title`}>
       <header className="al-heading">
@@ -221,6 +315,24 @@ export function ReplayViewer({
           : "Inspect a rigid-body experiment with a native rate controller."}{" "}
         These recorded trajectories are separate from the learned hover policy.
       </p>
+      {windFlight && (
+        <div className="al-wind-intro">
+          <strong>
+            {held
+              ? "Position hold enabled"
+              : "Reference: horizontal position hold disabled"}
+          </strong>
+          <p>
+            Seeded turbulent wind applies drag and overturning moments in PhysX.
+            Altitude and attitude control remain enabled in both experiments.
+            Wind acts from 5–25 s, with a stronger gust at 12–14 s.
+          </p>
+          <p>
+            Illustrative temporal wind and drag model; airborne start with
+            perfect state.
+          </p>
+        </div>
+      )}
       <div className="al-controls">
         <label>
           Experiment{" "}
@@ -230,6 +342,8 @@ export function ReplayViewer({
             onChange={(e) => {
               setPlaying(false);
               setRecording(null);
+              setReference(null);
+              setCompare(false);
               setSelected(Number(e.target.value));
             }}
           >
@@ -247,6 +361,15 @@ export function ReplayViewer({
         >
           {three ? "Use schematic" : "Enable 3D view"}
         </button>
+        {referenceEntry && (
+          <button
+            type="button"
+            aria-pressed={compare}
+            onClick={() => setCompare((value) => !value)}
+          >
+            {compare ? "Hide reference comparison" : "Compare reference"}
+          </button>
+        )}
       </div>
       <div
         className="al-stage"
@@ -287,7 +410,7 @@ export function ReplayViewer({
           {recording && (
             <polyline
               points={recording.samples
-                .map((s) => project(s.position_m).join(","))
+                .map((s) => projection(s.position_m).join(","))
                 .join(" ")}
               fill="none"
               stroke="#67e8f9"
@@ -328,11 +451,43 @@ export function ReplayViewer({
           </SceneBoundary>
         )}
         <span className="al-stage-note">
-          {three
-            ? "3D attitude / gold nose and target"
-            : "Position schematic / gold target"}
+          {three && windFlight
+            ? "Violet wind / orange drag / green thrust · camera follows drone"
+            : three
+              ? "3D attitude / gold nose and target"
+              : windFlight
+                ? "Position schematic fits full path / gold target"
+                : "Position schematic / gold target"}
         </span>
       </div>
+      {sample?.wind_velocity_m_s && (
+        <dl className="al-wind-readings" aria-label="Wind and stabilization">
+          <div>
+            <dt>Wind phase</dt>
+            <dd>
+              {time < 5
+                ? "Calm"
+                : time >= 25
+                  ? "Recovery in calm air"
+                  : time >= 12 && time < 14
+                    ? "Stronger gust"
+                    : "Turbulent wind"}
+            </dd>
+          </div>
+          <div>
+            <dt>Wind speed</dt>
+            <dd>{Math.hypot(...sample.wind_velocity_m_s).toFixed(2)} m/s</dd>
+          </div>
+          <div>
+            <dt>Drag force</dt>
+            <dd>{Math.hypot(...sample.external_force_n!).toFixed(2)} N</dd>
+          </div>
+          <div>
+            <dt>Drone tilt</dt>
+            <dd>{tiltDegrees(sample.quaternion_wxyz).toFixed(2)}°</dd>
+          </div>
+        </dl>
+      )}
       {sample?.rotor_thrust_n && (
         <div className="al-rotors" aria-label="Applied rotor thrust">
           {sample.rotor_thrust_n.map((thrust, i) => (
@@ -404,7 +559,10 @@ export function ReplayViewer({
       {plot && (
         <div>
           <div className="al-plot-labels">
-            <span>Position error: 0 to {plot.max.toFixed(2)} m</span>
+            <span>
+              Position error: 0 to {plot.max.toFixed(2)} m
+              {reference ? " · cyan: hold / orange: reference" : ""}
+            </span>
           </div>
           <svg
             className="al-plot"
@@ -413,6 +571,16 @@ export function ReplayViewer({
             role="img"
             aria-label="Position error over time. Plot uses display samples; summary RMSE uses full-resolution data."
           >
+            {windFlight && (
+              <rect
+                x={40 + (640 * 5) / duration}
+                y="20"
+                width={(640 * 20) / duration}
+                height="90"
+                fill="#a855f7"
+                opacity=".08"
+              />
+            )}
             <path
               d="M40 20v90h640"
               stroke="currentColor"
@@ -425,6 +593,15 @@ export function ReplayViewer({
               strokeWidth="2"
               fill="none"
             />
+            {plot.referencePoints && (
+              <polyline
+                points={plot.referencePoints}
+                stroke="#ea580c"
+                strokeWidth="2"
+                strokeDasharray="6 3"
+                fill="none"
+              />
+            )}
             <path
               d={`M${40 + (640 * time) / duration} 20v90`}
               stroke="currentColor"
@@ -434,6 +611,31 @@ export function ReplayViewer({
             <span>0 s</span>
             <span>{duration} s</span>
           </div>
+        </div>
+      )}
+      {compare && <p className="al-comparison-message">{comparisonMessage}</p>}
+      {referenceSample && sample && windMetrics && (
+        <div className="al-comparison" aria-label="Stabilization comparison">
+          <strong>
+            {reduction === null
+              ? "RMSE comparison unavailable"
+              : `${reduction.toFixed(1)}% less position error during wind`}
+          </strong>
+          <p>
+            5–25 s full-resolution RMSE: hold{" "}
+            {windMetrics!.wind_position_rmse_m?.toFixed(3)} m; reference{" "}
+            {referenceRmse?.toFixed(3)} m.
+          </p>
+          <p>
+            At {time.toFixed(2)} s: hold{" "}
+            {distance(sample!.position_m, sample!.target_m).toFixed(3)} m;
+            reference{" "}
+            {distance(
+              referenceSample.position_m,
+              referenceSample.target_m,
+            ).toFixed(3)}{" "}
+            m from target.
+          </p>
         </div>
       )}
       <div className="al-controls" aria-label="Recorded events">
@@ -466,9 +668,25 @@ export function ReplayViewer({
             </div>
             <div>
               <dt>Recorded outcome</dt>
-              <dd>{recording.entry.status}</dd>
+              <dd>
+                {windFlight && !held && recording.entry.status === "passed"
+                  ? "Reference completed (position hold disabled)"
+                  : recording.entry.status}
+              </dd>
             </div>
           </dl>
+          {windMetrics && (
+            <p>
+              Wind-window RMSE:{" "}
+              {windMetrics.wind_position_rmse_m?.toFixed(3) ?? "unavailable"} m.
+              Peak tilt: {windMetrics.peak_tilt_deg.toFixed(2)}°. Recovery after
+              wind ends:{" "}
+              {windMetrics.recovery_time_s === null
+                ? "did not recover"
+                : `${windMetrics.recovery_time_s.toFixed(3)} s`}
+              , within 0.10 m for 2 s.
+            </p>
+          )}
           <p>
             {recording.metrics.samples.toLocaleString("en-US")} full-resolution
             samples. RMSE window:{" "}

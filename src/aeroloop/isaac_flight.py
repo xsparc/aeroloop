@@ -6,9 +6,10 @@ import time
 
 from .controller import RateController
 from .frames import normalize, rotate
-from .physics import Model, State, desired_wrench
+from .physics import Model, State
 from .rotors import RotorModel
 from .simulation import encoded, metrics, record, sha256
+from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, flight_setpoint, wind_outcome, comparisons
 
 
 def flight(output: Path, launcher_args):
@@ -51,6 +52,8 @@ def flight(output: Path, launcher_args):
                 previous_rate, saturation = (0., 0., 0.), (0, 0, 0)
                 samples, events = [], []
                 status, reason = "passed", None
+                wind_model = WindModel() if scenario in WIND_SCENARIOS else None
+                winds = list(wind_model.velocities(seed, dt, round(duration/dt)+1)) if wind_model else None
                 with RateController() as controller:
                     library_hash = sha256(controller.path.read_bytes())
                     for step in range(round(duration/dt)+1):
@@ -64,11 +67,15 @@ def flight(output: Path, launcher_args):
                             tuple((v-old)/dt for v, old in zip(rate, previous_rate)) if step else (0., 0., 0.))
                         target = (0., 1., 1.5) if scenario == "position-step" and 10 <= t < 25 else (0., 0., 1.5)
                         external = (.5, 0., 0.) if scenario == "lateral-force-pulse" and 15 <= t < 15.5 else (0., 0., 0.)
+                        external_moment = (0., 0., 0.)
+                        if wind_model:
+                            external, external_moment = wind_model.wrench(state.velocity, state.quaternion, rate, winds[step])
+                            events.extend({"time_s": t, "type": kind} for instant, kind in WIND_EVENTS if t == instant)
                         if scenario == "position-step" and t in (10., 25.):
                             events.append({"time_s": t, "type": "target_step"})
                         if scenario == "lateral-force-pulse" and t in (15., 15.5):
                             events.append({"time_s": t, "type": "force_start" if t == 15. else "force_end"})
-                        thrust_request, rate_request = desired_wrench(state, target, model)
+                        thrust_request, rate_request = flight_setpoint(state, target, model, scenario)
                         effort = controller.step(rate, rate_request, state.acceleration, dt, saturation)
                         wanted = tuple(e*s for e, s in zip(effort, model.max_moment))
                         commands, saturation, scale = rotors.allocate(thrust_request, wanted)
@@ -82,6 +89,8 @@ def flight(output: Path, launcher_args):
                             "effort_normalized": effort, "thrust_n": thrust, "external_force_n": external,
                             "thrust_setpoint_n": thrust_request, "rotor_command_n": commands,
                             "rotor_thrust_n": motors, "moment_nm": moment, "allocation_scale": scale})
+                        if wind_model:
+                            samples[-1].update(wind_velocity_m_s=winds[step], external_moment_nm=external_moment)
                         if state.position[2] <= 0 or sum(v*v for v in state.position) > 100**2:
                             status, reason = "failed", "model_bounds_exceeded"
                             break
@@ -90,7 +99,7 @@ def flight(output: Path, launcher_args):
                         inverse = (state.quaternion[0], *(-v for v in state.quaternion[1:]))
                         body_external = rotate(inverse, external)
                         forces[0, 0] = torch.tensor((body_external[0], body_external[1], thrust+body_external[2]), device=sim.device)
-                        torques[0, 0] = torch.tensor(moment, device=sim.device)
+                        torques[0, 0] = torch.tensor(tuple(m+e for m, e in zip(moment, external_moment)), device=sim.device)
                         body.permanent_wrench_composer.set_forces_and_torques_index(
                             forces=forces, torques=torques, is_global=False)
                         body.write_data_to_sim()
@@ -99,6 +108,9 @@ def flight(output: Path, launcher_args):
                         previous_rate = rate
                 measured = metrics(samples, scenario)
                 if status == "passed":
+                    if wind_model:
+                        reason = wind_outcome(measured, scenario)
+                        status = "failed" if reason else "passed"
                     if scenario == "hover" and (measured["position_rmse_m"] is None or measured["position_rmse_m"] > .25):
                         status, reason = "failed", "hover_threshold"
                     if scenario == "position-step" and measured["step_response"]["settling_time_s"] is None:
@@ -111,6 +123,8 @@ def flight(output: Path, launcher_args):
                     "rate_gains": {"p": [.6]*3, "i": [.1]*3, "d": [.005]*3, "ff": [0.]*3, "integral_limit": [.3]*3},
                     "actuator": asdict(rotors), "simulator_versions": package_versions,
                     "physics_options": {"gyroscopic_forces": True}}
+                if wind_model:
+                    config.update(wind=asdict(wind_model), horizontal_position_hold=scenario == "turbulence-hold")
                 run = record({"experiment": "isaac-quadrotor", "config": config, "samples": samples,
                     "events": events, "metrics": measured, "status": status, "failure_reason": reason,
                     "controller_binary_sha256": library_hash}, output)
@@ -120,5 +134,7 @@ def flight(output: Path, launcher_args):
         result = {"schema_version": 1, "kind": "isaac_quadrotor_flight", "backend": "isaacsim_physx",
                   "versions": package_versions, "results": results, "trials": len(results),
                   "passed": sum(r["status"] == "passed" for r in results), "wall_time_s": time.perf_counter()-started}
+        if any(row["scenario"] in WIND_SCENARIOS for row in results):
+            result["comparisons"] = comparisons(results)
         (output / "result.json").write_bytes(encoded(result))
         print(f"Completed {len(results)} rotor-actuated PhysX trials.", flush=True)

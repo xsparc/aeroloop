@@ -6,6 +6,9 @@ export type Sample = {
   target_m: Vec3;
   quaternion_wxyz: Wxyz;
   rotor_thrust_n?: [number, number, number, number];
+  wind_velocity_m_s?: Vec3;
+  external_force_n?: Vec3;
+  external_moment_nm?: Vec3;
 };
 export type Entry = {
   run_id: string;
@@ -22,18 +25,28 @@ export type Recording = {
     position_rmse_m: number | null;
     samples: number;
     measurement_window_s: [number, number];
+    turbulence?: {
+      wind_position_rmse_m: number | null;
+      peak_tilt_deg: number;
+      recovery_time_s: number | null;
+      recovery_band_m: number;
+      recovery_dwell_s: number;
+    };
   };
   manifest: {
     experiment: "cpu-rigid-body" | "isaac-quadrotor";
-    model: "ideal-body-wrench-v1" | "quadrotor-x-v1";
+    model: "ideal-body-wrench-v1" | "quadrotor-x-v1" | "quadrotor-x-wind-v1";
     source_commit: string;
     source_dirty: boolean;
+    source_tree_sha256?: string;
+    controller_binary_sha256?: string;
+    lock_sha256?: string;
     failure_reason: string | null;
   };
 };
 export const HASH = /^[0-9a-f]{64}$/;
 const ID =
-  /^(cpu|isaac)-(hover|position-step|lateral-force-pulse)-\d{1,10}-[0-9a-f]{12}$/;
+  /^(cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only)-\d{1,10}-[0-9a-f]{12}$/;
 const finite = (n: unknown): n is number =>
   typeof n === "number" && Number.isFinite(n);
 const vector = (v: unknown, n: number) =>
@@ -49,7 +62,8 @@ export function validateIndex(value: unknown): Index {
   const data = object(value);
   assertContract(
     ((data.schema_version === 1 && data.isaac_validated === false) ||
-      (data.schema_version === 2 &&
+      ([2, 3].includes(Number(data.schema_version)) &&
+        typeof data.schema_version === "number" &&
         data.learning_validated === false &&
         !("isaac_validated" in data))) &&
       data.kind === "recorded_simulation" &&
@@ -68,16 +82,24 @@ export function validateIndex(value: unknown): Index {
         !seen.has(run.run_id),
     );
     assertContract(
-      ["hover", "position-step", "lateral-force-pulse"].includes(
-        String(run.scenario),
-      ) &&
+      [
+        "hover",
+        "position-step",
+        "lateral-force-pulse",
+        "turbulence-hold",
+        "turbulence-attitude-only",
+      ].includes(String(run.scenario)) &&
         Number.isInteger(run.seed) &&
         Number(run.seed) >= 0 &&
         Number(run.seed) <= 2147483647,
     );
+    if (String(run.scenario).startsWith("turbulence-"))
+      assertContract(
+        data.schema_version === 3 && run.run_id.startsWith("isaac-"),
+      );
     assertContract(
       (run.run_id.startsWith(`cpu-${run.scenario}-${run.seed}-`) ||
-        (data.schema_version === 2 &&
+        ([2, 3].includes(Number(data.schema_version)) &&
           run.run_id.startsWith(`isaac-${run.scenario}-${run.seed}-`))) &&
         ["passed", "failed"].includes(String(run.status)),
     );
@@ -109,7 +131,9 @@ export function validateRecording(
     manifest = object(manifestValue),
     metrics = object(metricsValue);
   const flight = entry.run_id.startsWith("isaac-");
-  const schema = flight ? 2 : 1;
+  const wind = entry.scenario.startsWith("turbulence-");
+  const schema = wind ? 3 : flight ? 2 : 1;
+  assertContract(!wind || flight);
   assertContract(
     replay.schema_version === schema &&
       replay.kind === "recorded_simulation" &&
@@ -123,7 +147,12 @@ export function validateRecording(
   );
   assertContract(
     manifest.experiment === (flight ? "isaac-quadrotor" : "cpu-rigid-body") &&
-      manifest.model === (flight ? "quadrotor-x-v1" : "ideal-body-wrench-v1") &&
+      manifest.model ===
+        (wind
+          ? "quadrotor-x-wind-v1"
+          : flight
+            ? "quadrotor-x-v1"
+            : "ideal-body-wrench-v1") &&
       manifest.controller === "rate-pid-v1",
   );
   assertContract(
@@ -149,6 +178,8 @@ export function validateRecording(
       "hover_threshold",
       "recovery_threshold",
       "step_did_not_settle",
+      "attitude_altitude_threshold",
+      "turbulence_hold_threshold",
     ].includes(manifest.failure_reason as string | null),
   );
   assertContract(
@@ -168,6 +199,16 @@ export function validateRecording(
           (s.rotor_thrust_n as number[]).every((n) => n >= 0 && n <= 5),
       );
     else assertContract(s.rotor_thrust_n === undefined);
+    for (const field of [
+      "wind_velocity_m_s",
+      "external_force_n",
+      "external_moment_nm",
+    ])
+      assertContract(wind ? vector(s[field], 3) : s[field] === undefined);
+    if (wind)
+      assertContract(
+        Math.hypot(...(s.wind_velocity_m_s as number[])) <= 12.000001,
+      );
     assertContract(
       finite(s.time_s) &&
         s.time_s > previous &&
@@ -199,6 +240,30 @@ export function validateRecording(
       Number(metrics.samples) <= 120001,
   );
   assertContract(vector(metrics.measurement_window_s, 2));
+  if (wind) {
+    const turbulence = object(metrics.turbulence);
+    for (const field of ["wind_position_rmse_m", "recovery_time_s"])
+      assertContract(
+        turbulence[field] === null ||
+          (finite(turbulence[field]) && turbulence[field] >= 0),
+      );
+    assertContract(
+      finite(turbulence.peak_tilt_deg) &&
+        turbulence.peak_tilt_deg >= 0 &&
+        turbulence.peak_tilt_deg <= 180,
+    );
+    assertContract(
+      turbulence.recovery_band_m === 0.1 && turbulence.recovery_dwell_s === 2,
+    );
+    for (const field of [
+      "source_tree_sha256",
+      "controller_binary_sha256",
+      "lock_sha256",
+    ])
+      assertContract(
+        typeof manifest[field] === "string" && HASH.test(manifest[field]),
+      );
+  } else assertContract(metrics.turbulence === undefined);
   const window = metrics.measurement_window_s as number[];
   assertContract(window[0] >= 0 && window[1] >= window[0] && window[1] <= 120);
   assertContract(Array.isArray(eventsValue) && eventsValue.length <= 100);
@@ -212,7 +277,10 @@ export function validateRecording(
         e.time_s <= replay.samples.at(-1).time_s,
     );
     assertContract(
-      ["target_step", "force_start", "force_end"].includes(String(e.type)),
+      (wind
+        ? ["wind_start", "gust_start", "gust_end", "wind_end"]
+        : ["target_step", "force_start", "force_end"]
+      ).includes(String(e.type)),
     );
     previous = e.time_s;
   }
@@ -273,5 +341,56 @@ export function sampleAt(samples: Sample[], time: number): Sample {
           ) as [number, number, number, number],
         }
       : {}),
+    ...(a.wind_velocity_m_s
+      ? Object.fromEntries(
+          (
+            [
+              "wind_velocity_m_s",
+              "external_force_n",
+              "external_moment_nm",
+            ] as const
+          ).map((key) => [
+            key,
+            a[key]!.map((n, i) => n + (b[key]![i] - n) * t),
+          ]),
+        )
+      : {}),
   };
+}
+
+export const tiltDegrees = ([w, x, y, z]: Wxyz) =>
+  (Math.acos(Math.max(-1, Math.min(1, 1 - 2 * (x * x + y * y)))) * 180) /
+  Math.PI;
+
+export function validateWindPair(held: Recording, reference: Recording) {
+  assertContract(
+    held.entry.scenario === "turbulence-hold" &&
+      reference.entry.scenario === "turbulence-attitude-only" &&
+      held.entry.seed === reference.entry.seed,
+  );
+  for (const key of [
+    "source_commit",
+    "source_dirty",
+    "source_tree_sha256",
+    "controller_binary_sha256",
+    "lock_sha256",
+  ] as const)
+    assertContract(held.manifest[key] === reference.manifest[key]);
+  assertContract(held.samples.length === reference.samples.length);
+  for (let i = 0; i < held.samples.length; i++) {
+    const a = held.samples[i],
+      b = reference.samples[i];
+    assertContract(
+      a.time_s === b.time_s &&
+        a.wind_velocity_m_s &&
+        b.wind_velocity_m_s &&
+        a.wind_velocity_m_s.every((v, j) => v === b.wind_velocity_m_s![j]),
+    );
+  }
+  assertContract(
+    held.samples[0].position_m.every(
+      (v, i) => v === reference.samples[0].position_m[i],
+    ),
+  );
+  return reference;
 }

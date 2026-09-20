@@ -9,6 +9,8 @@ import {
   slerp,
   validateIndex,
   validateRecording,
+  validateWindPair,
+  tiltDegrees,
 } from "../dist/contracts.js";
 import { evidenceBase, readVerified } from "../dist/load.js";
 import { ReplayViewer } from "../dist/index.js";
@@ -26,6 +28,114 @@ const samples = [
     quaternion_wxyz: [Math.SQRT1_2, 0, 0, Math.SQRT1_2],
   },
 ];
+
+test("wind recordings require version 3 and comparisons reject mismatched wind or provenance", () => {
+  // Synthetic protocol fixtures only; measured PhysX data is exercised separately.
+  function fixture(scenario) {
+    const entry = {
+      run_id: `isaac-${scenario}-0-123456789abc`,
+      scenario,
+      seed: 0,
+      status: "passed",
+    };
+    const replay = {
+      schema_version: 3,
+      kind: "recorded_simulation",
+      run_id: entry.run_id,
+      samples: samples.map((s, i) => ({
+        ...s,
+        rotor_thrust_n: [2, 2, 2, 2],
+        wind_velocity_m_s: [i, 0, 0],
+        external_force_n: [i * 0.1, 0, 0],
+        external_moment_nm: [0, i * 0.003, 0],
+      })),
+    };
+    const manifest = {
+      ...entry,
+      schema_version: 3,
+      fixture: false,
+      kind: "recorded_simulation",
+      experiment: "isaac-quadrotor",
+      model: "quadrotor-x-wind-v1",
+      controller: "rate-pid-v1",
+      world_frame: "ENU",
+      body_frame: "FLU",
+      quaternion_order: "wxyz",
+      units: "SI",
+      source_commit: "a".repeat(40),
+      source_dirty: false,
+      failure_reason: null,
+      source_tree_sha256: "b".repeat(64),
+      controller_binary_sha256: "c".repeat(64),
+      lock_sha256: "d".repeat(64),
+    };
+    const metrics = {
+      position_rmse_m: 0.1,
+      samples: 2,
+      measurement_window_s: [0, 1],
+      turbulence: {
+        wind_position_rmse_m: 0.1,
+        peak_tilt_deg: 10,
+        recovery_time_s: null,
+        recovery_band_m: 0.1,
+        recovery_dwell_s: 2,
+      },
+    };
+    return { entry, replay, manifest, metrics };
+  }
+  const a = fixture("turbulence-hold"),
+    b = fixture("turbulence-attitude-only");
+  const read = (f) =>
+    validateRecording(f.entry, f.replay, f.manifest, f.metrics, []);
+  const held = read(a),
+    reference = read(b);
+  validateWindPair(held, reference);
+  assert.deepEqual(sampleAt(held.samples, 0.5).wind_velocity_m_s, [0.5, 0, 0]);
+  assert.deepEqual(sampleAt(held.samples, 0.5).external_force_n, [0.05, 0, 0]);
+  assert.equal(tiltDegrees([1, 0, 0, 0]), 0);
+  assert.ok(
+    Math.abs(tiltDegrees([Math.SQRT1_2, Math.SQRT1_2, 0, 0]) - 90) < 1e-10,
+  );
+  for (const change of [
+    (f) => {
+      f.replay.schema_version = 2;
+    },
+    (f) => {
+      f.manifest.model = "quadrotor-x-v1";
+    },
+    (f) => {
+      f.replay.samples[0].wind_velocity_m_s = [13, 0, 0];
+    },
+    (f) => {
+      delete f.replay.samples[0].external_moment_nm;
+    },
+    (f) => {
+      f.metrics.turbulence.recovery_time_s = -1;
+    },
+  ]) {
+    const f = structuredClone(a);
+    change(f);
+    assert.throws(() => read(f));
+  }
+  for (const change of [
+    (r) => {
+      r.manifest.source_tree_sha256 = "e".repeat(64);
+    },
+    (r) => {
+      r.entry.seed = 1;
+    },
+    (r) => {
+      r.samples[1].wind_velocity_m_s[0] = 2;
+    },
+    (r) => {
+      r.samples[0].position_m[0] = 1;
+    },
+  ]) {
+    const r = structuredClone(reference);
+    change(r);
+    assert.throws(() => validateWindPair(held, r));
+  }
+});
 
 test("rotor replay requires the Isaac schema, backend and bounded thrust", () => {
   // Synthetic protocol data; this test is not physics evidence.
