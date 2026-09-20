@@ -61,6 +61,10 @@ represents the independently trained hover policy.
 
 ## Validation and boundaries
 
+The [measured rotor-control suite](evidence/isaac-rotor-validation.md) passed
+15/15 trials at a clean committed revision. Its summary and source/configuration
+hashes are retained with the experiment.
+
 Run `python tools/aeroloop test --suite cpu`, the C++ CTest checks and
 `npm test` in `web/replay` for changes to math, control or evidence. Run
 `npm run test:browser` against a prepared hover/step/pulse bundle for viewer changes.
