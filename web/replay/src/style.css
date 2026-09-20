@@ -236,7 +236,13 @@
   border-left: 3px solid #a855f7;
   padding: 0.7rem 1rem;
   margin: 1rem 0;
-  background: light-dark(#f5f3ff, #182033);
+  background: #f5f3ff;
+}
+@media (prefers-color-scheme: dark) {
+  .al-replay .al-wind-intro,
+  .al-replay .al-comparison {
+    background: #182033;
+  }
 }
 .al-replay .al-wind-intro p,
 .al-replay .al-comparison p {

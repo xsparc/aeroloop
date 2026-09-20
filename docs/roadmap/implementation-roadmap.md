@@ -16,7 +16,7 @@ Public deployment and merges are separate decisions.
 | AL-005C | Clean-checkout reproduction audit | Verified: fresh native build, 15/15 CPU trials, Isaac checkpoint reload again 20/20 trained vs 0/20 untrained |
 | AL-005D | Post-merge MVP evidence audit and checklist reconciliation | Verified: merged trees match, retained measurements rechecked, 10 live browser checks and 23 served artifact hashes pass |
 | AL-006 | Native C++ flight control with four rotors in Isaac PhysX, versioned evidence and local 3D replay | Verified: 15/15 clean-revision PhysX trials, 49 Python checks, two native tests and 3D browser checks |
-| AL-007 | Seeded turbulent wind, pressure-centre drag and measured stabilization against a matching reference | In progress: development pair and browser checks pass; final clean-revision suite pending |
+| AL-007 | Seeded turbulent wind, pressure-centre drag and measured stabilization against a matching reference | Verified: 10/10 clean-revision PhysX trials, 5/5 paired comparisons and eight measured browser checks |
 
 ## Next gate
 
@@ -32,6 +32,8 @@ prioritizes AL-007 before takeoff/landing and waypoint work. See
 [decision 004](../architecture/decisions/004-turbulence-stabilization.md) and the
 [wind demonstration](../turbulence.md). Preserve the established CPU and learning
 baselines. Ground-contact flight remains the following proposed slice.
+AL-007's [retained results](../evidence/isaac-wind-validation.md) show 98.7–98.9%
+less wind-window position RMSE than the reference across all five seeds.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration

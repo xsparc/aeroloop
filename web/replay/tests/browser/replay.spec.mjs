@@ -174,6 +174,30 @@ test("tablet and wide views fit in light and dark themes", async ({ page }) => {
     for (const colorScheme of ["light", "dark"]) {
       await page.setViewportSize({ width, height: 1100 });
       await page.emulateMedia({ colorScheme });
+      if (windFlight) {
+        const contrast = await page
+          .locator(".al-wind-intro")
+          .evaluate((element) => {
+            const style = getComputedStyle(element);
+            const luminance = (color) =>
+              color
+                .match(/[\d.]+/g)
+                .slice(0, 3)
+                .map(Number)
+                .map((n) => n / 255)
+                .map((n) =>
+                  n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4,
+                )
+                .reduce(
+                  (sum, n, i) => sum + n * [0.2126, 0.7152, 0.0722][i],
+                  0,
+                );
+            const a = luminance(style.color),
+              b = luminance(style.backgroundColor);
+            return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+          });
+        expect(contrast).toBeGreaterThanOrEqual(4.5);
+      }
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,

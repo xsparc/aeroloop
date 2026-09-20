@@ -1,0 +1,536 @@
+{
+  "schema_version": 1,
+  "kind": "isaac_turbulence_stabilization_summary",
+  "backend": "isaacsim_physx",
+  "source_dirty": false,
+  "source_commit": "9ca7c3bcbfda5e0428f25bd34eeca03352cbf373",
+  "source_tree_sha256": "4d9cd724edfac12f31c3e75fcc946cddab2da042cc0604c5e32db115117c8203",
+  "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+  "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+  "versions": {
+    "isaaclab": "17.0.2",
+    "isaacsim": "6.1.0.0",
+    "torch": "2.11.0+cu128"
+  },
+  "model": {
+    "gravity": 9.80665,
+    "inertia": [
+      0.02,
+      0.02,
+      0.04
+    ],
+    "mass": 1.0,
+    "max_moment": [
+      0.4,
+      0.4,
+      0.2
+    ],
+    "max_thrust": 20.0
+  },
+  "actuator": {
+    "arm_m": 0.23,
+    "max_rotor_thrust_n": 5.0,
+    "thrust_time_constant_s": 0.03,
+    "yaw_m": 0.02
+  },
+  "wind": {
+    "active_s": [
+      5.0,
+      25.0
+    ],
+    "correlation_s": 0.6,
+    "density_kg_m3": 1.225,
+    "drag_area_m2": 0.06,
+    "gust_m_s": [
+      3.0,
+      0.0,
+      0.0
+    ],
+    "gust_s": [
+      12.0,
+      14.0
+    ],
+    "kind": "bounded-temporal-ou-v1",
+    "mean_m_s": [
+      3.0,
+      -1.0,
+      0.0
+    ],
+    "pressure_centre_m": [
+      0.0,
+      0.0,
+      0.03
+    ],
+    "ramp_s": 1.0,
+    "sigma_m_s": [
+      1.2,
+      1.0,
+      0.5
+    ],
+    "speed_limit_m_s": 12.0
+  },
+  "physics_options": {
+    "gyroscopic_forces": true
+  },
+  "dt_s": 0.005,
+  "duration_s": 35.0,
+  "wall_time_s": 238.56133349999436,
+  "trials": 10,
+  "passed": 10,
+  "comparisons": [
+    {
+      "hold_run_id": "isaac-turbulence-hold-0-a43c8c9615bb",
+      "hold_to_reference_rmse_ratio": 0.011980449636986006,
+      "passed": true,
+      "reference_run_id": "isaac-turbulence-attitude-only-0-b7866e6759d5",
+      "seed": 0
+    },
+    {
+      "hold_run_id": "isaac-turbulence-hold-1-b2b6e32e7f44",
+      "hold_to_reference_rmse_ratio": 0.01325289895898444,
+      "passed": true,
+      "reference_run_id": "isaac-turbulence-attitude-only-1-39460cdff2a7",
+      "seed": 1
+    },
+    {
+      "hold_run_id": "isaac-turbulence-hold-2-b5ea015877c3",
+      "hold_to_reference_rmse_ratio": 0.010728792798198248,
+      "passed": true,
+      "reference_run_id": "isaac-turbulence-attitude-only-2-e5ff6c965400",
+      "seed": 2
+    },
+    {
+      "hold_run_id": "isaac-turbulence-hold-3-35d10b8427ad",
+      "hold_to_reference_rmse_ratio": 0.012870440983766074,
+      "passed": true,
+      "reference_run_id": "isaac-turbulence-attitude-only-3-62a2ccfedf32",
+      "seed": 3
+    },
+    {
+      "hold_run_id": "isaac-turbulence-hold-4-0b3fcffe5a14",
+      "hold_to_reference_rmse_ratio": 0.012529952951556629,
+      "passed": true,
+      "reference_run_id": "isaac-turbulence-attitude-only-4-ea960944c5ff",
+      "seed": 4
+    }
+  ],
+  "results": [
+    {
+      "run_id": "isaac-turbulence-attitude-only-0-b7866e6759d5",
+      "scenario": "turbulence-attitude-only",
+      "seed": 0,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "e84daaa1a216d8432cf5257b21be48d2e7e945325cbc5b93435176cd0fdb6598",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 59.92821802322196,
+        "position_rmse_m": 34.40586094002797,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.04973399639129639,
+          "peak_tilt_deg": 0.7021287382981678,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": null,
+          "wind_position_rmse_m": 20.44681398146649,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "680215dcee562dd512fad3c2ceca695cd954d2faa27177500cc269b8cda8cc61",
+      "peak_wind_speed_m_s": 7.067714032663077,
+      "peak_drag_force_n": 0.8831566358613111,
+      "peak_external_moment_nm": 0.02620485630569352,
+      "rotor_thrust_range_n": [
+        2.423905578806577,
+        2.533304150824941
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-attitude-only-1-39460cdff2a7",
+      "scenario": "turbulence-attitude-only",
+      "seed": 1,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "56f63ddf26a7459f6b516d3e30a440093a8c636c1b964819c09f7aa4a27dfdfe",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 56.283135208662216,
+        "position_rmse_m": 31.95777255519961,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.026377439498901367,
+          "peak_tilt_deg": 0.8793465120342026,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": null,
+          "wind_position_rmse_m": 18.473296564755678,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "effc40d2b90479ab9b1121d8465183a3b2d165d734a363be44820f44a5ecfc9d",
+      "peak_wind_speed_m_s": 7.00550611947535,
+      "peak_drag_force_n": 0.9154016602798103,
+      "peak_external_moment_nm": 0.027411595283739435,
+      "rotor_thrust_range_n": [
+        2.377115550585318,
+        2.515725710193182
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-attitude-only-2-e5ff6c965400",
+      "scenario": "turbulence-attitude-only",
+      "seed": 2,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "fa303100e566040eaeec026d817474df66643a0b6f18d859630e9ade389c9ba4",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 54.92782942118615,
+        "position_rmse_m": 31.95305020596309,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.04434490203857422,
+          "peak_tilt_deg": 1.217084904246472,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": null,
+          "wind_position_rmse_m": 19.646386758604443,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "4fa84369d817b7e9eb3af36836b263cdb6ebfe55f94bc713d77416756bdde01d",
+      "peak_wind_speed_m_s": 8.231794306293143,
+      "peak_drag_force_n": 1.3397398095859665,
+      "peak_external_moment_nm": 0.04018807643805831,
+      "rotor_thrust_range_n": [
+        2.356553522132371,
+        2.4945722168278257
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-attitude-only-3-62a2ccfedf32",
+      "scenario": "turbulence-attitude-only",
+      "seed": 3,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "e7e56164fda855faa41a3946a76cc54bf1137456da5b19b397b7d0c7a61628f5",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 68.27752799587077,
+        "position_rmse_m": 39.97148578929477,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.042909860610961914,
+          "peak_tilt_deg": 1.7231250805144884,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": null,
+          "wind_position_rmse_m": 24.325707099154293,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "07802b95cad53eb182e11783edb60d871e5998b595a7b4879e0789112155635c",
+      "peak_wind_speed_m_s": 9.167105777183878,
+      "peak_drag_force_n": 1.719964895207529,
+      "peak_external_moment_nm": 0.051542098938582345,
+      "rotor_thrust_range_n": [
+        2.380111990706108,
+        2.541008158674575
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-attitude-only-4-ea960944c5ff",
+      "scenario": "turbulence-attitude-only",
+      "seed": 4,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "66ab8fce461d72636ea54f1041a9215f2c3f8aa899d64ab1f7a610181c55c8da",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 54.713032032862394,
+        "position_rmse_m": 30.820386789281685,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.02812802791595459,
+          "peak_tilt_deg": 0.7639221721825807,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": null,
+          "wind_position_rmse_m": 17.61793054455101,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "df5df051bd17d8591bb478b80e242b27c48babf9c0211e8adb6c2f61d8c1a21b",
+      "peak_wind_speed_m_s": 6.783601059956451,
+      "peak_drag_force_n": 0.9700097019040742,
+      "peak_external_moment_nm": 0.028919467000810037,
+      "rotor_thrust_range_n": [
+        2.3794423727968645,
+        2.491187101210546
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-hold-0-a43c8c9615bb",
+      "scenario": "turbulence-hold",
+      "seed": 0,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "ed78db6d07daf800907c7dbde4ec134c85649db55320db256d06baa486753e4f",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.5348879396487269,
+        "position_rmse_m": 0.2010142973346934,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.061270833015441895,
+          "peak_tilt_deg": 9.702771741994432,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": 0.3099999999999987,
+          "wind_position_rmse_m": 0.24496202514178061,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "680215dcee562dd512fad3c2ceca695cd954d2faa27177500cc269b8cda8cc61",
+      "peak_wind_speed_m_s": 7.067714032663077,
+      "peak_drag_force_n": 1.6870013142554945,
+      "peak_external_moment_nm": 0.04851075643717831,
+      "rotor_thrust_range_n": [
+        2.365713606541426,
+        2.621186532533858
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-hold-1-b2b6e32e7f44",
+      "scenario": "turbulence-hold",
+      "seed": 1,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "cde7014edb740f6921b5a0561de48272f8be69d8b8903b3721bd32969f8fbbf4",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.49684684522107175,
+        "position_rmse_m": 0.2002874155810707,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.03183245658874512,
+          "peak_tilt_deg": 9.2139812512405,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": 0.0,
+          "wind_position_rmse_m": 0.24482473281206135,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "effc40d2b90479ab9b1121d8465183a3b2d165d734a363be44820f44a5ecfc9d",
+      "peak_wind_speed_m_s": 7.00550611947535,
+      "peak_drag_force_n": 1.698072368771811,
+      "peak_external_moment_nm": 0.05046144066752936,
+      "rotor_thrust_range_n": [
+        2.3566887834270167,
+        2.6285999132246363
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-hold-2-b5ea015877c3",
+      "scenario": "turbulence-hold",
+      "seed": 2,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "6c2ee3991f3d7109577820ea04ded5e43c8759cd6401db08ac2ae5aa18877a18",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.5914602953270514,
+        "position_rmse_m": 0.17242437426445759,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.04657721519470215,
+          "peak_tilt_deg": 12.597046422174817,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": 0.0,
+          "wind_position_rmse_m": 0.21078201276633277,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "4fa84369d817b7e9eb3af36836b263cdb6ebfe55f94bc713d77416756bdde01d",
+      "peak_wind_speed_m_s": 8.231794306293143,
+      "peak_drag_force_n": 2.2017206154313347,
+      "peak_external_moment_nm": 0.06459175945977322,
+      "rotor_thrust_range_n": [
+        2.310978095357539,
+        2.560679413792118
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-hold-3-35d10b8427ad",
+      "scenario": "turbulence-hold",
+      "seed": 3,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "8b5ce21270cd668df80e2a771c604ab1683df43787c7b0dfb99b05c85488ceba",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.8906933943903325,
+        "position_rmse_m": 0.25596171222129566,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.04599106311798096,
+          "peak_tilt_deg": 16.038129431513962,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": 0.0,
+          "wind_position_rmse_m": 0.31308257760804475,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "07802b95cad53eb182e11783edb60d871e5998b595a7b4879e0789112155635c",
+      "peak_wind_speed_m_s": 9.167105777183878,
+      "peak_drag_force_n": 2.737112692999542,
+      "peak_external_moment_nm": 0.08105368465847303,
+      "rotor_thrust_range_n": [
+        2.337920951926066,
+        2.695848438897052
+      ],
+      "allocation_saturated_samples": 0
+    },
+    {
+      "run_id": "isaac-turbulence-hold-4-0b3fcffe5a14",
+      "scenario": "turbulence-hold",
+      "seed": 4,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "5a80fac51cda42010cb97f7ce9fc5b755936647928c3b46c73ec7fbe723c0481",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.4324132320117899,
+        "position_rmse_m": 0.18066746750079302,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null,
+        "turbulence": {
+          "peak_altitude_error_m": 0.04848134517669678,
+          "peak_tilt_deg": 8.014423642103043,
+          "recovery_band_m": 0.1,
+          "recovery_dwell_s": 2.0,
+          "recovery_time_s": 0.0,
+          "wind_position_rmse_m": 0.22075184082701663,
+          "wind_window_s": [
+            5.0,
+            25.0
+          ]
+        }
+      },
+      "wind_samples_sha256": "df5df051bd17d8591bb478b80e242b27c48babf9c0211e8adb6c2f61d8c1a21b",
+      "peak_wind_speed_m_s": 6.783601059956451,
+      "peak_drag_force_n": 1.6717999480096037,
+      "peak_external_moment_nm": 0.05014607873406357,
+      "rotor_thrust_range_n": [
+        2.3039406828000843,
+        2.5701376660230433
+      ],
+      "allocation_saturated_samples": 0
+    }
+  ],
+  "interpretation": "Reference completion checks altitude and attitude; horizontal position hold is disabled. Comparison uses identical seeded wind velocity, not identical drag force.",
+  "limitations": [
+    "Illustrative temporal OU wind, not Dryden/Von Karman or measured weather",
+    "Perfect state and airborne initial conditions",
+    "No ground contact, battery or propeller aerodynamic model",
+    "No hardware-flight or learned-policy validation"
+  ]
+}

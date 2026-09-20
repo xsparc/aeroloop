@@ -1,5 +1,9 @@
 # Turbulence and stabilization
 
+The [retained final suite](evidence/isaac-wind-validation.md) passed ten PhysX
+trials and all five paired comparisons. Position hold reduced wind-window RMSE
+by 98.7–98.9% relative to the matching attitude/altitude-only reference.
+
 Run a pair of airborne drone experiments under identical seeded wind velocities.
 `turbulence-hold` uses the existing position, attitude and native rate loops.
 `turbulence-attitude-only` keeps altitude and attitude control but disables
