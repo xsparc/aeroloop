@@ -322,14 +322,14 @@ export function ReplayViewer({
       </p>
       {contactFlight && (
         <div className="al-wind-intro">
-          <strong>Takeoff � waypoint route � contact landing</strong>
+          <strong>Takeoff / waypoint route / contact landing</strong>
           <p>
             Start with stopped motors, climb to 1.5 m, visit the north and east
             waypoints, return home and land on a physical floor.
           </p>
           <p>
             Calm air, perfect state and illustrative contact parameters. The
-            white wireframe shows the actual 0.4 � 0.4 � 0.1 m body collider;
+            white wireframe shows the actual 0.4 x 0.4 x 0.1 m body collider;
             the rotor drawing is schematic.
           </p>
         </div>
