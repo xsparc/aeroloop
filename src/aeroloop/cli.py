@@ -61,7 +61,7 @@ def main(argv=None):
         elif args.command == "export":
             from .evidence import export_bundle
             result = export_bundle(args.runs, args.output)
-            print(f"Exported {len(result['runs'])} verified recordings; research preview, Isaac not validated.")
+            print(f"Exported {len(result['runs'])} verified physics recordings; learning evidence remains separate.")
         elif args.command == "verify-run":
             from .evidence import read_run
             read_run(args.run)

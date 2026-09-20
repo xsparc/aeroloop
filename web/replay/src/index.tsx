@@ -143,7 +143,11 @@ export function ReplayViewer({
         );
         if (!abort.signal.aborted) {
           setRecording(result);
-          setMessage("Checksums verified. CPU simulation recording.");
+          setMessage(
+            result.manifest.experiment === "isaac-quadrotor"
+              ? "Checksums verified. Isaac PhysX quadrotor recording."
+              : "Checksums verified. CPU simulation recording.",
+          );
         }
       } catch {
         if (!abort.signal.aborted)
@@ -195,6 +199,7 @@ export function ReplayViewer({
   };
   const xy = sample ? project(sample.position_m) : [340, 150],
     target = sample ? project(sample.target_m) : [340, 150];
+  const rotorFlight = recording?.manifest.experiment === "isaac-quadrotor";
   return (
     <section ref={root} className="al-replay" aria-labelledby={`${id}-title`}>
       <header className="al-heading">
@@ -202,11 +207,19 @@ export function ReplayViewer({
           <p className="al-kicker">AEROLOOP / RECORDED SIMULATION</p>
           <h2 id={`${id}-title`}>{title}</h2>
         </div>
-        <span className="al-badge">CPU physics</span>
+        <span className="al-badge">
+          {recording
+            ? rotorFlight
+              ? "Isaac PhysX"
+              : "CPU physics"
+            : "Physics replay"}
+        </span>
       </header>
       <p>
-        Inspect an ideal body-wrench model with a native rate controller. These
-        trajectories are separate from the Isaac learning experiment.
+        {rotorFlight
+          ? "Four-rotor X drone with motor lag, thrust limits and a native C++ flight controller."
+          : "Inspect a rigid-body experiment with a native rate controller."}{" "}
+        These recorded trajectories are separate from the learned hover policy.
       </p>
       <div className="al-controls">
         <label>
@@ -237,7 +250,7 @@ export function ReplayViewer({
       </div>
       <div
         className="al-stage"
-        role="img"
+        role="group"
         aria-label={
           sample
             ? `Recorded position: east ${sample.position_m[0].toFixed(2)}, north ${sample.position_m[1].toFixed(2)}, up ${sample.position_m[2].toFixed(2)} metres. Gold marks the target.`
@@ -304,7 +317,13 @@ export function ReplayViewer({
             <Suspense
               fallback={<p className="al-overlay">Loading 3D view...</p>}
             >
-              <Scene sample={sample} visible={visible} onFailure={gpuFailure} />
+              <Scene
+                sample={sample}
+                samples={recording!.samples}
+                rotorFlight={rotorFlight}
+                visible={visible}
+                onFailure={gpuFailure}
+              />
             </Suspense>
           </SceneBoundary>
         )}
@@ -314,6 +333,26 @@ export function ReplayViewer({
             : "Position schematic / gold target"}
         </span>
       </div>
+      {sample?.rotor_thrust_n && (
+        <div className="al-rotors" aria-label="Applied rotor thrust">
+          {sample.rotor_thrust_n.map((thrust, i) => (
+            <label key={i}>
+              {["Front left", "Rear left", "Rear right", "Front right"][i]}
+              <meter
+                min={0}
+                max={5}
+                value={thrust}
+                aria-label={`Rotor ${i + 1} thrust`}
+              />
+              <span>{thrust.toFixed(3)} N</span>
+            </label>
+          ))}
+          <p>
+            Applied thrust per physics interval, 0 to 5 N per rotor. Display
+            values are interpolated.
+          </p>
+        </div>
+      )}
       {gpuFailed && (
         <p>
           3D is unavailable. The schematic and recording controls remain

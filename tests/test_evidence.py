@@ -62,6 +62,16 @@ class EvidenceTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             read_run(self.run)
 
+    def test_cpu_recording_cannot_be_relabelled_as_isaac(self):
+        self.mutate("manifest.json", lambda m: m.update(experiment="isaac-quadrotor", model="quadrotor-x-v1"))
+        with self.assertRaises(ValidationError):
+            read_run(self.run)
+
+    def test_new_schema_does_not_accept_cpu_recording_without_rotor_evidence(self):
+        self.mutate("manifest.json", lambda m: m.update(schema_version=2))
+        with self.assertRaises(ValidationError):
+            read_run(self.run)
+
     def test_forged_metric_rejected_even_with_updated_checksum(self):
         self.mutate("metrics.json", lambda m: m.update(position_rmse_m=0))
         with self.assertRaises(ValidationError):

@@ -1,12 +1,20 @@
 import { test, expect } from "@playwright/test";
 import fs from "node:fs";
-const index = JSON.parse(
-  fs.readFileSync(new URL("../../public/evidence/index.json", import.meta.url)),
+const demo = JSON.parse(
+  fs.readFileSync(new URL("../../public/demo-config.json", import.meta.url)),
 );
+const index = JSON.parse(
+  fs.readFileSync(
+    new URL(`../../public${demo.baseUrl}index.json`, import.meta.url),
+  ),
+);
+const rotorFlight = index.runs[0].run_id.startsWith("isaac-");
 const start = async (page) => {
   await page.goto("/");
   await expect(page.getByRole("status")).toHaveText(
-    "Checksums verified. CPU simulation recording.",
+    rotorFlight
+      ? "Checksums verified. Isaac PhysX quadrotor recording."
+      : "Checksums verified. CPU simulation recording.",
   );
 };
 test("loads only selected evidence, scrubs events, pauses offscreen and remounts", async ({
@@ -82,6 +90,13 @@ test("reduced motion and mobile retain controls; 3D can mount and dispose", asyn
   ).toBe(true);
   await page.getByRole("button", { name: "Enable 3D view" }).click();
   await expect(page.locator("canvas")).toHaveCount(1);
+  await page.getByRole("button", { name: "Top view", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await page.getByRole("button", { name: "Side view", exact: true }).click();
+  if (rotorFlight) {
+    await expect(page.getByRole("meter")).toHaveCount(4);
+    await expect(page.locator(".al-badge")).toHaveText("Isaac PhysX");
+  }
   await page.getByRole("button", { name: "Use schematic" }).click();
   await expect(page.locator("canvas")).toHaveCount(0);
   await page.getByRole("button", { name: "Enable 3D view" }).click();

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "c06b2d4173ac4b30836b6c063b5b8fe2bac75089",
+  "scanned_at": "2026-09-20",
+  "coverage": ["Quadrotor force and moment allocation", "Pinned Isaac rigid-body state and applied wrenches", "Existing recorded 3D visualization"],
+  "findings": [{
+    "finding": "Rotor thrust, moment arms and alternating reaction torque provide an explicit actuation model for the existing controller. Isaac exposes rigid-body state and applied wrenches; its pinned Lab 3 convention must be used instead of assuming older APIs.",
+    "source_event_date": null,
+    "citations": ["https://vnav.mit.edu/material/06-Control1-notes.pdf", "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.assets.html", "https://github.com/isaac-sim/IsaacLab/blob/ae37b028ea415c91ea2bc32609efcd759ed2b974/source/isaaclab/isaaclab/assets/rigid_object/base_rigid_object_data.py"],
+    "confidence": "high",
+    "relevance": "Simulation-only drone flight-control development with inspectable 3D physics results",
+    "direction_alignment": "The maintainer explicitly requested further drone development grounded in physics and 3D visualization.",
+    "opportunity_or_risk": "Actuator coupling and delay expose control behavior absent from the ideal-wrench baseline; incorrect frame conversion can reverse the response.",
+    "engineering_cost": "One rotor/Isaac control slice, versioned evidence support and reuse of the existing 3D viewer",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-006: rotor-actuated native flight control in Isaac with local 3D replay",
+    "verification_needed": "Mixer/lag tests, recorded actual PhysX trials, strict actuator evidence checks and browser verification"
+  }],
+  "overall_recommendation": "Implement the approved rotor-control slice with the existing pinned simulator and gains; retain the CPU and learned-policy baselines.",
+  "evidence_gaps": ["Rotor-actuated closed-loop PhysX trials and their 3D replay are not yet validated.", "Example actuator parameters are not hardware identification results."]
+}

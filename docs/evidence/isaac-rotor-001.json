@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "kind": "isaac_quadrotor_regression",
+  "date": "2026-09-20",
+  "backend": "isaacsim_physx",
+  "model": "quadrotor-x-v1",
+  "source_commit": "52f8bae2dd760d50e40e86093d78bd91d618a71e",
+  "source_dirty": false,
+  "source_tree_sha256": "8d5b11d40c5584858b0ccf1f8da864326b45273e19ec550b0d54195081f117ca",
+  "controller_binary_sha256": "64b6611758cc4226b00e30b8eaa036b761cda7ed9269e00fb6609f81c9a31eec",
+  "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+  "regression_result_sha256": "de062f0ace9fa6553b7549e4f0a483df9e99580ede63d9d104e0502063264d0b",
+  "versions": {
+    "isaaclab": "17.0.2",
+    "isaacsim": "6.1.0.0",
+    "torch": "2.11.0+cu128"
+  },
+  "body": {
+    "gravity": 9.80665,
+    "inertia": [
+      0.02,
+      0.02,
+      0.04
+    ],
+    "mass": 1.0,
+    "max_moment": [
+      0.4,
+      0.4,
+      0.2
+    ],
+    "max_thrust": 20.0
+  },
+  "actuator": {
+    "arm_m": 0.23,
+    "max_rotor_thrust_n": 5.0,
+    "thrust_time_constant_s": 0.03,
+    "yaw_m": 0.02
+  },
+  "physics_options": {
+    "gyroscopic_forces": true
+  },
+  "world_frame": "ENU",
+  "body_frame": "FLU",
+  "quaternion_order": "wxyz",
+  "units": "SI",
+  "physics_dt_s": 0.005,
+  "duration_per_trial_s": 35.0,
+  "wall_time_s": 321.4425096999912,
+  "total": 15,
+  "passed": 15,
+  "trials": [
+    {
+      "run_id": "isaac-hover-0-cc82d625c194",
+      "scenario": "hover",
+      "seed": 0,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "8b23ef971805174f49590910470524c6fcedb06e1151a48532038a1fb9595913",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.04375793628537158,
+        "position_rmse_m": 0.0004532856087601541,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "128a7e9ae062851794b5e7deb9126c30b95bb2ba62a2d858e1b24373122c2d72",
+      "min_applied_rotor_thrust_n": 2.4373593143118275,
+      "max_applied_rotor_thrust_n": 2.4740058941030107,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-hover-1-ed34911677ae",
+      "scenario": "hover",
+      "seed": 1,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "30e266e8faeb669a0c4babad219c22cb971be120ce381dfed3b762df55fc0486",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.056918944765316254,
+        "position_rmse_m": 0.0004524868394190906,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "4138333074e189c6f43810f86ab014350c1c68412412f588bd4f6b88841b398d",
+      "min_applied_rotor_thrust_n": 2.4169899171603624,
+      "max_applied_rotor_thrust_n": 2.4613627164784866,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-hover-2-50beab89720e",
+      "scenario": "hover",
+      "seed": 2,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "c94bd2766347d88b67e3d77e41257017a123ba2876e66299d0db20490c8f28e1",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.0777922728208768,
+        "position_rmse_m": 0.0004651978761276005,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "b974aeff86251f55522ba991dc069c747c78610acb9e06dbe79c975c36044b1e",
+      "min_applied_rotor_thrust_n": 2.443089338041864,
+      "max_applied_rotor_thrust_n": 2.501348299365906,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-hover-3-562dc12ede33",
+      "scenario": "hover",
+      "seed": 3,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "a9d1d671282c57e79561996f5e623a1b2b45514e9266fafbdfe6d5b7377089a4",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.029585565933540062,
+        "position_rmse_m": 0.0004462286606339033,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "a655c92523110312848d239640ee46173499c80eaf94a2474d76f9a3f0945210",
+      "min_applied_rotor_thrust_n": 2.44841750533216,
+      "max_applied_rotor_thrust_n": 2.467452914113413,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-hover-4-99bf76921af2",
+      "scenario": "hover",
+      "seed": 4,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "4f0e4413e6c8a3140c8e7b5e826232bf46318b4e7707e554895452ca9b690cc3",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.04878030202012684,
+        "position_rmse_m": 0.0004501535394018872,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "0b6631e67a5bcaf64611971ca5b43ccecc4dc359b0cb7eb6c42ac1ddcf9a1dd9",
+      "min_applied_rotor_thrust_n": 2.436792575262916,
+      "max_applied_rotor_thrust_n": 2.477006227504439,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-position-step-0-af8d94c2de44",
+      "scenario": "position-step",
+      "seed": 0,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "f98729c2fd31d093909d8595b8b579f2e4db46aedf3591de09a080ff6cde1129",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 1.000330965145861,
+        "position_rmse_m": 0.22869421201961398,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0005832910537719727,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.1050000000000004
+        }
+      },
+      "manifest_sha256": "caff1c4e799cb88190ba94007d1d3a250820ba499297e112de4596a54a6f0d0a",
+      "min_applied_rotor_thrust_n": 2.1583850286240756,
+      "max_applied_rotor_thrust_n": 2.7475658330371666,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-position-step-1-474ac50b77b9",
+      "scenario": "position-step",
+      "seed": 1,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "41fbda516ea0018876bc98611c5c97b7a7efc63c3abace9f60982fb77740038c",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 1.0002581940175534,
+        "position_rmse_m": 0.228698632097457,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0005841255187988281,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.1050000000000004
+        }
+      },
+      "manifest_sha256": "1516231fe893f13a891018fe0d7d7f1b800ac391f83f6da132c079cbba6f0bed",
+      "min_applied_rotor_thrust_n": 2.158381462459713,
+      "max_applied_rotor_thrust_n": 2.747606977831031,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-position-step-2-615a38b44ef1",
+      "scenario": "position-step",
+      "seed": 2,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "e2b55c794dffe5e82bb369482f6b3e1349e0ef50f22d83b37574739c3669fe8c",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 1.000379930875854,
+        "position_rmse_m": 0.2287066017869557,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0005829334259033203,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.1050000000000004
+        }
+      },
+      "manifest_sha256": "787106c5f4438dfc39d11b0dd2acd05be966605137a3ed731bcd521d199b9d28",
+      "min_applied_rotor_thrust_n": 2.15838674322027,
+      "max_applied_rotor_thrust_n": 2.747561615607841,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-position-step-3-94f4eba68d57",
+      "scenario": "position-step",
+      "seed": 3,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "f8c9c4fb8e0a02c733fae5d0dba2c1d547f890c6f02d717d5870de9569e2b66e",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 1.0000721099817529,
+        "position_rmse_m": 0.2286663574472459,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.000583648681640625,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.1050000000000004
+        }
+      },
+      "manifest_sha256": "adace31a8f46c3c9d477d19fafef04f267c2330658216c7b944ce3b31c47ee90",
+      "min_applied_rotor_thrust_n": 2.158384038609257,
+      "max_applied_rotor_thrust_n": 2.7476298336959593,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-position-step-4-497c614b4f8f",
+      "scenario": "position-step",
+      "seed": 4,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "ddc5527c143b9696cd459aa1af3b6b19a0871f44a588ee65bcd3765ed26d304e",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.9995188717553458,
+        "position_rmse_m": 0.22861495005983087,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 7001,
+        "step_response": {
+          "overshoot_m": 0.0005832910537719727,
+          "rise_time_s": 1.4850000000000012,
+          "settling_reason": null,
+          "settling_time_s": 3.1050000000000004
+        }
+      },
+      "manifest_sha256": "2798054a9c36899cae20e6c36d58e2948da7e99fa920b1780b1532f2f8030430",
+      "min_applied_rotor_thrust_n": 2.15834488227703,
+      "max_applied_rotor_thrust_n": 2.747572504996376,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-lateral-force-pulse-0-356402051ffb",
+      "scenario": "lateral-force-pulse",
+      "seed": 0,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "0951628704855876102adde7975295ae18a85660ccdd82389f05d40e8b6592a5",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08585307396196651,
+        "position_rmse_m": 0.013623381833104678,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "8b3d6946cbbed8c8c115d812c259ae2345173dea132ead087bb53cc860953df0",
+      "min_applied_rotor_thrust_n": 2.424326006626564,
+      "max_applied_rotor_thrust_n": 2.483088721348775,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-lateral-force-pulse-1-cf383a7a0e6d",
+      "scenario": "lateral-force-pulse",
+      "seed": 1,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "2f10f3bf19a74da100050e0edf66732e7f93944a25e0d43d421bffdea3809137",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08610512398002489,
+        "position_rmse_m": 0.013670027830304838,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "ab0a818d626fa8afa546652c5915bccdf3cd03845244d30afe6d5fdcb2a3c189",
+      "min_applied_rotor_thrust_n": 2.4169899171603624,
+      "max_applied_rotor_thrust_n": 2.4830463689655073,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-lateral-force-pulse-2-311233af9298",
+      "scenario": "lateral-force-pulse",
+      "seed": 2,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "1bccfcb677471e22321f9c589c8d4c36172ad94645b69aac2cc241b533d64aff",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08589517994215021,
+        "position_rmse_m": 0.013633184039502838,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "5aac78abe46926f57b4c5dfec58ee64cbc634d7df30930b067bfe51b7b8d335f",
+      "min_applied_rotor_thrust_n": 2.424329995354767,
+      "max_applied_rotor_thrust_n": 2.501348299365906,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-lateral-force-pulse-3-0bcdd978aa34",
+      "scenario": "lateral-force-pulse",
+      "seed": 3,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "42301dcc606283ee50f59659d2d21563466dbc196a5a5930d66d3f64bdd45aa1",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08634396444316254,
+        "position_rmse_m": 0.013719904774549005,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "e665ed3b3a492e6d7c503709519afb7b1aa81535ec4097bb565d732597d13424",
+      "min_applied_rotor_thrust_n": 2.424371623203734,
+      "max_applied_rotor_thrust_n": 2.483012031676647,
+      "allocation_limited_samples": 0
+    },
+    {
+      "run_id": "isaac-lateral-force-pulse-4-64315a83d7cc",
+      "scenario": "lateral-force-pulse",
+      "seed": 4,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "f98de7c548c5315df2fe3e8665ed162b2621991405d46aea4c2232323f60fde1",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          35.0
+        ],
+        "peak_error_m": 0.08626188440273902,
+        "position_rmse_m": 0.01370269144867747,
+        "recovery_reason": null,
+        "recovery_time_s": 0.0,
+        "samples": 7001,
+        "step_response": null
+      },
+      "manifest_sha256": "4cba27f18c255ad2174801f15fed331dd2dcd9685e1911f96cd9cd17c12002ee",
+      "min_applied_rotor_thrust_n": 2.424359064790266,
+      "max_applied_rotor_thrust_n": 2.4830493425382705,
+      "allocation_limited_samples": 0
+    }
+  ],
+  "new_training_performed": false
+}
