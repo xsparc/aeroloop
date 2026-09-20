@@ -23,6 +23,13 @@ lazy peer dependency with an original schematic mesh. Renderer coordinates are
 Playback pauses offscreen and on page hiding. Static text, controls and the SVG
 schematic remain independent of WebGL. See [integration acceptance](../replay-integration.md).
 
+The subsequent [drone-development slice](../drone-development.md) runs the native
+controller against a four-rotor X actuator with lag in Isaac PhysX. Version 2
+recordings identify this backend and retain rotor commands, applied thrust and
+moments. The exporter recomputes these fields, while the viewer shows measured
+3D pose, trajectory and rotor thrust. Version 1 CPU and the separate learned
+hover task retain their original contracts.
+
 PX4 flight execution and Pegasus transport are no longer MVP dependencies. No CPU
 result can stand in for Isaac validation. The CPU body-wrench model does not model
 propeller aerodynamics, individual motors, estimation error, contact or hardware.

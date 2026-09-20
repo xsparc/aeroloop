@@ -11,7 +11,7 @@ from .simulation import sha256
 def serve(bundle, port=8765):
     bundle = Path(bundle).resolve()
     index = load_json(bundle / "index.json")
-    require(index.get("schema_version") == 1 and isinstance(index.get("checksums"), dict), "invalid bundle index")
+    require(type(index.get("schema_version")) is int and index["schema_version"] in (1, 2) and isinstance(index.get("checksums"), dict), "invalid bundle index")
     allowed = {"index.html", "index.json", "viewer.js", "viewer.css"}
     for name, digest in index["checksums"].items():
         parts = name.split("/")

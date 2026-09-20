@@ -8,6 +8,7 @@ import {
   sampleAt,
   slerp,
   validateIndex,
+  validateRecording,
 } from "../dist/contracts.js";
 import { evidenceBase, readVerified } from "../dist/load.js";
 import { ReplayViewer } from "../dist/index.js";
@@ -25,6 +26,82 @@ const samples = [
     quaternion_wxyz: [Math.SQRT1_2, 0, 0, Math.SQRT1_2],
   },
 ];
+
+test("rotor replay requires the Isaac schema, backend and bounded thrust", () => {
+  // Synthetic protocol data; this test is not physics evidence.
+  const entry = {
+    run_id: "isaac-hover-0-123456789abc",
+    scenario: "hover",
+    seed: 0,
+    status: "passed",
+  };
+  const checksums = Object.fromEntries(
+    ["replay", "manifest", "metrics", "events", "config", "samples"].map(
+      (name) => [`${entry.run_id}/${name}.json`, "a".repeat(64)],
+    ),
+  );
+  const index = {
+    schema_version: 2,
+    kind: "recorded_simulation",
+    release_status: "research_preview",
+    learning_validated: false,
+    runs: [entry],
+    checksums,
+  };
+  validateIndex(index);
+  assert.throws(() =>
+    validateIndex({ ...index, schema_version: 1, isaac_validated: false }),
+  );
+  assert.throws(() => validateIndex({ ...index, isaac_validated: true }));
+  const replay = {
+    schema_version: 2,
+    kind: "recorded_simulation",
+    run_id: entry.run_id,
+    samples: samples.map((s) => ({ ...s, rotor_thrust_n: [1, 2, 3, 4] })),
+  };
+  const manifest = {
+    ...entry,
+    schema_version: 2,
+    fixture: false,
+    kind: "recorded_simulation",
+    experiment: "isaac-quadrotor",
+    model: "quadrotor-x-v1",
+    controller: "rate-pid-v1",
+    world_frame: "ENU",
+    body_frame: "FLU",
+    quaternion_order: "wxyz",
+    units: "SI",
+    source_commit: "a".repeat(40),
+    source_dirty: false,
+    failure_reason: null,
+  };
+  const metrics = {
+    position_rmse_m: 0.1,
+    samples: 2,
+    measurement_window_s: [0, 1],
+  };
+  const result = validateRecording(entry, replay, manifest, metrics, []);
+  assert.deepEqual(sampleAt(result.samples, 0.5).rotor_thrust_n, [1, 2, 3, 4]);
+  for (const bad of [
+    { ...manifest, experiment: "cpu-rigid-body" },
+    { ...manifest, schema_version: 1 },
+    { ...manifest, fixture: true },
+  ])
+    assert.throws(() => validateRecording(entry, replay, bad, metrics, []));
+  for (const thrust of [undefined, [1, 2, 3], [1, 2, 3, 6], [1, 2, 3, NaN]])
+    assert.throws(() =>
+      validateRecording(
+        entry,
+        {
+          ...replay,
+          samples: samples.map((s) => ({ ...s, rotor_thrust_n: thrust })),
+        },
+        manifest,
+        metrics,
+        [],
+      ),
+    );
+});
 test("frame basis preserves gravity, north and body-to-world yaw", () => {
   assert.deepEqual(enuToView([1, 2, 3]), [1, 3, -2]);
   const basis = new Quaternion().setFromAxisAngle(

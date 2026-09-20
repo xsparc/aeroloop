@@ -121,7 +121,12 @@ def simulate(scenario="hover", seed=0, dt=0.005, duration=35.):
 
 
 def record(result, output_root):
-    run_id = f"cpu-{result['config']['scenario']}-{result['config']['seed']}-{uuid.uuid4().hex[:12]}"
+    experiment = result.get("experiment", "cpu-rigid-body")
+    if experiment not in ("cpu-rigid-body", "isaac-quadrotor"):
+        raise ValidationError("unsupported recording experiment")
+    rotor_flight = experiment == "isaac-quadrotor"
+    prefix = "isaac" if rotor_flight else "cpu"
+    run_id = f"{prefix}-{result['config']['scenario']}-{result['config']['seed']}-{uuid.uuid4().hex[:12]}"
     directory = Path(output_root) / run_id
     directory.mkdir(parents=True, exist_ok=False)
     source_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
@@ -129,9 +134,9 @@ def record(result, output_root):
     # Hash all implementation inputs to retain provenance even for a dirty checkout.
     source_files = sorted([* (ROOT / "src/aeroloop").glob("*.py"), *(ROOT / "firmware/control_core").glob("*.*"), ROOT / "CMakeLists.txt"])
     source_digest = sha256(b"".join(path.relative_to(ROOT).as_posix().encode()+b"\0"+path.read_bytes()+b"\0" for path in source_files))
-    manifest = {"schema_version": 1, "run_id": run_id, "kind": "recorded_simulation", "fixture": False,
-                "captured_at": datetime.now(timezone.utc).isoformat(), "experiment": "cpu-rigid-body",
-                "model": "ideal-body-wrench-v1", "controller": "rate-pid-v1", "scenario": result["config"]["scenario"],
+    manifest = {"schema_version": 2 if rotor_flight else 1, "run_id": run_id, "kind": "recorded_simulation", "fixture": False,
+                "captured_at": datetime.now(timezone.utc).isoformat(), "experiment": experiment,
+                "model": "quadrotor-x-v1" if rotor_flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "scenario": result["config"]["scenario"],
                 "seed": result["config"]["seed"], "source_commit": source_commit, "source_dirty": dirty,
                 "source_tree_sha256": source_digest, "controller_binary_sha256": result["controller_binary_sha256"],
                 "config_sha256": sha256(encoded(result["config"])), "lock_sha256": sha256((ROOT / "versions.lock.json").read_bytes()),

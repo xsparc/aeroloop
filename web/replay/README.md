@@ -1,6 +1,7 @@
 # AeroLoop replay component
 
-A read-only React 19 / Three.js 0.185 viewer for validated AeroLoop CPU recordings.
+A read-only React 19 / Three.js 0.185 viewer for validated AeroLoop CPU and
+Isaac quadrotor flight-control recordings, with explicit backend labels.
 React, React DOM and Three.js remain peer dependencies; the package does not bundle
 another React runtime. The TypeScript build preserves the client boundary and
 loads the Three renderer only after the visitor enables 3D.
@@ -25,7 +26,10 @@ index pins integrity, not the truth of a simulation; the exporter validates raw
 recordings and recomputes full-resolution metrics before publication.
 
 The schematic shows position; the optional original 3D mesh also shows recorded
-attitude. Body FLU coordinates rotate into ENU using body-to-world wxyz quaternions,
+attitude and trajectory. Orbit with the pointer or choose top, side and orbit
+camera presets with the keyboard. Version 2 rotor recordings include thrust
+meters and scaled thrust arrows on an X configuration. Body FLU coordinates
+rotate into ENU using body-to-world wxyz quaternions,
 then into the Y-up view basis `(east, up, -north)`. Quaternion interpolation follows
 the shortest arc. Target steps are held until their recorded timestamp.
 
@@ -54,6 +58,10 @@ declarations in `dist`; `npm run demo:build` emits the standalone site in
 `demo-dist`. Neither output is committed. Choose a new export location or remove
 only your generated demo evidence before preparing another recording set.
 
-CPU replay is distinct from the measured Isaac hover training summary. No simulator
+Use `--name <new-name>` with `tools/replay_demo.py` to retain previous bundles.
+See the [Isaac drone workflow](../../docs/drone-development.md) to produce rotor
+recordings through physics execution. No policy training is implied by a rotor replay.
+
+CPU and Isaac flight-control replay are distinct from the hover training summary. No simulator
 executes in the browser, and these simplified models do not validate physical flight.
 This source uses the repository's Apache-2.0 license and original schematic geometry.

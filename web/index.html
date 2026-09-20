@@ -10,7 +10,7 @@
 <body>
   <header><a class="wordmark" href="./">AERO<span>LOOP</span></a><span class="eyebrow">FLIGHT CONTROL / RESEARCH PREVIEW</span></header>
   <main>
-    <div class="intro"><div><p class="eyebrow accent">EXPERIMENT LOG / 001</p><h1>Control. Disturb.<br><span>Observe.</span></h1><p class="lede">Explore how a C++ controller responds inside a rigid-body physics model. Every trace comes from a recorded simulation.</p></div><aside class="status"><span class="status-dot"></span>Recorded simulation<p>CPU physics · ideal body wrench<br>Isaac physics and learning pending</p></aside></div>
+    <div class="intro"><div><p class="eyebrow accent">EXPERIMENT LOG / 001</p><h1>Control. Disturb.<br><span>Observe.</span></h1><p class="lede">Explore how a C++ controller responds inside a rigid-body physics model. Every trace comes from a recorded simulation.</p></div><aside class="status"><span class="status-dot"></span>Recorded simulation<p id="backend">Verifying physics backend</p></aside></div>
     <div class="workspace">
       <section class="replay" aria-labelledby="replay-title">
         <div class="panel-heading"><h2 id="replay-title">Flight trace</h2><span>ENU / METRES</span></div>
@@ -33,12 +33,12 @@
         <p id="message" role="status" aria-live="polite">Checking the evidence bundle.</p>
         <div class="metric"><span>Position RMSE</span><strong id="rmse">—</strong><small>Full-resolution measurement window</small></div>
         <div class="metric"><span>Current target error</span><strong id="error">—</strong><small>Interpolated replay position</small></div>
-        <dl><div><dt>Controller</dt><dd>Rate PID / C++</dd></div><div><dt>Model</dt><dd>Ideal body wrench</dd></div><div><dt>Seed</dt><dd id="seed">—</dd></div><div><dt>Outcome</dt><dd id="outcome">—</dd></div><div><dt>Source</dt><dd id="revision">—</dd></div></dl>
+        <dl><div><dt>Controller</dt><dd>Rate PID / C++</dd></div><div><dt>Model</dt><dd id="model-name">Verified recording model</dd></div><div><dt>Seed</dt><dd id="seed">—</dd></div><div><dt>Outcome</dt><dd id="outcome">—</dd></div><div><dt>Source</dt><dd id="revision">—</dd></div></dl>
         <a id="record-link" href="#">Download run manifest</a>
       </aside>
     </div>
     <section class="plot-panel" aria-labelledby="plot-title"><div class="panel-heading"><h2 id="plot-title">Distance to target</h2><span>FULL RUN / METRES</span></div><svg id="plot" viewBox="0 0 1000 180" role="img" aria-label="Recorded position error over simulation time"><path d="M50 15V150H980" fill="none" stroke="#5a7175"/><polyline id="error-line" fill="none" stroke="#f3ac68" stroke-width="2"/><line id="cursor" x1="50" x2="50" y1="15" y2="150" stroke="#a8c7bb"/><text id="plot-max" x="4" y="24" class="axis"></text><text x="12" y="152" class="axis">0</text><text x="50" y="174" class="axis">0 s</text><text id="plot-end" x="930" y="174" class="axis"></text></svg></section>
-    <section class="notes"><div><p class="eyebrow">WHAT THIS SHOWS</p><h2>Measured in a model.</h2><p id="summary">Choose a recording to inspect its measured outcome. The static run manifest and metrics remain available without animation.</p><noscript><p>JavaScript is required for replay. Download the <a href="index.json">bundle index</a> to find run manifests and full-resolution measurements.</p></noscript></div><div><p class="eyebrow">MODEL BOUNDARY</p><p>Perfect state, ideal thrust and body moments. No individual motor dynamics, estimator, drag or contact model. Initial conditions are already airborne. These results do not establish physical-flight performance.</p><p>Isaac physics execution, training and held-out policy evaluation remain required before the MVP is complete.</p></div></section>
+    <section class="notes"><div><p class="eyebrow">WHAT THIS SHOWS</p><h2>Measured in a model.</h2><p id="summary">Choose a recording to inspect its measured outcome. The static run manifest and metrics remain available without animation.</p><noscript><p>JavaScript is required for replay. Download the <a href="index.json">bundle index</a> to find run manifests and full-resolution measurements.</p></noscript></div><div><p class="eyebrow">MODEL BOUNDARY</p><p id="model-boundary">Model details appear after verification.</p><p>Recorded flight control is separate from learned-policy evaluation. These simulations do not establish physical-flight performance.</p></div></section>
   </main><footer>AEROLOOP <span>Simulation-only control research · no live vehicle connection</span></footer>
 </body>
 </html>

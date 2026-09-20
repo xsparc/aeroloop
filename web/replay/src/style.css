@@ -162,6 +162,42 @@
 .al-footnote {
   font-size: 13px;
 }
+.al-rotors {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.al-rotors label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+.al-rotors meter {
+  width: 100%;
+}
+.al-rotors p {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13px;
+}
+.al-camera {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+.al-camera button {
+  font-size: 12px;
+  padding: 5px 9px;
+}
+@media (max-width: 500px) {
+  .al-rotors {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 .al-replay [role="status"] {
   font-size: 14px;
   min-height: 1.6em;

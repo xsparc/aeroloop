@@ -5,6 +5,7 @@ export type Sample = {
   position_m: Vec3;
   target_m: Vec3;
   quaternion_wxyz: Wxyz;
+  rotor_thrust_n?: [number, number, number, number];
 };
 export type Entry = {
   run_id: string;
@@ -23,6 +24,8 @@ export type Recording = {
     measurement_window_s: [number, number];
   };
   manifest: {
+    experiment: "cpu-rigid-body" | "isaac-quadrotor";
+    model: "ideal-body-wrench-v1" | "quadrotor-x-v1";
     source_commit: string;
     source_dirty: boolean;
     failure_reason: string | null;
@@ -30,7 +33,7 @@ export type Recording = {
 };
 export const HASH = /^[0-9a-f]{64}$/;
 const ID =
-  /^cpu-(hover|position-step|lateral-force-pulse)-\d{1,10}-[0-9a-f]{12}$/;
+  /^(cpu|isaac)-(hover|position-step|lateral-force-pulse)-\d{1,10}-[0-9a-f]{12}$/;
 const finite = (n: unknown): n is number =>
   typeof n === "number" && Number.isFinite(n);
 const vector = (v: unknown, n: number) =>
@@ -45,10 +48,12 @@ function object(value: unknown): Record<string, unknown> {
 export function validateIndex(value: unknown): Index {
   const data = object(value);
   assertContract(
-    data.schema_version === 1 &&
+    ((data.schema_version === 1 && data.isaac_validated === false) ||
+      (data.schema_version === 2 &&
+        data.learning_validated === false &&
+        !("isaac_validated" in data))) &&
       data.kind === "recorded_simulation" &&
-      data.release_status === "research_preview" &&
-      data.isaac_validated === false,
+      data.release_status === "research_preview",
   );
   assertContract(
     Array.isArray(data.runs) && data.runs.length > 0 && data.runs.length <= 30,
@@ -71,7 +76,9 @@ export function validateIndex(value: unknown): Index {
         Number(run.seed) <= 2147483647,
     );
     assertContract(
-      run.run_id.startsWith(`cpu-${run.scenario}-${run.seed}-`) &&
+      (run.run_id.startsWith(`cpu-${run.scenario}-${run.seed}-`) ||
+        (data.schema_version === 2 &&
+          run.run_id.startsWith(`isaac-${run.scenario}-${run.seed}-`))) &&
         ["passed", "failed"].includes(String(run.status)),
     );
     seen.add(run.run_id);
@@ -101,20 +108,22 @@ export function validateRecording(
   const replay = object(replayValue),
     manifest = object(manifestValue),
     metrics = object(metricsValue);
+  const flight = entry.run_id.startsWith("isaac-");
+  const schema = flight ? 2 : 1;
   assertContract(
-    replay.schema_version === 1 &&
+    replay.schema_version === schema &&
       replay.kind === "recorded_simulation" &&
       replay.run_id === entry.run_id,
   );
   assertContract(
-    manifest.schema_version === 1 &&
+    manifest.schema_version === schema &&
       manifest.run_id === entry.run_id &&
       manifest.fixture === false &&
       manifest.kind === "recorded_simulation",
   );
   assertContract(
-    manifest.experiment === "cpu-rigid-body" &&
-      manifest.model === "ideal-body-wrench-v1" &&
+    manifest.experiment === (flight ? "isaac-quadrotor" : "cpu-rigid-body") &&
+      manifest.model === (flight ? "quadrotor-x-v1" : "ideal-body-wrench-v1") &&
       manifest.controller === "rate-pid-v1",
   );
   assertContract(
@@ -153,6 +162,12 @@ export function validateRecording(
   let previous = -1;
   for (const value of replay.samples) {
     const s = object(value);
+    if (flight)
+      assertContract(
+        vector(s.rotor_thrust_n, 4) &&
+          (s.rotor_thrust_n as number[]).every((n) => n >= 0 && n <= 5),
+      );
+    else assertContract(s.rotor_thrust_n === undefined);
     assertContract(
       finite(s.time_s) &&
         s.time_s > previous &&
@@ -251,5 +266,12 @@ export function sampleAt(samples: Sample[], time: number): Sample {
     ) as Vec3,
     target_m: a.target_m,
     quaternion_wxyz: slerp(a.quaternion_wxyz, b.quaternion_wxyz, t),
+    ...(a.rotor_thrust_n
+      ? {
+          rotor_thrust_n: a.rotor_thrust_n.map(
+            (n, i) => n + (b.rotor_thrust_n![i] - n) * t,
+          ) as [number, number, number, number],
+        }
+      : {}),
   };
 }

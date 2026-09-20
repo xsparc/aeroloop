@@ -9,6 +9,10 @@ training and the reviewed website replay are validated in the
 by its Actions budget; a versioned release is pending. PX4 flight execution is
 outside scope. No physical-flight claims are made.
 
+For continued drone development, use the [Isaac flight-control and 3D workflow](docs/drone-development.md).
+It runs the C++ controller with four bounded rotors and motor lag in PhysX, then
+opens the measured trajectory and attitude in an interactive local 3D replay.
+
 Python 3.11+ runs the dependency-free CPU tooling directly from a checkout:
 
 ```sh

@@ -8,7 +8,10 @@ function Demo({ config }: { config: ReplayViewerProps }) {
   return (
     <>
       <h1>AeroLoop replay</h1>
-      <p>Recorded CPU physics. No live flight control.</p>
+      <p>
+        Measured flight-control experiments. Enable 3D to inspect attitude and
+        trajectory; drag to orbit and scroll to zoom.
+      </p>
       <button onClick={() => setMounted((value) => !value)}>
         Toggle viewer
       </button>

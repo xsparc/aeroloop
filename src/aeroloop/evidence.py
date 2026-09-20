@@ -10,9 +10,10 @@ from .simulation import SCENARIOS, ROOT, encoded, metrics, sha256
 
 FILES = {"manifest.json", "config.json", "samples.json", "events.json", "metrics.json"}
 HASH = re.compile(r"[0-9a-f]{64}\Z")
-RUN_ID = re.compile(r"cpu-(hover|position-step|lateral-force-pulse)-[0-9]{1,10}-[0-9a-f]{12}\Z")
+RUN_ID = re.compile(r"(?:cpu|isaac)-(hover|position-step|lateral-force-pulse)-[0-9]{1,10}-[0-9a-f]{12}\Z")
 MANIFEST_FIELDS = {"schema_version", "run_id", "kind", "fixture", "captured_at", "experiment", "model", "controller", "scenario", "seed", "source_commit", "source_dirty", "source_tree_sha256", "controller_binary_sha256", "config_sha256", "lock_sha256", "world_frame", "body_frame", "quaternion_order", "units", "status", "failure_reason"}
 SAMPLE_FIELDS = {"time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "thrust_n", "external_force_n"}
+ROTOR_FIELDS = {"thrust_setpoint_n", "rotor_command_n", "rotor_thrust_n", "moment_nm", "allocation_scale"}
 
 
 def require(condition, message):
@@ -26,14 +27,16 @@ def keys(value, expected):
 
 def validate_manifest(m):
     keys(m, MANIFEST_FIELDS)
-    require(type(m["schema_version"]) is int and m["schema_version"] == 1, "unsupported manifest version")
+    require(type(m["schema_version"]) is int and m["schema_version"] in (1, 2), "unsupported manifest version")
+    flight = m["schema_version"] == 2
     require(isinstance(m["run_id"], str) and RUN_ID.fullmatch(m["run_id"]), "invalid run identifier")
     require(m["kind"] == "recorded_simulation" and m["fixture"] is False, "fixtures are not publishable evidence")
-    for field, value in {"experiment": "cpu-rigid-body", "model": "ideal-body-wrench-v1", "controller": "rate-pid-v1", "world_frame": "ENU", "body_frame": "FLU", "quaternion_order": "wxyz", "units": "SI"}.items():
+    for field, value in {"experiment": "isaac-quadrotor" if flight else "cpu-rigid-body", "model": "quadrotor-x-v1" if flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "world_frame": "ENU", "body_frame": "FLU", "quaternion_order": "wxyz", "units": "SI"}.items():
         require(m[field] == value, "unsupported evidence convention")
     require(m["scenario"] in SCENARIOS, "unsupported scenario")
     require(type(m["seed"]) is int and 0 <= m["seed"] <= 2**31-1, "invalid seed")
-    require(m["run_id"].startswith(f"cpu-{m['scenario']}-{m['seed']}-"), "run identifier does not match scenario and seed")
+    prefix = "isaac" if flight else "cpu"
+    require(m["run_id"].startswith(f"{prefix}-{m['scenario']}-{m['seed']}-"), "run identifier does not match backend, scenario and seed")
     require(isinstance(m["source_commit"], str) and re.fullmatch(r"[0-9a-f]{40}", m["source_commit"]), "invalid source commit")
     require(type(m["source_dirty"]) is bool, "invalid source state")
     for field in ("source_tree_sha256", "controller_binary_sha256", "config_sha256", "lock_sha256"):
@@ -49,7 +52,8 @@ def validate_manifest(m):
 
 
 def validate_config(c, m):
-    keys(c, {"model", "initial_state", "dt_s", "duration_s", "scenario", "seed", "controller", "position_kp", "position_kd", "attitude_kp", "rate_gains"})
+    flight = m["schema_version"] == 2
+    keys(c, {"model", "initial_state", "dt_s", "duration_s", "scenario", "seed", "controller", "position_kp", "position_kd", "attitude_kp", "rate_gains"} | ({"actuator", "simulator_versions", "physics_options"} if flight else set()))
     require(c["scenario"] == m["scenario"] and c["seed"] == m["seed"] and c["controller"] == m["controller"], "configuration mismatch")
     require(finite(c["dt_s"]) and .001 <= c["dt_s"] <= .02 and finite(c["duration_s"]) and 6 <= c["duration_s"] <= 120, "invalid timing")
     require(abs(.5/c["dt_s"]-round(.5/c["dt_s"])) < 1e-7, "unaligned event interval")
@@ -67,6 +71,37 @@ def validate_config(c, m):
     keys(c["rate_gains"], {"p", "i", "d", "ff", "integral_limit"})
     for value in c["rate_gains"].values():
         require(all(v >= 0 for v in vector(value)), "invalid rate gain")
+    if flight:
+        from dataclasses import asdict
+        from .physics import Model
+        from .rotors import RotorModel
+        require(encoded(c["actuator"]) == encoded(asdict(RotorModel())), "unsupported rotor model")
+        require(encoded(c["model"]) == encoded(asdict(Model())), "unsupported rotor body model")
+        require(c["dt_s"] == .005 and c["duration_s"] == 35., "unsupported rotor experiment timing")
+        keys(c["physics_options"], {"gyroscopic_forces"})
+        require(c["physics_options"]["gyroscopic_forces"] is True, "gyroscopic forces must be enabled")
+        keys(c["simulator_versions"], {"isaacsim", "isaaclab", "torch"})
+        for version in c["simulator_versions"].values():
+            require(isinstance(version, str) and re.fullmatch(r"[0-9][a-zA-Z0-9.+-]{0,31}", version), "invalid simulator version")
+
+
+def validate_rotors(sample, config, previous):
+    from .rotors import RotorModel
+    model = RotorModel(**config["actuator"])
+    request = sample["thrust_setpoint_n"]
+    require(finite(request) and 0 <= request <= 20., "invalid thrust setpoint")
+    require(all(abs(e) <= 1. for e in sample["effort_normalized"]), "invalid controller effort")
+    moment = tuple(e*s for e, s in zip(sample["effort_normalized"], config["model"]["max_moment"]))
+    commands, _, scale = model.allocate(request, moment)
+    applied = model.advance(previous, commands, config["dt_s"])
+    thrust, torque = model.wrench(applied)
+    expected = {"rotor_command_n": commands, "rotor_thrust_n": applied, "moment_nm": torque}
+    for name, values in expected.items():
+        measured = vector(sample[name], len(values))
+        require(all(abs(a-b) <= 1e-9 for a, b in zip(values, measured)), "rotor evidence disagrees with actuator model")
+    require(finite(sample["allocation_scale"]) and abs(sample["allocation_scale"]-scale) <= 1e-9, "invalid allocation scale")
+    require(abs(sample["thrust_n"]-thrust) <= 1e-9, "total thrust disagrees with rotors")
+    return applied
 
 
 def read_run(directory):
@@ -89,10 +124,12 @@ def read_run(directory):
     m, c, samples, events = (data[k] for k in ("manifest.json", "config.json", "samples.json", "events.json"))
     validate_manifest(m)
     validate_config(c, m)
+    flight = m["schema_version"] == 2
+    motors = (c["model"]["mass"]*c["model"]["gravity"]/4,)*4
     require(sha256(encoded(c)) == m["config_sha256"], "configuration hash mismatch")
     require(isinstance(samples, list) and 2 <= len(samples) <= 120001, "invalid sample count")
     for i, sample in enumerate(samples):
-        keys(sample, SAMPLE_FIELDS)
+        keys(sample, SAMPLE_FIELDS | (ROTOR_FIELDS if flight else set()))
         require(type(sample["sequence"]) is int and sample["sequence"] == i, "missing or unordered samples")
         require(finite(sample["time_s"]) and abs(sample["time_s"] - i*c["dt_s"]) <= 1e-8, "invalid simulation timestamps")
         for name in SAMPLE_FIELDS - {"time_s", "sequence", "thrust_n", "quaternion_wxyz"}:
@@ -101,6 +138,8 @@ def read_run(directory):
         require(abs(math.hypot(*q)-1.) <= 1e-6, "non-unit quaternion")
         require(finite(sample["thrust_n"]) and 0 <= sample["thrust_n"] <= c["model"]["max_thrust"], "invalid thrust")
         require(all(abs(v) <= 1 for v in sample["effort_normalized"]), "invalid normalized effort")
+        if flight:
+            motors = validate_rotors(sample, c, motors)
     expected_count = round(c["duration_s"]/c["dt_s"])+1
     require(len(samples) <= expected_count, "recording exceeds duration")
     require(m["status"] != "passed" or len(samples) == expected_count, "truncated successful recording")
@@ -142,14 +181,19 @@ def export_bundle(run_directories, output):
         for event in events:
             i = round(event["time_s"] / run["config.json"]["dt_s"])
             indices.update(j for j in (i-1, i, i+1) if 0 <= j < len(samples))
-        replay = {"schema_version": 1, "kind": "recorded_simulation", "run_id": run_id,
-                  "samples": [{k: sample[k] for k in ("time_s", "position_m", "target_m", "quaternion_wxyz")}
+        replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] == 2 else ())
+        replay = {"schema_version": m["schema_version"], "kind": "recorded_simulation", "run_id": run_id,
+                  "samples": [{k: sample[k] for k in replay_fields}
                               for i, sample in enumerate(samples) if i in indices]}
         for name, value in {**run, "replay.json": replay}.items():
             payloads[f"{run_id}/{name}"] = encoded(value)
         entries.append({"run_id": run_id, "scenario": m["scenario"], "status": m["status"], "seed": m["seed"]})
     index = {"schema_version": 1, "kind": "recorded_simulation", "release_status": "research_preview", "isaac_validated": False,
              "runs": entries, "checksums": {name: sha256(value) for name, value in payloads.items()}}
+    if any(run["manifest.json"]["schema_version"] == 2 for run in data):
+        index["schema_version"] = 2
+        del index["isaac_validated"]
+        index["learning_validated"] = False
     payloads["index.json"] = encoded(index)
     for name in ("index.html", "viewer.js", "viewer.css"):
         payloads[name] = (ROOT / "web" / name).read_bytes()

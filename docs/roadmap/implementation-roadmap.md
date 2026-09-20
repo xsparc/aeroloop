@@ -15,8 +15,19 @@ Public deployment and merges are separate decisions.
 | AL-005B | Separate website preview PR with immutable viewer and distinct Isaac evidence | Maintainer merged; local and served-site checks pass; hosted Actions execution remains blocked |
 | AL-005C | Clean-checkout reproduction audit | Verified: fresh native build, 15/15 CPU trials, Isaac checkpoint reload again 20/20 trained vs 0/20 untrained |
 | AL-005D | Post-merge MVP evidence audit and checklist reconciliation | Verified: merged trees match, retained measurements rechecked, 10 live browser checks and 23 served artifact hashes pass |
+| AL-006 | Native C++ flight control with four rotors in Isaac PhysX, versioned evidence and local 3D replay | In progress: development scenarios and viewer checks pass; fixed regression suite pending |
 
 ## Next gate
+
+The maintainer requested further simulation-only drone development with physics
+execution and 3D visualization on 2026-09-20. AL-006 implements that extension;
+the prior instruction to avoid unrequested feature work does not block this
+explicitly requested slice. See [decision 003](../architecture/decisions/003-rotor-flight-control.md)
+and the [development workflow](../drone-development.md).
+
+Finish the fixed rotor-control regression and retained evidence before closing
+AL-006. Then specify takeoff/landing and waypoint acceptance with contact physics
+as the next incremental slice. Preserve the established CPU and learning baselines.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration

@@ -185,3 +185,35 @@ roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-20-post-merge-autonomous-continuation"
 acceptance_refs = ["docs/evidence/mvp-audit.md"]
 evidence_refs = ["docs/evidence/mvp-audit.md", "docs/evidence/mvp-audit-001.json", "docs/research/2026-09-20-closeout.json"]
+
+[[requirements]]
+id = "REQ-DRONE-CONTROL"
+statement = "Develop native drone flight control through rotor-actuated Isaac physics and inspectable 3D recordings."
+status = "planned"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/decisions/003-rotor-flight-control.md"]
+implementation_refs = ["src/aeroloop/rotors.py", "src/aeroloop/isaac_flight.py", "tools/isaac_flight.py", "web/replay/src/scene.tsx"]
+verification_refs = ["tests/test_rotors.py", "tests/test_evidence.py", "web/replay/tests/contracts.test.mjs", "web/replay/tests/browser/replay.spec.mjs"]
+validation_refs = ["docs/drone-development.md"]
+risk_refs = ["docs/architecture/decisions/003-rotor-flight-control.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-006"
+title = "Rotor-actuated Isaac flight control and 3D replay"
+status = "in-progress"
+requirement_ids = ["REQ-DRONE-CONTROL", "REQ-REUSABLE-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-simulation-only-drone-development"
+acceptance_refs = ["docs/architecture/decisions/003-rotor-flight-control.md"]
+evidence_refs = ["docs/drone-development.md", "docs/research/2026-09-20-quadrotor.json"]
+
+[[research_decisions]]
+id = "RD-ROTOR-CONTROL"
+finding = "Explicit rotor force allocation and a pinned Isaac state/wrench bridge support the requested physics-based drone development."
+disposition = "adopted"
+source_urls = ["https://vnav.mit.edu/material/06-Control1-notes.pdf", "https://github.com/isaac-sim/IsaacLab/blob/ae37b028ea415c91ea2bc32609efcd759ed2b974/source/isaaclab/isaaclab/assets/rigid_object/base_rigid_object_data.py"]
+observed_on = "2026-09-20"
+reviewed_on = "2026-09-20"
+review_due = "2026-10-20"
+decision_ref = "docs/architecture/decisions/003-rotor-flight-control.md"
