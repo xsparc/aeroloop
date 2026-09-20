@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Scope revised 2026-09-20: physics simulation replaces PX4 execution; Isaac physics
+Scope revised 2026-09-21: physics simulation replaces PX4 execution; Isaac physics
 and learning remain in the MVP. Incremental PRs target `main`; after a squash merge,
 verify that every reviewed change reached `main` before starting the next slice.
 Public deployment and merges are separate decisions.
@@ -17,6 +17,7 @@ Public deployment and merges are separate decisions.
 | AL-005D | Post-merge MVP evidence audit and checklist reconciliation | Verified: merged trees match, retained measurements rechecked, 10 live browser checks and 23 served artifact hashes pass |
 | AL-006 | Native C++ flight control with four rotors in Isaac PhysX, versioned evidence and local 3D replay | Verified: 15/15 clean-revision PhysX trials, 49 Python checks, two native tests and 3D browser checks |
 | AL-007 | Seeded turbulent wind, pressure-centre drag and measured stabilization against a matching reference | Verified: 10/10 clean-revision PhysX trials, 5/5 paired comparisons and eight measured browser checks |
+| AL-008 | Ground-contact takeoff, waypoint route, measured landing and 3D replay | Verified: 5/5 clean-revision PhysX missions, four waypoint holds per run, contact-latched landing and measured 3D replay |
 
 ## Next gate
 
@@ -31,9 +32,16 @@ fifteen trials and was merged. The maintainer's subsequent turbulence request
 prioritizes AL-007 before takeoff/landing and waypoint work. See
 [decision 004](../architecture/decisions/004-turbulence-stabilization.md) and the
 [wind demonstration](../turbulence.md). Preserve the established CPU and learning
-baselines. Ground-contact flight remains the following proposed slice.
+baselines. The maintainer merged AL-007 and requested autonomous continuation on
+2026-09-21. AL-008 now implements ground-contact flight under
+[decision 005](../architecture/decisions/005-ground-contact-mission.md), with a
+[calm mission workflow](../ground-mission.md).
 AL-007's [retained results](../evidence/isaac-wind-validation.md) show 98.7–98.9%
 less wind-window position RMSE than the reference across all five seeds.
+
+After AL-008, the next proposed extension combines mission flight and turbulent
+wind, with new acceptance criteria for waypoint tracking and landing. It must not
+inherit a success claim from the separate airborne wind and calm contact suites.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration

@@ -37,6 +37,13 @@ controller mode before export. The 3D viewer displays wind/drag vectors, follows
 the aircraft and offers a verified reference error comparison. See
 [decision 004](decisions/004-turbulence-stabilization.md).
 
+Version 4 adds a calm ground-contact mission using the same controller and rotors.
+A static floor and cuboid body provide physical support. Measured normal contact
+force, oriented clearance and vertical speed drive a landing latch; disarming
+requests zero rotor thrust while preserving motor lag. The evidence verifier
+reconstructs mission phases, targets, events and gates; the viewer depicts the
+collider and route. See [decision 005](decisions/005-ground-contact-mission.md).
+
 PX4 flight execution and Pegasus transport are no longer MVP dependencies. No CPU
 result can stand in for Isaac validation. The CPU body-wrench model does not model
 propeller aerodynamics, individual motors, estimation error, contact or hardware.

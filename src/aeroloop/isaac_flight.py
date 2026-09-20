@@ -9,6 +9,7 @@ from .frames import normalize, rotate
 from .physics import Model, State
 from .rotors import RotorModel
 from .simulation import encoded, metrics, record, sha256
+from . import mission
 from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, flight_setpoint, wind_outcome, comparisons
 
 
@@ -32,7 +33,20 @@ def flight(output: Path, launcher_args):
             physics=physics_cfg, save_logs_to_file=False))
         vehicle = body_config()
         vehicle.spawn.rigid_props.enable_gyroscopic_forces = True
+        contact_mission = launcher_args.scenarios == (mission.SCENARIO,)
+        if contact_mission:
+            contact_cfg = mission.configuration()
+            material = sim_utils.RigidBodyMaterialCfg(**{k: contact_cfg[k] for k in ("static_friction", "dynamic_friction", "restitution")})
+            collision = sim_utils.CollisionPropertiesCfg(contact_offset=contact_cfg["contact_offset_m"], rest_offset=contact_cfg["rest_offset_m"])
+            vehicle.spawn.size = tuple(contact_cfg["collider_size_m"])
+            vehicle.spawn.collision_props = collision
+            vehicle.spawn.physics_material = material
+            vehicle.spawn.activate_contact_sensors = True
+            ground = sim_utils.CuboidCfg(size=tuple(contact_cfg["ground_size_m"]), collision_props=collision, physics_material=material)
+            ground.func("/World/Ground", ground, translation=tuple(contact_cfg["ground_position_m"]))
+            from isaaclab.sensors import ContactSensor, ContactSensorCfg
         body = RigidObject(vehicle)
+        sensor = ContactSensor(ContactSensorCfg(prim_path="/World/Vehicle", update_period=0., history_length=1, debug_vis=False)) if contact_mission else None
         set_inertia(sim.stage, "/World/Vehicle")
         sim.reset()
         package_versions = versions()
@@ -40,15 +54,21 @@ def flight(output: Path, launcher_args):
         torques = torch.zeros_like(forces)
         for scenario in launcher_args.scenarios:
             for seed in launcher_args.seeds:
+                duration = mission.DURATION if contact_mission else 35.
+                route = mission.Mission() if contact_mission else None
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
+                if route:
+                    initial = mission.initial_state(seed)
                 pose = body.data.default_root_pose.torch.clone()
                 pose[0, :3] = torch.tensor(initial.position, device=sim.device)
                 pose[0, 3:] = torch.tensor((0., 0., 0., 1.), device=sim.device)
                 body.write_root_pose_to_sim_index(root_pose=pose)
                 body.write_root_velocity_to_sim_index(root_velocity=torch.zeros((1, 6), device=sim.device))
                 body.reset()
-                motors = (model.mass*model.gravity/4,)*4
+                if sensor:
+                    sensor.reset()
+                motors = (0.,)*4 if route else (model.mass*model.gravity/4,)*4
                 previous_rate, saturation = (0., 0., 0.), (0, 0, 0)
                 samples, events = [], []
                 status, reason = "passed", None
@@ -75,8 +95,14 @@ def flight(output: Path, launcher_args):
                             events.append({"time_s": t, "type": "target_step"})
                         if scenario == "lateral-force-pulse" and t in (15., 15.5):
                             events.append({"time_s": t, "type": "force_start" if t == 15. else "force_end"})
-                        thrust_request, rate_request = flight_setpoint(state, target, model, scenario)
-                        effort = controller.step(rate, rate_request, state.acceleration, dt, saturation)
+                        armed = True
+                        if route:
+                            normal_force = tuple(sensor.data.net_normal_forces_w.torch[0, 0].cpu().tolist()) if step else (0., 0., 0.)
+                            phase, target, armed, bottom = route.update(t, state, normal_force)
+                            thrust_request, rate_request = mission.setpoint(state, target, armed)
+                        else:
+                            thrust_request, rate_request = flight_setpoint(state, target, model, scenario)
+                        effort = controller.step(rate, rate_request, state.acceleration, dt, saturation, armed=armed)
                         wanted = tuple(e*s for e, s in zip(effort, model.max_moment))
                         commands, saturation, scale = rotors.allocate(thrust_request, wanted)
                         saturation = tuple(flag | (1 if e >= 1 else 2 if e <= -1 else 0)
@@ -89,6 +115,8 @@ def flight(output: Path, launcher_args):
                             "effort_normalized": effort, "thrust_n": thrust, "external_force_n": external,
                             "thrust_setpoint_n": thrust_request, "rotor_command_n": commands,
                             "rotor_thrust_n": motors, "moment_nm": moment, "allocation_scale": scale})
+                        if route:
+                            samples[-1].update(mission_phase=phase, contact_normal_force_n=normal_force, support_clearance_m=bottom)
                         if wind_model:
                             samples[-1].update(wind_velocity_m_s=winds[step], external_moment_nm=external_moment)
                         if state.position[2] <= 0 or sum(v*v for v in state.position) > 100**2:
@@ -105,9 +133,16 @@ def flight(output: Path, launcher_args):
                         body.write_data_to_sim()
                         sim.step(render=False)
                         body.update(dt)
+                        if sensor:
+                            sensor.update(dt, force_recompute=True)
                         previous_rate = rate
+                if route:
+                    events = route.events
                 measured = metrics(samples, scenario)
                 if status == "passed":
+                    if route:
+                        reason = mission.outcome(measured)
+                        status = "failed" if reason else "passed"
                     if wind_model:
                         reason = wind_outcome(measured, scenario)
                         status = "failed" if reason else "passed"
@@ -123,6 +158,8 @@ def flight(output: Path, launcher_args):
                     "rate_gains": {"p": [.6]*3, "i": [.1]*3, "d": [.005]*3, "ff": [0.]*3, "integral_limit": [.3]*3},
                     "actuator": asdict(rotors), "simulator_versions": package_versions,
                     "physics_options": {"gyroscopic_forces": True}}
+                if route:
+                    config["mission"] = contact_cfg
                 if wind_model:
                     config.update(wind=asdict(wind_model), horizontal_position_hold=scenario == "turbulence-hold")
                 run = record({"experiment": "isaac-quadrotor", "config": config, "samples": samples,

@@ -72,14 +72,14 @@ Generic CI runs CPU tests and CPU recordings; local GPU validation must actually
 execute `tools/isaac.py flight`. No passing CPU job substitutes for an Isaac run.
 
 The example drone has ideal ground-truth state, a 1 kg rigid body and declared
-actuator parameters. It starts airborne with motors initialized at hover thrust.
-Aerodynamics, battery discharge, sensor noise, estimation, ground contact and
-physical flights are outside this slice. The earlier learned-policy task and
-its retained evidence are unchanged. The next planned extension is a separately
-specified takeoff/landing and waypoint scenario with appropriate contact physics.
+actuator parameters. The original version 2 suite starts airborne with motors
+initialized at hover thrust and omits aerodynamic drag and ground contact.
+Battery discharge, sensor noise, estimation and physical flights remain outside
+these experiments. The learned-policy task and its retained evidence are unchanged.
 
-The next accepted extension is [turbulence and stabilization](turbulence.md).
-It adds illustrative wind-relative drag and pressure-centre torque, paired with
-a reference that disables horizontal position hold. That request takes priority
-over the proposed contact/waypoint slice. Versions 1 and 2 above keep their
-original models; version 3 identifies the wind model explicitly.
+The [turbulence demonstration](turbulence.md) adds version 3 wind-relative drag
+and pressure-centre torque, paired with a reference that disables horizontal
+position hold. The [ground-contact mission](ground-mission.md) adds version 4
+calm takeoff, a waypoint route and measured landing from stopped motors. These
+are separate experiments with explicit model contracts and acceptance gates.
+The default `--scenario all` continues to run the original three airborne cases.

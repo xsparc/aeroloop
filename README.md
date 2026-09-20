@@ -14,6 +14,8 @@ It runs the C++ controller with four bounded rotors and motor lag in PhysX, then
 opens the measured trajectory and attitude in an interactive local 3D replay.
 The [turbulence demonstration](docs/turbulence.md) adds seeded wind and drag,
 with a matching reference that makes the effect of position hold visible.
+The [ground-contact mission](docs/ground-mission.md) adds calm takeoff, waypoint
+flight and measured landing with motor shutdown on a physical floor.
 
 Python 3.11+ runs the dependency-free CPU tooling directly from a checkout:
 
