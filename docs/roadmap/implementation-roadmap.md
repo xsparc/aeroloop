@@ -18,8 +18,7 @@ Public deployment and merges are separate decisions.
 | AL-006 | Native C++ flight control with four rotors in Isaac PhysX, versioned evidence and local 3D replay | Verified: 15/15 clean-revision PhysX trials, 49 Python checks, two native tests and 3D browser checks |
 | AL-007 | Seeded turbulent wind, pressure-centre drag and measured stabilization against a matching reference | Verified: 10/10 clean-revision PhysX trials, 5/5 paired comparisons and eight measured browser checks |
 | AL-008 | Ground-contact takeoff, waypoint route, measured landing and 3D replay | Verified: 5/5 clean-revision PhysX missions, four waypoint holds per run, contact-latched landing and measured 3D replay |
-
-| AL-009 | Turbulent takeoff, waypoint route, contact landing and combined 3D replay | Implemented; development seed 73 passes; clean five-seed validation pending |
+| AL-009 | Turbulent takeoff, waypoint route, contact landing and combined 3D replay | Verified: 5/5 clean-revision PhysX missions with wind through landing, four waypoint holds per run and combined 3D replay |
 
 ## Next gate
 

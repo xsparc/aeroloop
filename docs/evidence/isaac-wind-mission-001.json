@@ -1,0 +1,856 @@
+{
+  "schema_version": 1,
+  "kind": "isaac_turbulent_mission_summary",
+  "backend": "isaacsim_physx",
+  "source_dirty": false,
+  "source_commit": "19fb20d14a1234a69c0307507a1b7ca27262ae7c",
+  "source_tree_sha256": "c0b0c89d60ea45ab6e05e2633df76358674bed53bc2c047fed3e47372229ef91",
+  "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+  "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+  "versions": {
+    "isaaclab": "17.0.2",
+    "isaacsim": "6.1.0.0",
+    "torch": "2.11.0+cu128"
+  },
+  "model": {
+    "gravity": 9.80665,
+    "inertia": [
+      0.02,
+      0.02,
+      0.04
+    ],
+    "mass": 1.0,
+    "max_moment": [
+      0.4,
+      0.4,
+      0.2
+    ],
+    "max_thrust": 20.0
+  },
+  "actuator": {
+    "arm_m": 0.23,
+    "max_rotor_thrust_n": 5.0,
+    "thrust_time_constant_s": 0.03,
+    "yaw_m": 0.02
+  },
+  "mission": {
+    "collider_size_m": [
+      0.4,
+      0.4,
+      0.1
+    ],
+    "contact_dwell_s": 0.05,
+    "contact_force_threshold_n": 0.1,
+    "contact_offset_m": 0.001,
+    "dynamic_friction": 0.5,
+    "ground_position_m": [
+      0.0,
+      0.0,
+      -0.05
+    ],
+    "ground_size_m": [
+      20.0,
+      20.0,
+      0.1
+    ],
+    "kind": "wind-contact-mission-v1",
+    "landing_clearance_m": 0.015,
+    "landing_speed_m_s": 0.2,
+    "rest_offset_m": 0.0,
+    "restitution": 0.0,
+    "static_friction": 0.7,
+    "waypoints": [
+      {
+        "position_m": [
+          0.0,
+          0.0,
+          1.5
+        ],
+        "window_s": [
+          7.0,
+          10.0
+        ]
+      },
+      {
+        "position_m": [
+          0.0,
+          1.0,
+          1.5
+        ],
+        "window_s": [
+          15.0,
+          18.0
+        ]
+      },
+      {
+        "position_m": [
+          1.0,
+          1.0,
+          1.5
+        ],
+        "window_s": [
+          23.0,
+          26.0
+        ]
+      },
+      {
+        "position_m": [
+          0.0,
+          0.0,
+          1.5
+        ],
+        "window_s": [
+          31.0,
+          34.0
+        ]
+      }
+    ]
+  },
+  "physics_options": {
+    "gyroscopic_forces": true
+  },
+  "dt_s": 0.005,
+  "duration_s": 50.0,
+  "wind": {
+    "active_s": [
+      0.0,
+      55.0
+    ],
+    "correlation_s": 0.6,
+    "density_kg_m3": 1.225,
+    "drag_area_m2": 0.06,
+    "gust_m_s": [
+      3.0,
+      0.0,
+      0.0
+    ],
+    "gust_s": [
+      40.0,
+      42.0
+    ],
+    "kind": "bounded-temporal-ou-v1",
+    "mean_m_s": [
+      3.0,
+      -1.0,
+      0.0
+    ],
+    "pressure_centre_m": [
+      0.0,
+      0.0,
+      0.03
+    ],
+    "ramp_s": 1.0,
+    "sigma_m_s": [
+      1.2,
+      1.0,
+      0.5
+    ],
+    "speed_limit_m_s": 12.0
+  },
+  "trajectory_control": {
+    "acceleration_limit_m_s2": 4.0,
+    "feedforward": true,
+    "freeze_on_allocation_saturation": true,
+    "integral_ki": [
+      0.6,
+      0.6,
+      0.0
+    ],
+    "integral_limit_m_s2": [
+      1.5,
+      1.5,
+      0.0
+    ],
+    "kind": "trajectory-pid-v1",
+    "position_kp": 2.5,
+    "reset_when_disarmed": true,
+    "velocity_kd": 2.8
+  },
+  "wall_time_s": 204.55906759999925,
+  "trials": 5,
+  "passed": 5,
+  "results": [
+    {
+      "run_id": "isaac-ground-mission-wind-0-c8d7cb33c32b",
+      "scenario": "ground-mission-wind",
+      "seed": 0,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "7697603c30d29f9cab33c336af184d3309f3f7a70dc74f58ef2a84e77dfbf357",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          50.0
+        ],
+        "mission": {
+          "final_support": {
+            "mean_normal_force_n": 9.816687821747358,
+            "mean_vertical_balance_error_n": 7.917971173510811e-06,
+            "peak_height_error_m": 3.270804882077316e-07,
+            "peak_rotor_thrust_n": 9.591497563332275e-65,
+            "peak_speed_m_s": 0.000148618266094999,
+            "peak_tilt_deg": 0.0001343683492323807,
+            "peak_xy_error_m": 0.039596112827879656,
+            "samples": 401
+          },
+          "initial_support": {
+            "mean_normal_force_n": 9.815277452468871,
+            "mean_vertical_balance_error_n": 1.2722017784554395e-05,
+            "peak_height_error_m": 3.233551979092697e-07,
+            "peak_rotor_thrust_n": 0.0,
+            "peak_speed_m_s": 0.0001522171521376773,
+            "peak_tilt_deg": 0.00011909759843994624,
+            "peak_xy_error_m": 0.017212400652644587,
+            "samples": 200
+          },
+          "landed_time_s": 43.555,
+          "liftoff_time_s": 2.915,
+          "max_penetration_m": 3.828125728688736e-06,
+          "peak_tilt_deg": 9.50868192677626,
+          "touchdown_descent_speed_m_s": 0.06544170528650284,
+          "touchdown_horizontal_speed_m_s": 0.24158746458457842,
+          "touchdown_time_s": 42.56,
+          "unexpected_contact_samples": 0,
+          "waypoint_band_m": 0.35,
+          "waypoint_reached_s": [
+            7.0,
+            15.0,
+            23.0,
+            31.0
+          ]
+        },
+        "peak_error_m": 0.36391677035042286,
+        "position_rmse_m": 0.10919246357819502,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 10001,
+        "step_response": null
+      },
+      "events": [
+        {
+          "time_s": 0.0,
+          "type": "grounded"
+        },
+        {
+          "time_s": 0.0,
+          "type": "wind_start"
+        },
+        {
+          "time_s": 2.0,
+          "type": "takeoff"
+        },
+        {
+          "time_s": 2.915,
+          "type": "liftoff"
+        },
+        {
+          "time_s": 7.0,
+          "type": "hover"
+        },
+        {
+          "time_s": 10.0,
+          "type": "north"
+        },
+        {
+          "time_s": 15.0,
+          "type": "north_hold"
+        },
+        {
+          "time_s": 18.0,
+          "type": "east"
+        },
+        {
+          "time_s": 23.0,
+          "type": "east_hold"
+        },
+        {
+          "time_s": 26.0,
+          "type": "return"
+        },
+        {
+          "time_s": 31.0,
+          "type": "home_hold"
+        },
+        {
+          "time_s": 34.0,
+          "type": "landing"
+        },
+        {
+          "time_s": 40.0,
+          "type": "gust_start"
+        },
+        {
+          "time_s": 42.0,
+          "type": "gust_end"
+        },
+        {
+          "time_s": 42.56,
+          "type": "touchdown"
+        },
+        {
+          "time_s": 43.555,
+          "type": "landed"
+        }
+      ],
+      "rotor_thrust_range_n": [
+        0.0,
+        2.665250467650912
+      ],
+      "allocation_saturated_samples": 0,
+      "wind_samples_sha256": "787c3cc0b6a5f460b2d57844f39c261c626909d0b7ad8230395cb4c31befc7f8",
+      "peak_wind_speed_m_s": 6.98074294081479,
+      "peak_descent_wind_m_s": 6.98074294081479,
+      "final_wind_speed_range_m_s": [
+        0.4979426449281266,
+        4.426520205185981
+      ]
+    },
+    {
+      "run_id": "isaac-ground-mission-wind-1-72d92e10ff1e",
+      "scenario": "ground-mission-wind",
+      "seed": 1,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "2c64c097dac8359ef016a1ef7ed2153a61a3aa80e62cd57070fe34711c6bb004",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          50.0
+        ],
+        "mission": {
+          "final_support": {
+            "mean_normal_force_n": 9.792586400324566,
+            "mean_vertical_balance_error_n": -7.154745990139365e-06,
+            "peak_height_error_m": 3.270804882077316e-07,
+            "peak_rotor_thrust_n": 3.399382429252345e-63,
+            "peak_speed_m_s": 0.00017780753809868425,
+            "peak_tilt_deg": 0.00011568554145036467,
+            "peak_xy_error_m": 0.06384975854287527,
+            "samples": 401
+          },
+          "initial_support": {
+            "mean_normal_force_n": 9.825137047767639,
+            "mean_vertical_balance_error_n": 6.458880350761475e-06,
+            "peak_height_error_m": 3.233551979092697e-07,
+            "peak_rotor_thrust_n": 0.0,
+            "peak_speed_m_s": 0.00013415225325245653,
+            "peak_tilt_deg": 0.00011902719259507426,
+            "peak_xy_error_m": 0.020175112403786905,
+            "samples": 200
+          },
+          "landed_time_s": 43.66,
+          "liftoff_time_s": 2.925,
+          "max_penetration_m": 2.6201504160286437e-06,
+          "peak_tilt_deg": 9.420927527077971,
+          "touchdown_descent_speed_m_s": 0.08314979076385498,
+          "touchdown_horizontal_speed_m_s": 0.06274790236974803,
+          "touchdown_time_s": 43.585,
+          "unexpected_contact_samples": 0,
+          "waypoint_band_m": 0.35,
+          "waypoint_reached_s": [
+            7.0,
+            15.0,
+            23.0,
+            31.0
+          ]
+        },
+        "peak_error_m": 0.2987391434697774,
+        "position_rmse_m": 0.11534612566652001,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 10001,
+        "step_response": null
+      },
+      "events": [
+        {
+          "time_s": 0.0,
+          "type": "grounded"
+        },
+        {
+          "time_s": 0.0,
+          "type": "wind_start"
+        },
+        {
+          "time_s": 2.0,
+          "type": "takeoff"
+        },
+        {
+          "time_s": 2.925,
+          "type": "liftoff"
+        },
+        {
+          "time_s": 7.0,
+          "type": "hover"
+        },
+        {
+          "time_s": 10.0,
+          "type": "north"
+        },
+        {
+          "time_s": 15.0,
+          "type": "north_hold"
+        },
+        {
+          "time_s": 18.0,
+          "type": "east"
+        },
+        {
+          "time_s": 23.0,
+          "type": "east_hold"
+        },
+        {
+          "time_s": 26.0,
+          "type": "return"
+        },
+        {
+          "time_s": 31.0,
+          "type": "home_hold"
+        },
+        {
+          "time_s": 34.0,
+          "type": "landing"
+        },
+        {
+          "time_s": 40.0,
+          "type": "gust_start"
+        },
+        {
+          "time_s": 42.0,
+          "type": "gust_end"
+        },
+        {
+          "time_s": 43.585,
+          "type": "touchdown"
+        },
+        {
+          "time_s": 43.66,
+          "type": "landed"
+        }
+      ],
+      "rotor_thrust_range_n": [
+        0.0,
+        2.70219998738998
+      ],
+      "allocation_saturated_samples": 0,
+      "wind_samples_sha256": "ce37f4e586c4ecf2d1eaa71af842e7ba2b00599274b5056ceb868ee963b5f341",
+      "peak_wind_speed_m_s": 7.00550611947535,
+      "peak_descent_wind_m_s": 6.546995393044622,
+      "final_wind_speed_range_m_s": [
+        0.5095763680477438,
+        5.1618506500120365
+      ]
+    },
+    {
+      "run_id": "isaac-ground-mission-wind-2-b1e53b985cd0",
+      "scenario": "ground-mission-wind",
+      "seed": 2,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "c906587389e5c5666f3b4c2d262855be47136cba173def9fdd16f9f83f6b66db",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          50.0
+        ],
+        "mission": {
+          "final_support": {
+            "mean_normal_force_n": 9.832668527997937,
+            "mean_vertical_balance_error_n": 9.62302783738067e-06,
+            "peak_height_error_m": 3.270804882077316e-07,
+            "peak_rotor_thrust_n": 5.134876161520387e-64,
+            "peak_speed_m_s": 0.00017824267647016608,
+            "peak_tilt_deg": 0.00011738378587377236,
+            "peak_xy_error_m": 0.16020426505311966,
+            "samples": 401
+          },
+          "initial_support": {
+            "mean_normal_force_n": 9.778471827507019,
+            "mean_vertical_balance_error_n": -2.322220378925266e-07,
+            "peak_height_error_m": 3.270804882077316e-07,
+            "peak_rotor_thrust_n": 0.0,
+            "peak_speed_m_s": 0.00022334205425347066,
+            "peak_tilt_deg": 0.00012356143047313606,
+            "peak_xy_error_m": 0.025566186953618245,
+            "samples": 200
+          },
+          "landed_time_s": 43.605,
+          "liftoff_time_s": 2.955,
+          "max_penetration_m": 1.1349217963266267e-06,
+          "peak_tilt_deg": 11.427305662297124,
+          "touchdown_descent_speed_m_s": 0.05365864932537079,
+          "touchdown_horizontal_speed_m_s": 0.13485007120175563,
+          "touchdown_time_s": 43.545,
+          "unexpected_contact_samples": 0,
+          "waypoint_band_m": 0.35,
+          "waypoint_reached_s": [
+            7.0,
+            15.0,
+            23.0,
+            31.0
+          ]
+        },
+        "peak_error_m": 0.380635454119148,
+        "position_rmse_m": 0.13252222482575676,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 10001,
+        "step_response": null
+      },
+      "events": [
+        {
+          "time_s": 0.0,
+          "type": "grounded"
+        },
+        {
+          "time_s": 0.0,
+          "type": "wind_start"
+        },
+        {
+          "time_s": 2.0,
+          "type": "takeoff"
+        },
+        {
+          "time_s": 2.955,
+          "type": "liftoff"
+        },
+        {
+          "time_s": 7.0,
+          "type": "hover"
+        },
+        {
+          "time_s": 10.0,
+          "type": "north"
+        },
+        {
+          "time_s": 15.0,
+          "type": "north_hold"
+        },
+        {
+          "time_s": 18.0,
+          "type": "east"
+        },
+        {
+          "time_s": 23.0,
+          "type": "east_hold"
+        },
+        {
+          "time_s": 26.0,
+          "type": "return"
+        },
+        {
+          "time_s": 31.0,
+          "type": "home_hold"
+        },
+        {
+          "time_s": 34.0,
+          "type": "landing"
+        },
+        {
+          "time_s": 40.0,
+          "type": "gust_start"
+        },
+        {
+          "time_s": 42.0,
+          "type": "gust_end"
+        },
+        {
+          "time_s": 43.545,
+          "type": "touchdown"
+        },
+        {
+          "time_s": 43.605,
+          "type": "landed"
+        }
+      ],
+      "rotor_thrust_range_n": [
+        0.0,
+        2.6170369709372685
+      ],
+      "allocation_saturated_samples": 0,
+      "wind_samples_sha256": "8ef1e2e14a0becc2547af4606b4d82977bf2f7a66d21cb9185376d19e670421c",
+      "peak_wind_speed_m_s": 7.611440657388824,
+      "peak_descent_wind_m_s": 7.611440657388824,
+      "final_wind_speed_range_m_s": [
+        2.7641477451853436,
+        5.4342848104013575
+      ]
+    },
+    {
+      "run_id": "isaac-ground-mission-wind-3-6e0365d2cac7",
+      "scenario": "ground-mission-wind",
+      "seed": 3,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "592b33feac57f9bf51c680ffc54c361c3e566fedbeeaaf1411cd4d7045eef20c",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          50.0
+        ],
+        "mission": {
+          "final_support": {
+            "mean_normal_force_n": 9.920984791401319,
+            "mean_vertical_balance_error_n": 3.0359902163030513e-06,
+            "peak_height_error_m": 3.308057785061935e-07,
+            "peak_rotor_thrust_n": 7.139245527337641e-64,
+            "peak_speed_m_s": 0.00016382984865441757,
+            "peak_tilt_deg": 0.00011719423403170716,
+            "peak_xy_error_m": 0.30027292066173195,
+            "samples": 401
+          },
+          "initial_support": {
+            "mean_normal_force_n": 9.837403173446654,
+            "mean_vertical_balance_error_n": -2.0132817377298552e-05,
+            "peak_height_error_m": 3.270804882077316e-07,
+            "peak_rotor_thrust_n": 0.0,
+            "peak_speed_m_s": 0.00027836944315293133,
+            "peak_tilt_deg": 0.00012700295518981142,
+            "peak_xy_error_m": 0.010629644153590197,
+            "samples": 200
+          },
+          "landed_time_s": 43.615,
+          "liftoff_time_s": 2.945,
+          "max_penetration_m": 1.3547799725954768e-06,
+          "peak_tilt_deg": 10.429475662054463,
+          "touchdown_descent_speed_m_s": 0.07259543240070343,
+          "touchdown_horizontal_speed_m_s": 0.17161578969160418,
+          "touchdown_time_s": 40.995,
+          "unexpected_contact_samples": 0,
+          "waypoint_band_m": 0.35,
+          "waypoint_reached_s": [
+            7.0,
+            15.0,
+            23.0,
+            31.0
+          ]
+        },
+        "peak_error_m": 0.33157539321016427,
+        "position_rmse_m": 0.1657781232903869,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 10001,
+        "step_response": null
+      },
+      "events": [
+        {
+          "time_s": 0.0,
+          "type": "grounded"
+        },
+        {
+          "time_s": 0.0,
+          "type": "wind_start"
+        },
+        {
+          "time_s": 2.0,
+          "type": "takeoff"
+        },
+        {
+          "time_s": 2.945,
+          "type": "liftoff"
+        },
+        {
+          "time_s": 7.0,
+          "type": "hover"
+        },
+        {
+          "time_s": 10.0,
+          "type": "north"
+        },
+        {
+          "time_s": 15.0,
+          "type": "north_hold"
+        },
+        {
+          "time_s": 18.0,
+          "type": "east"
+        },
+        {
+          "time_s": 23.0,
+          "type": "east_hold"
+        },
+        {
+          "time_s": 26.0,
+          "type": "return"
+        },
+        {
+          "time_s": 31.0,
+          "type": "home_hold"
+        },
+        {
+          "time_s": 34.0,
+          "type": "landing"
+        },
+        {
+          "time_s": 40.0,
+          "type": "gust_start"
+        },
+        {
+          "time_s": 40.995,
+          "type": "touchdown"
+        },
+        {
+          "time_s": 42.0,
+          "type": "gust_end"
+        },
+        {
+          "time_s": 43.615,
+          "type": "landed"
+        }
+      ],
+      "rotor_thrust_range_n": [
+        0.0,
+        2.7120735799577447
+      ],
+      "allocation_saturated_samples": 0,
+      "wind_samples_sha256": "1fd26224cf1588cb5a6a61aa50b3d9e33eadc2aca3057e947598d060300fdab7",
+      "peak_wind_speed_m_s": 7.8804746942644535,
+      "peak_descent_wind_m_s": 7.8804746942644535,
+      "final_wind_speed_range_m_s": [
+        1.546652620813703,
+        5.094544486708746
+      ]
+    },
+    {
+      "run_id": "isaac-ground-mission-wind-4-a95a0f8c90c1",
+      "scenario": "ground-mission-wind",
+      "seed": 4,
+      "status": "passed",
+      "failure_reason": null,
+      "config_sha256": "2433e91dd0a9b6ec0093e82d9701758b108f5b0ac02a9b7645138e713a7e4df1",
+      "metrics": {
+        "measurement_window_s": [
+          5.0,
+          50.0
+        ],
+        "mission": {
+          "final_support": {
+            "mean_normal_force_n": 9.731517894012375,
+            "mean_vertical_balance_error_n": -5.411205518164745e-06,
+            "peak_height_error_m": 3.270804882077316e-07,
+            "peak_rotor_thrust_n": 6.065561729399944e-64,
+            "peak_speed_m_s": 0.00020562399740088562,
+            "peak_tilt_deg": 0.00012620842325998595,
+            "peak_xy_error_m": 0.12682256893170252,
+            "samples": 401
+          },
+          "initial_support": {
+            "mean_normal_force_n": 9.769279718399048,
+            "mean_vertical_balance_error_n": 2.782168145941455e-05,
+            "peak_height_error_m": 3.270804882077316e-07,
+            "peak_rotor_thrust_n": 0.0,
+            "peak_speed_m_s": 0.0002948111173229253,
+            "peak_tilt_deg": 0.0001269599018799232,
+            "peak_xy_error_m": 0.01906410888617923,
+            "samples": 200
+          },
+          "landed_time_s": 43.61,
+          "liftoff_time_s": 2.925,
+          "max_penetration_m": 1.0535478370404805e-06,
+          "peak_tilt_deg": 14.240560225440996,
+          "touchdown_descent_speed_m_s": 0.05947059765458107,
+          "touchdown_horizontal_speed_m_s": 0.11076357902855888,
+          "touchdown_time_s": 43.545,
+          "unexpected_contact_samples": 0,
+          "waypoint_band_m": 0.35,
+          "waypoint_reached_s": [
+            7.0,
+            15.0,
+            23.0,
+            31.0
+          ]
+        },
+        "peak_error_m": 0.44078636710039,
+        "position_rmse_m": 0.123176726042606,
+        "recovery_reason": "not_applicable",
+        "recovery_time_s": null,
+        "samples": 10001,
+        "step_response": null
+      },
+      "events": [
+        {
+          "time_s": 0.0,
+          "type": "grounded"
+        },
+        {
+          "time_s": 0.0,
+          "type": "wind_start"
+        },
+        {
+          "time_s": 2.0,
+          "type": "takeoff"
+        },
+        {
+          "time_s": 2.925,
+          "type": "liftoff"
+        },
+        {
+          "time_s": 7.0,
+          "type": "hover"
+        },
+        {
+          "time_s": 10.0,
+          "type": "north"
+        },
+        {
+          "time_s": 15.0,
+          "type": "north_hold"
+        },
+        {
+          "time_s": 18.0,
+          "type": "east"
+        },
+        {
+          "time_s": 23.0,
+          "type": "east_hold"
+        },
+        {
+          "time_s": 26.0,
+          "type": "return"
+        },
+        {
+          "time_s": 31.0,
+          "type": "home_hold"
+        },
+        {
+          "time_s": 34.0,
+          "type": "landing"
+        },
+        {
+          "time_s": 40.0,
+          "type": "gust_start"
+        },
+        {
+          "time_s": 42.0,
+          "type": "gust_end"
+        },
+        {
+          "time_s": 43.545,
+          "type": "touchdown"
+        },
+        {
+          "time_s": 43.61,
+          "type": "landed"
+        }
+      ],
+      "rotor_thrust_range_n": [
+        0.0,
+        2.6878645696455044
+      ],
+      "allocation_saturated_samples": 0,
+      "wind_samples_sha256": "fc7e5b1119c992076b59446b8e0444b96b1f307fa6ec18e7cb24e6d132709ac9",
+      "peak_wind_speed_m_s": 8.017042156652415,
+      "peak_descent_wind_m_s": 8.017042156652415,
+      "final_wind_speed_range_m_s": [
+        2.957212962528409,
+        5.791792711820478
+      ]
+    }
+  ],
+  "interpretation": "Contact force is the measured ENU net normal force, excluding friction. Touchdown descent speed uses the preceding physics sample; rotor commands go to zero after continuous contact latches landing.",
+  "limitations": [
+    "Temporal OU wind and perfect state",
+    "Illustrative cuboid contact geometry and friction",
+    "No battery, propeller aerodynamics or ground effect",
+    "No hardware-flight or learned-policy validation"
+  ]
+}

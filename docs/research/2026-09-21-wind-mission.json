@@ -2,20 +2,33 @@
   "schema_version": 1,
   "baseline_commit": "9c308e43a4c07e98610f9279470a83167d85b2b9",
   "scanned_at": "2026-09-21",
-  "coverage": ["Quadrotor tracking feedback and feedforward", "Relative-velocity drag", "Contact normal-force interpretation"],
-  "findings": [{
-    "finding": "Trajectory feedforward and bounded tracking feedback can be combined with the existing rotor controller. Under wind, ground normal force is only one term in vertical force balance; drag and rotor thrust must be aligned to the interval that produced the measured contact force.",
-    "source_event_date": null,
-    "citations": ["https://vnav.mit.edu/material/06-Control1-notes.pdf", "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/", "https://isaac-sim.github.io/IsaacLab/main/source/overview/core-concepts/sensors/contact_sensor.html"],
-    "confidence": "high",
-    "relevance": "Combining the measured calm contact route and airborne wind model in one physics experiment",
-    "direction_alignment": "Implements the next slice named in the prior delivery and the maintainer's explicit continuation after merging it.",
-    "opportunity_or_risk": "Wind during descent exposes tracking and touchdown behavior absent from either earlier experiment; five seeds cannot establish general wind robustness.",
-    "engineering_cost": "One trajectory-control and turbulence mission slice using existing physics and replay infrastructure",
-    "disposition": "adopt",
-    "roadmap_delta": "AL-009 turbulent takeoff, waypoint route and contact landing with independent acceptance gates",
-    "verification_needed": "Controller/force-timing tests, clean-source seeded GPU missions, strict evidence validation and measured 3D inspection"
-  }],
+  "coverage": [
+    "Quadrotor tracking feedback and feedforward",
+    "Relative-velocity drag",
+    "Contact normal-force interpretation"
+  ],
+  "findings": [
+    {
+      "finding": "Trajectory feedforward and bounded tracking feedback can be combined with the existing rotor controller. Under wind, ground normal force is only one term in vertical force balance; drag and rotor thrust must be aligned to the interval that produced the measured contact force.",
+      "source_event_date": null,
+      "citations": [
+        "https://vnav.mit.edu/material/06-Control1-notes.pdf",
+        "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "https://isaac-sim.github.io/IsaacLab/main/source/overview/core-concepts/sensors/contact_sensor.html"
+      ],
+      "confidence": "high",
+      "relevance": "Combining the measured calm contact route and airborne wind model in one physics experiment",
+      "direction_alignment": "Implements the next slice named in the prior delivery and the maintainer's explicit continuation after merging it.",
+      "opportunity_or_risk": "Wind during descent exposes tracking and touchdown behavior absent from either earlier experiment; five seeds cannot establish general wind robustness.",
+      "engineering_cost": "One trajectory-control and turbulence mission slice using existing physics and replay infrastructure",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-009 turbulent takeoff, waypoint route and contact landing with independent acceptance gates",
+      "verification_needed": "Controller/force-timing tests, clean-source seeded GPU missions, strict evidence validation and measured 3D inspection"
+    }
+  ],
   "overall_recommendation": "Continue with a bounded turbulent contact mission while preserving established contracts and distinguishing engineering acceptance from atmospheric or hardware validation.",
-  "evidence_gaps": ["No calibrated wind or propeller/ground-effect model", "Final turbulent contact trials have not yet run"]
+  "evidence_gaps": [
+    "No calibrated wind or propeller/ground-effect model",
+    "Five final seeds passed; sensor noise, delay and broader wind envelopes remain unvalidated"
+  ]
 }
