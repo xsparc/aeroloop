@@ -217,3 +217,35 @@ observed_on = "2026-09-20"
 reviewed_on = "2026-09-20"
 review_due = "2026-10-20"
 decision_ref = "docs/architecture/decisions/003-rotor-flight-control.md"
+
+[[requirements]]
+id = "REQ-TURBULENCE"
+statement = "Demonstrate measured stabilization under repeatable wind with a matching reference in Isaac physics and 3D replay."
+status = "planned"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/decisions/004-turbulence-stabilization.md"]
+implementation_refs = ["src/aeroloop/wind.py", "src/aeroloop/isaac_flight.py", "tools/wind_report.py", "web/replay/src/scene.tsx"]
+verification_refs = ["tests/test_wind.py", "web/replay/tests/contracts.test.mjs", "web/replay/tests/browser/replay.spec.mjs"]
+validation_refs = ["docs/evidence/isaac-wind-validation.md"]
+risk_refs = ["docs/architecture/decisions/004-turbulence-stabilization.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-007"
+title = "Turbulent wind and stabilization comparison"
+status = "in-progress"
+requirement_ids = ["REQ-TURBULENCE", "REQ-DRONE-CONTROL", "REQ-REUSABLE-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-20-turbulence-stabilization"
+acceptance_refs = ["docs/architecture/decisions/004-turbulence-stabilization.md"]
+evidence_refs = ["docs/research/2026-09-20-turbulence.json", "docs/evidence/isaac-wind-validation.md"]
+
+[[research_decisions]]
+id = "RD-TURBULENCE"
+finding = "Relative-air-velocity drag and a declared temporal wind model support a same-wind control comparison without claiming atmospheric spectral fidelity."
+disposition = "adopted"
+source_urls = ["https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/", "https://www.mathworks.com/help/aeroblks/drydenwindturbulencemodelcontinuous.html"]
+observed_on = "2026-09-20"
+reviewed_on = "2026-09-20"
+review_due = "2026-10-20"
+decision_ref = "docs/architecture/decisions/004-turbulence-stabilization.md"

@@ -1,7 +1,7 @@
-const ID = /^(cpu|isaac)-(hover|position-step|lateral-force-pulse)-\d{1,10}-[0-9a-f]{12}$/;
+const ID = /^(cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only)-\d{1,10}-[0-9a-f]{12}$/;
 const finiteVector = (v, n) => Array.isArray(v) && v.length === n && v.every(x => typeof x === "number" && Number.isFinite(x));
 export function validateReplay(data) {
-  if (!data || typeof data.run_id !== "string" || data.schema_version !== (data.run_id.startsWith("isaac-") ? 2 : 1) || data.kind !== "recorded_simulation" || !ID.test(data.run_id) || !Array.isArray(data.samples) || data.samples.length < 2 || data.samples.length > 10000) throw Error("Invalid replay contract");
+  if (!data || typeof data.run_id !== "string" || data.schema_version !== (data.run_id.startsWith("isaac-turbulence-") ? 3 : data.run_id.startsWith("isaac-") ? 2 : 1) || data.kind !== "recorded_simulation" || !ID.test(data.run_id) || data.run_id.startsWith("cpu-turbulence-") || !Array.isArray(data.samples) || data.samples.length < 2 || data.samples.length > 10000) throw Error("Invalid replay contract");
   let previous = -1;
   for (const sample of data.samples) {
     if (!Number.isFinite(sample.time_s) || sample.time_s < 0 || sample.time_s <= previous || sample.time_s > 120 || !finiteVector(sample.position_m, 3) || !finiteVector(sample.target_m, 3) || !finiteVector(sample.quaternion_wxyz, 4) || Math.abs(Math.hypot(...sample.quaternion_wxyz)-1) > 1e-6) throw Error("Invalid replay sample");
@@ -57,11 +57,12 @@ async function start() {
     if (request !== serial) return;
     validateReplay(r);
     if (r.run_id !== entry.run_id || f.run_id !== entry.run_id || f.fixture !== false || f.kind !== "recorded_simulation") throw Error("Recording identity mismatch");
-    const flight = r.schema_version === 2;
-    if (f.schema_version !== r.schema_version || f.experiment !== (flight ? "isaac-quadrotor" : "cpu-rigid-body") || f.model !== (flight ? "quadrotor-x-v1" : "ideal-body-wrench-v1")) throw Error("Recording backend mismatch");
+    const flight = r.schema_version >= 2, wind = r.schema_version === 3;
+    if (f.schema_version !== r.schema_version || f.experiment !== (flight ? "isaac-quadrotor" : "cpu-rigid-body") || f.model !== (wind ? "quadrotor-x-wind-v1" : flight ? "quadrotor-x-v1" : "ideal-body-wrench-v1")) throw Error("Recording backend mismatch");
     $("backend").textContent = flight ? "Isaac PhysX / four-rotor X" : "CPU physics / ideal body wrench";
     $("model-name").textContent = flight ? "Four rotors with thrust limits and lag" : "Ideal body wrench";
     $("model-boundary").textContent = flight ? "A 1 kg X quadrotor with bounded per-rotor thrust, first-order motor lag and perfect state. No propeller aerodynamics, battery, estimator or contact model. Initial conditions are airborne." : "Perfect state, ideal thrust and body moments. No individual motor dynamics, estimator, drag or contact model. Initial conditions are airborne.";
+    if (wind) $("model-boundary").textContent = "Seeded temporal turbulent wind with relative-velocity drag and pressure-centre torque. Illustrative parameters; perfect state and airborne start. The attitude-only reference disables horizontal position hold and can drift far from target.";
     replay = r; runMetrics = m; manifest = f; duration = replay.samples.at(-1).time_s;
     time = Math.max(0,Math.min(duration,Number.isFinite(initialTime)?initialTime:0));
     $("time").max = duration;
@@ -69,6 +70,7 @@ async function start() {
     $("whole-trail").setAttribute("points", replay.samples.map(s=>project(s.position_m).join(",")).join(" "));
     $("rmse").textContent = runMetrics.position_rmse_m === null ? "Unavailable" : `${runMetrics.position_rmse_m > 0 && runMetrics.position_rmse_m < .0001 ? runMetrics.position_rmse_m.toExponential(2) : runMetrics.position_rmse_m.toFixed(4)} m`;
     $("seed").textContent = manifest.seed; $("outcome").textContent = manifest.status;
+    if (entry.scenario === "turbulence-attitude-only" && manifest.status === "passed") $("outcome").textContent = "Reference completed; position hold disabled";
     $("revision").textContent = `${manifest.source_commit.slice(0,8)}${manifest.source_dirty ? " + changes" : ""}`;
     $("message").textContent = flight ? "Checksums verified · Isaac PhysX quadrotor" : "Checksums verified · CPU simulation";
     $("record-link").href = `${entry.run_id}/manifest.json`;
@@ -94,7 +96,7 @@ async function start() {
   requestAnimationFrame(tick);
   try {
     index = await read("index.json",false);
-    if(!((index.schema_version===1 && index.isaac_validated===false) || (index.schema_version===2 && index.learning_validated===false && !("isaac_validated" in index))) || index.kind!=="recorded_simulation" || index.release_status!=="research_preview" || !Array.isArray(index.runs) || !index.runs.length || index.runs.length>30 || !index.checksums || index.runs.some(r=>!ID.test(r.run_id) || (index.schema_version===1 && !r.run_id.startsWith("cpu-")))) throw Error("Invalid preview index");
+    if(!((index.schema_version===1 && index.isaac_validated===false) || ([2,3].includes(index.schema_version) && index.learning_validated===false && !("isaac_validated" in index))) || index.kind!=="recorded_simulation" || index.release_status!=="research_preview" || !Array.isArray(index.runs) || !index.runs.length || index.runs.length>30 || !index.checksums || index.runs.some(r=>!ID.test(r.run_id) || (index.schema_version===1 && !r.run_id.startsWith("cpu-")) || (r.run_id.includes("-turbulence-") && (index.schema_version!==3 || !r.run_id.startsWith("isaac-"))))) throw Error("Invalid preview index");
     $("experiment").replaceChildren();
     for (const entry of index.runs) { const option=document.createElement("option");option.textContent=`${entry.scenario.replaceAll("-"," ")} · seed ${entry.seed}`;$("experiment").append(option); }
     const params = new URLSearchParams(location.hash.slice(1));

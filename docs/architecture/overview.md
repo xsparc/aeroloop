@@ -30,6 +30,13 @@ moments. The exporter recomputes these fields, while the viewer shows measured
 3D pose, trajectory and rotor thrust. Version 1 CPU and the separate learned
 hover task retain their original contracts.
 
+Version 3 adds the explicitly declared temporal wind model, relative-velocity drag
+at an offset pressure centre and a same-wind reference with horizontal position
+hold disabled. Evidence validates the sampled wind, resulting force/moment and
+controller mode before export. The 3D viewer displays wind/drag vectors, follows
+the aircraft and offers a verified reference error comparison. See
+[decision 004](decisions/004-turbulence-stabilization.md).
+
 PX4 flight execution and Pegasus transport are no longer MVP dependencies. No CPU
 result can stand in for Isaac validation. The CPU body-wrench model does not model
 propeller aerodynamics, individual motors, estimation error, contact or hardware.

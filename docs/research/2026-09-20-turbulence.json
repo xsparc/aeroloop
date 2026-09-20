@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "3c550e80233da2fd9ac52cf2d05d9758f7962a1d",
+  "scanned_at": "2026-09-20",
+  "coverage": ["Relative-air-velocity drag", "Spectral turbulence model boundaries", "Existing Isaac rotor control and measured replay"],
+  "findings": [{
+    "finding": "Aerodynamic drag depends on relative air velocity squared, density and effective coefficient-area. A pressure-centre offset also creates a moment. These relations support a bounded seeded wind experiment; implementing the full Dryden spectrum would be a separate fidelity decision.",
+    "source_event_date": null,
+    "citations": ["https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/", "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/velocity-effects/", "https://www.mathworks.com/help/aeroblks/drydenwindturbulencemodelcontinuous.html"],
+    "confidence": "high",
+    "relevance": "Demonstrating controller stabilization under repeatable turbulent wind in the existing PhysX drone",
+    "direction_alignment": "The maintainer explicitly requested turbulence simulation and a stabilization demonstration after merging rotor control.",
+    "opportunity_or_risk": "A same-wind reference isolates horizontal feedback. Calling a simple temporal OU process a validated atmospheric model would overstate fidelity.",
+    "engineering_cost": "One wind/control comparison slice, strict versioned evidence, measured GPU trials and local visualization",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-007 turbulence stabilization precedes the previously proposed takeoff/contact slice",
+    "verification_needed": "Force/moment and seed tests, same-source paired PhysX trials, recovery gates, evidence tampering checks and browser comparison"
+  }],
+  "overall_recommendation": "Add the requested bounded temporal wind with explicit drag and paired horizontal-feedback ablation. Preserve the existing gains and baselines.",
+  "evidence_gaps": ["Illustrative drag area and pressure centre are not calibrated against hardware", "No Dryden/Von Karman spectral or outdoor-weather validation is claimed"]
+}

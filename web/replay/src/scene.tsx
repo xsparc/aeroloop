@@ -45,6 +45,7 @@ export default function Scene({
     controls.maxDistance = 15;
     controls.enableDamping = false;
     controls.update();
+    const windy = !!samples[0].wind_velocity_m_s;
     const aircraft = new THREE.Group();
     // Original schematic body: +X nose, +Y left, +Z up in FLU.
     const material = new THREE.MeshBasicMaterial({ color: 0x67e8f9 });
@@ -111,23 +112,72 @@ export default function Scene({
       new THREE.LineBasicMaterial({ color: 0x7b9bb0 }),
     );
     scene.add(path);
+    const windArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(),
+      1,
+      0xc084fc,
+      0.12,
+      0.07,
+    );
+    const dragArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(),
+      1,
+      0xfb923c,
+      0.1,
+      0.06,
+    );
+    scene.add(windArrow, dragArrow);
     const target = new THREE.Mesh(
       new THREE.SphereGeometry(0.07, 12, 8),
       new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true }),
     );
-    scene.add(target, new THREE.GridHelper(6, 12, 0x52748c, 0x29465c));
+    scene.add(
+      target,
+      new THREE.GridHelper(
+        windy ? 120 : 6,
+        windy ? 120 : 12,
+        0x52748c,
+        0x29465c,
+      ),
+    );
     const basis = new THREE.Quaternion().setFromAxisAngle(
       new THREE.Vector3(1, 0, 0),
       -Math.PI / 2,
     );
     const body = new THREE.Quaternion();
+    const lastPosition = new THREE.Vector3(...enuToView(samples[0].position_m));
     let disposed = false;
     draw.current = (s) => {
       if (disposed) return;
       aircraft.position.set(...enuToView(s.position_m));
+      if (windy) {
+        const delta = aircraft.position.clone().sub(lastPosition);
+        camera.position.add(delta);
+        controls.target.add(delta);
+        lastPosition.copy(aircraft.position);
+        camera.lookAt(controls.target);
+      }
       const [w, x, y, z] = s.quaternion_wxyz;
       aircraft.quaternion.copy(basis).multiply(body.set(x, y, z, w));
       target.position.set(...enuToView(s.target_m));
+      for (const [arrow, value, scale, height] of [
+        [windArrow, s.wind_velocity_m_s, 0.13, 0.38],
+        [dragArrow, s.external_force_n, 0.5, -0.1],
+      ] as const) {
+        const magnitude = value ? Math.hypot(...value) : 0;
+        arrow.visible = magnitude > 1e-8;
+        if (arrow.visible && value) {
+          arrow.position
+            .copy(aircraft.position)
+            .add(new THREE.Vector3(0, height, 0));
+          arrow.setDirection(
+            new THREE.Vector3(...enuToView(value)).normalize(),
+          );
+          arrow.setLength(Math.min(2, scale * magnitude), 0.1, 0.06);
+        }
+      }
       thrustArrows.forEach((arrow, i) =>
         arrow.setLength(
           0.02 + (0.3 * (s.rotor_thrust_n?.[i] ?? 0)) / 5,
@@ -148,6 +198,13 @@ export default function Scene({
             : [1.5, 2.1, 1.9]) as [number, number, number]),
       );
       controls.target.set(0, 1.3, -0.4);
+      if (windy) {
+        const offset = aircraft.position
+          .clone()
+          .sub(new THREE.Vector3(0, 1.5, 0));
+        camera.position.add(offset);
+        controls.target.add(offset);
+      }
       controls.update();
       changed();
     };

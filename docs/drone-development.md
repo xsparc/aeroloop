@@ -77,3 +77,9 @@ Aerodynamics, battery discharge, sensor noise, estimation, ground contact and
 physical flights are outside this slice. The earlier learned-policy task and
 its retained evidence are unchanged. The next planned extension is a separately
 specified takeoff/landing and waypoint scenario with appropriate contact physics.
+
+The next accepted extension is [turbulence and stabilization](turbulence.md).
+It adds illustrative wind-relative drag and pressure-centre torque, paired with
+a reference that disables horizontal position hold. That request takes priority
+over the proposed contact/waypoint slice. Versions 1 and 2 above keep their
+original models; version 3 identifies the wind model explicitly.
