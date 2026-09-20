@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "c19c74fee2aca16bcb86e1d412f0b5733994993d",
+  "scanned_at": "2026-09-21",
+  "coverage": ["Pinned contact sensor API", "Physical ground support", "Mission control and recorded visualization"],
+  "findings": [{
+    "finding": "Isaac contact reporters provide measured normal forces. Lab 3 distinguishes normal and total force fields, so this PhysX experiment must explicitly record net_normal_forces_w and must not label it total contact force.",
+    "source_event_date": null,
+    "citations": ["https://isaac-sim.github.io/IsaacLab/main/source/overview/core-concepts/sensors/contact_sensor.html", "https://isaac-sim.github.io/IsaacLab/develop/source/migration/migrating_to_isaaclab_3-0.html", "https://docs.isaacsim.omniverse.nvidia.com/6.1.0/sensors/isaacsim_sensors_physics_contact.html"],
+    "confidence": "high",
+    "relevance": "Measured takeoff and landing in the existing simulated drone",
+    "direction_alignment": "Continues the requested simulation-only drone project after the turbulence slice was merged.",
+    "opportunity_or_risk": "Contact feedback proves physical support; visual proximity and post-impact zero velocity cannot prove a controlled touchdown.",
+    "engineering_cost": "One calm mission scenario, versioned evidence and existing replay extension",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-008 implements the proposed ground-contact flight slice",
+    "verification_needed": "Actual PhysX normal-force capture, pre-contact descent speed, full-rate gates, strict evidence and browser checks"
+  }],
+  "overall_recommendation": "Implement a calm ground-contact route with the pinned simulator and existing gains, preserving airborne wind and learning baselines.",
+  "evidence_gaps": ["Contact parameters are illustrative rather than calibrated hardware data", "Mission flight under turbulent wind remains a separate extension"]
+}

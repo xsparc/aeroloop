@@ -45,6 +45,7 @@ export default function Scene({
     controls.maxDistance = 15;
     controls.enableDamping = false;
     controls.update();
+    const contact = !!samples[0].mission_phase;
     const windy = !!samples[0].wind_velocity_m_s;
     const aircraft = new THREE.Group();
     // Original schematic body: +X nose, +Y left, +Z up in FLU.
@@ -104,6 +105,57 @@ export default function Scene({
     nose.rotation.z = -Math.PI / 2;
     nose.position.x = 0.17;
     aircraft.add(nose);
+    if (contact) {
+      const box = new THREE.BoxGeometry(0.4, 0.4, 0.1);
+      aircraft.add(
+        new THREE.LineSegments(
+          new THREE.EdgesGeometry(box),
+          new THREE.LineBasicMaterial({ color: 0xffffff }),
+        ),
+      );
+      box.dispose();
+      const points = [
+        [0, 0, 0.05],
+        [0, 0, 1.5],
+        [0, 1, 1.5],
+        [1, 1, 1.5],
+        [0, 0, 1.5],
+        [0, 0, 0.05],
+      ] as [number, number, number][];
+      const route = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(
+          points.map((p) => new THREE.Vector3(...enuToView(p))),
+        ),
+        new THREE.LineDashedMaterial({
+          color: 0xfbbf24,
+          dashSize: 0.07,
+          gapSize: 0.05,
+        }),
+      );
+      route.computeLineDistances();
+      scene.add(route);
+      for (const p of points.slice(1, 4)) {
+        const marker = new THREE.Mesh(
+          new THREE.SphereGeometry(0.045, 12, 8),
+          new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true }),
+        );
+        marker.position.set(...enuToView(p));
+        scene.add(marker);
+      }
+      const pad = new THREE.Mesh(
+        new THREE.BoxGeometry(0.8, 0.002, 0.8),
+        new THREE.MeshBasicMaterial({
+          color: 0x324e60,
+          transparent: true,
+          opacity: 0.65,
+        }),
+      );
+      pad.position.y = -0.001;
+      scene.add(pad);
+      camera.position.set(3, 2.5, 3);
+      controls.target.set(0.35, 0.7, -0.35);
+      controls.update();
+    }
     scene.add(aircraft);
     const path = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints(
@@ -128,7 +180,15 @@ export default function Scene({
       0.1,
       0.06,
     );
-    scene.add(windArrow, dragArrow);
+    const supportArrow = new THREE.ArrowHelper(
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(),
+      0.5,
+      0xf472b6,
+      0.07,
+      0.04,
+    );
+    scene.add(windArrow, dragArrow, supportArrow);
     const target = new THREE.Mesh(
       new THREE.SphereGeometry(0.07, 12, 8),
       new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true }),
@@ -178,13 +238,27 @@ export default function Scene({
           arrow.setLength(Math.min(2, scale * magnitude), 0.1, 0.06);
         }
       }
-      thrustArrows.forEach((arrow, i) =>
+      supportArrow.visible = (s.contact_normal_force_n?.[2] ?? 0) > 0.1;
+      if (supportArrow.visible) {
+        supportArrow.position.set(
+          aircraft.position.x + 0.35,
+          0,
+          aircraft.position.z,
+        );
+        supportArrow.setLength(
+          Math.min(1, s.contact_normal_force_n![2] * 0.06),
+          0.07,
+          0.04,
+        );
+      }
+      thrustArrows.forEach((arrow, i) => {
+        arrow.visible = (s.rotor_thrust_n?.[i] ?? 0) > 0.01;
         arrow.setLength(
           0.02 + (0.3 * (s.rotor_thrust_n?.[i] ?? 0)) / 5,
           0.025,
           0.015,
-        ),
-      );
+        );
+      });
       renderer.render(scene, camera);
     };
     const changed = () => draw.current?.(current.current);
@@ -198,6 +272,16 @@ export default function Scene({
             : [1.5, 2.1, 1.9]) as [number, number, number]),
       );
       controls.target.set(0, 1.3, -0.4);
+      if (contact) {
+        camera.position.set(
+          ...((name === "top"
+            ? [0.35, 4.5, -0.34]
+            : name === "side"
+              ? [3.8, 1.1, -0.35]
+              : [3, 2.5, 3]) as [number, number, number]),
+        );
+        controls.target.set(0.35, 0.7, -0.35);
+      }
       if (windy) {
         const offset = aircraft.position
           .clone()

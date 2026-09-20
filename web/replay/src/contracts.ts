@@ -9,6 +9,9 @@ export type Sample = {
   wind_velocity_m_s?: Vec3;
   external_force_n?: Vec3;
   external_moment_nm?: Vec3;
+  mission_phase?: string;
+  contact_normal_force_n?: Vec3;
+  support_clearance_m?: number;
 };
 export type Entry = {
   run_id: string;
@@ -25,6 +28,15 @@ export type Recording = {
     position_rmse_m: number | null;
     samples: number;
     measurement_window_s: [number, number];
+    mission?: {
+      liftoff_time_s: number | null;
+      touchdown_time_s: number | null;
+      touchdown_descent_speed_m_s: number | null;
+      landed_time_s: number | null;
+      waypoint_reached_s: (number | null)[];
+      max_penetration_m: number;
+      peak_tilt_deg: number;
+    };
     turbulence?: {
       wind_position_rmse_m: number | null;
       peak_tilt_deg: number;
@@ -35,7 +47,11 @@ export type Recording = {
   };
   manifest: {
     experiment: "cpu-rigid-body" | "isaac-quadrotor";
-    model: "ideal-body-wrench-v1" | "quadrotor-x-v1" | "quadrotor-x-wind-v1";
+    model:
+      | "ideal-body-wrench-v1"
+      | "quadrotor-x-v1"
+      | "quadrotor-x-wind-v1"
+      | "quadrotor-x-contact-v1";
     source_commit: string;
     source_dirty: boolean;
     source_tree_sha256?: string;
@@ -44,9 +60,22 @@ export type Recording = {
     failure_reason: string | null;
   };
 };
+export const MISSION_PHASES = [
+  "grounded",
+  "takeoff",
+  "hover",
+  "north",
+  "north_hold",
+  "east",
+  "east_hold",
+  "return",
+  "home_hold",
+  "landing",
+  "landed",
+];
 export const HASH = /^[0-9a-f]{64}$/;
 const ID =
-  /^(cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only)-\d{1,10}-[0-9a-f]{12}$/;
+  /^(cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only|ground-mission)-\d{1,10}-[0-9a-f]{12}$/;
 const finite = (n: unknown): n is number =>
   typeof n === "number" && Number.isFinite(n);
 const vector = (v: unknown, n: number) =>
@@ -62,7 +91,7 @@ export function validateIndex(value: unknown): Index {
   const data = object(value);
   assertContract(
     ((data.schema_version === 1 && data.isaac_validated === false) ||
-      ([2, 3].includes(Number(data.schema_version)) &&
+      ([2, 3, 4].includes(Number(data.schema_version)) &&
         typeof data.schema_version === "number" &&
         data.learning_validated === false &&
         !("isaac_validated" in data))) &&
@@ -88,6 +117,7 @@ export function validateIndex(value: unknown): Index {
         "lateral-force-pulse",
         "turbulence-hold",
         "turbulence-attitude-only",
+        "ground-mission",
       ].includes(String(run.scenario)) &&
         Number.isInteger(run.seed) &&
         Number(run.seed) >= 0 &&
@@ -95,14 +125,19 @@ export function validateIndex(value: unknown): Index {
     );
     if (String(run.scenario).startsWith("turbulence-"))
       assertContract(
-        data.schema_version === 3 && run.run_id.startsWith("isaac-"),
+        [3, 4].includes(Number(data.schema_version)) &&
+          run.run_id.startsWith("isaac-"),
       );
     assertContract(
       (run.run_id.startsWith(`cpu-${run.scenario}-${run.seed}-`) ||
-        ([2, 3].includes(Number(data.schema_version)) &&
+        ([2, 3, 4].includes(Number(data.schema_version)) &&
           run.run_id.startsWith(`isaac-${run.scenario}-${run.seed}-`))) &&
         ["passed", "failed"].includes(String(run.status)),
     );
+    if (run.scenario === "ground-mission")
+      assertContract(
+        data.schema_version === 4 && run.run_id.startsWith("isaac-"),
+      );
     seen.add(run.run_id);
     for (const name of [
       "replay",
@@ -132,8 +167,9 @@ export function validateRecording(
     metrics = object(metricsValue);
   const flight = entry.run_id.startsWith("isaac-");
   const wind = entry.scenario.startsWith("turbulence-");
-  const schema = wind ? 3 : flight ? 2 : 1;
-  assertContract(!wind || flight);
+  const contact = entry.scenario === "ground-mission";
+  const schema = contact ? 4 : wind ? 3 : flight ? 2 : 1;
+  assertContract(!(wind || contact) || flight);
   assertContract(
     replay.schema_version === schema &&
       replay.kind === "recorded_simulation" &&
@@ -148,11 +184,13 @@ export function validateRecording(
   assertContract(
     manifest.experiment === (flight ? "isaac-quadrotor" : "cpu-rigid-body") &&
       manifest.model ===
-        (wind
-          ? "quadrotor-x-wind-v1"
-          : flight
-            ? "quadrotor-x-v1"
-            : "ideal-body-wrench-v1") &&
+        (contact
+          ? "quadrotor-x-contact-v1"
+          : wind
+            ? "quadrotor-x-wind-v1"
+            : flight
+              ? "quadrotor-x-v1"
+              : "ideal-body-wrench-v1") &&
       manifest.controller === "rate-pid-v1",
   );
   assertContract(
@@ -180,6 +218,8 @@ export function validateRecording(
       "step_did_not_settle",
       "attitude_altitude_threshold",
       "turbulence_hold_threshold",
+      "mission_threshold",
+      "mission_support_threshold",
     ].includes(manifest.failure_reason as string | null),
   );
   assertContract(
@@ -208,6 +248,24 @@ export function validateRecording(
     if (wind)
       assertContract(
         Math.hypot(...(s.wind_velocity_m_s as number[])) <= 12.000001,
+      );
+    if (contact) {
+      assertContract(
+        MISSION_PHASES.includes(String(s.mission_phase)) &&
+          vector(s.contact_normal_force_n, 3) &&
+          finite(s.support_clearance_m),
+      );
+      const force = s.contact_normal_force_n as number[];
+      assertContract(
+        force[2] >= -1e-6 &&
+          force[2] <= 10000 &&
+          force.slice(0, 2).every((n) => Math.abs(n) <= 1e-4),
+      );
+    } else
+      assertContract(
+        s.mission_phase === undefined &&
+          s.contact_normal_force_n === undefined &&
+          s.support_clearance_m === undefined,
       );
     assertContract(
       finite(s.time_s) &&
@@ -264,6 +322,43 @@ export function validateRecording(
         typeof manifest[field] === "string" && HASH.test(manifest[field]),
       );
   } else assertContract(metrics.turbulence === undefined);
+  if (contact) {
+    const mission = object(metrics.mission);
+    for (const field of [
+      "liftoff_time_s",
+      "touchdown_time_s",
+      "landed_time_s",
+      "touchdown_descent_speed_m_s",
+    ])
+      assertContract(
+        mission[field] === null ||
+          (finite(mission[field]) &&
+            mission[field] >= 0 &&
+            mission[field] <= 50),
+      );
+    assertContract(
+      Array.isArray(mission.waypoint_reached_s) &&
+        mission.waypoint_reached_s.length === 4 &&
+        mission.waypoint_reached_s.every(
+          (n) => n === null || (finite(n) && n >= 0 && n <= 34),
+        ),
+    );
+    assertContract(
+      finite(mission.max_penetration_m) &&
+        mission.max_penetration_m >= 0 &&
+        finite(mission.peak_tilt_deg) &&
+        mission.peak_tilt_deg >= 0 &&
+        mission.peak_tilt_deg <= 180,
+    );
+    for (const field of [
+      "source_tree_sha256",
+      "controller_binary_sha256",
+      "lock_sha256",
+    ])
+      assertContract(
+        typeof manifest[field] === "string" && HASH.test(manifest[field]),
+      );
+  } else assertContract(metrics.mission === undefined);
   const window = metrics.measurement_window_s as number[];
   assertContract(window[0] >= 0 && window[1] >= window[0] && window[1] <= 120);
   assertContract(Array.isArray(eventsValue) && eventsValue.length <= 100);
@@ -277,9 +372,11 @@ export function validateRecording(
         e.time_s <= replay.samples.at(-1).time_s,
     );
     assertContract(
-      (wind
-        ? ["wind_start", "gust_start", "gust_end", "wind_end"]
-        : ["target_step", "force_start", "force_end"]
+      (contact
+        ? [...MISSION_PHASES, "liftoff", "touchdown"]
+        : wind
+          ? ["wind_start", "gust_start", "gust_end", "wind_end"]
+          : ["target_step", "force_start", "force_end"]
       ).includes(String(e.type)),
     );
     previous = e.time_s;
@@ -339,6 +436,14 @@ export function sampleAt(samples: Sample[], time: number): Sample {
           rotor_thrust_n: a.rotor_thrust_n.map(
             (n, i) => n + (b.rotor_thrust_n![i] - n) * t,
           ) as [number, number, number, number],
+        }
+      : {}),
+    ...(a.mission_phase
+      ? {
+          // Discrete contact/phase readings stay at the last measured sample.
+          mission_phase: a.mission_phase,
+          contact_normal_force_n: a.contact_normal_force_n,
+          support_clearance_m: a.support_clearance_m,
         }
       : {}),
     ...(a.wind_velocity_m_s

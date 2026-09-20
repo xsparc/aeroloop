@@ -179,6 +179,9 @@ export function ReplayViewer({
     setComparisonMessage("");
     if (!compare || !referenceEntry || !recording || !index) return;
     const abort = new AbortController();
+    const contactFlight =
+      recording?.manifest.model === "quadrotor-x-contact-v1";
+    const missionMetrics = recording?.metrics.mission;
     const held = recording;
     setComparisonMessage("Verifying the matching reference...");
     loadRecording(
@@ -285,6 +288,8 @@ export function ReplayViewer({
     target = sample ? projection(sample.target_m) : [340, 150];
   const rotorFlight = recording?.manifest.experiment === "isaac-quadrotor";
   const windFlight = recording?.manifest.model === "quadrotor-x-wind-v1";
+  const contactFlight = recording?.manifest.model === "quadrotor-x-contact-v1";
+  const missionMetrics = recording?.metrics.mission;
   const held = recording?.entry.scenario === "turbulence-hold";
   const windMetrics = recording?.metrics.turbulence;
   const referenceRmse = reference?.metrics.turbulence?.wind_position_rmse_m;
@@ -315,6 +320,20 @@ export function ReplayViewer({
           : "Inspect a rigid-body experiment with a native rate controller."}{" "}
         These recorded trajectories are separate from the learned hover policy.
       </p>
+      {contactFlight && (
+        <div className="al-wind-intro">
+          <strong>Takeoff � waypoint route � contact landing</strong>
+          <p>
+            Start with stopped motors, climb to 1.5 m, visit the north and east
+            waypoints, return home and land on a physical floor.
+          </p>
+          <p>
+            Calm air, perfect state and illustrative contact parameters. The
+            white wireframe shows the actual 0.4 � 0.4 � 0.1 m body collider;
+            the rotor drawing is schematic.
+          </p>
+        </div>
+      )}
       {windFlight && (
         <div className="al-wind-intro">
           <strong>
@@ -451,15 +470,44 @@ export function ReplayViewer({
           </SceneBoundary>
         )}
         <span className="al-stage-note">
-          {three && windFlight
-            ? "Violet wind / orange drag / green thrust · camera follows drone"
-            : three
-              ? "3D attitude / gold nose and target"
-              : windFlight
-                ? "Position schematic fits full path / gold target"
-                : "Position schematic / gold target"}
+          {three && contactFlight
+            ? "White collider / gold route / green thrust / pink ground support"
+            : three && windFlight
+              ? "Violet wind / orange drag / green thrust · camera follows drone"
+              : three
+                ? "3D attitude / gold nose and target"
+                : windFlight
+                  ? "Position schematic fits full path / gold target"
+                  : "Position schematic / gold target"}
         </span>
       </div>
+      {sample?.mission_phase && (
+        <dl
+          className="al-wind-readings"
+          aria-label="Mission and ground contact"
+        >
+          <div>
+            <dt>Mission phase</dt>
+            <dd>{label(sample.mission_phase)}</dd>
+          </div>
+          <div>
+            <dt>Normal ground support</dt>
+            <dd>{sample.contact_normal_force_n![2].toFixed(2)} N</dd>
+          </div>
+          <div>
+            <dt>Collider clearance</dt>
+            <dd>{(sample.support_clearance_m! * 1000).toFixed(1)} mm</dd>
+          </div>
+          <div>
+            <dt>Motors</dt>
+            <dd>
+              {["grounded", "landed"].includes(sample.mission_phase)
+                ? "Disarmed"
+                : "Armed"}
+            </dd>
+          </div>
+        </dl>
+      )}
       {sample?.wind_velocity_m_s && (
         <dl className="al-wind-readings" aria-label="Wind and stabilization">
           <div>
@@ -675,6 +723,24 @@ export function ReplayViewer({
               </dd>
             </div>
           </dl>
+          {missionMetrics && (
+            <p aria-label="Mission measurements">
+              Waypoints reached:{" "}
+              {
+                missionMetrics.waypoint_reached_s.filter((t) => t !== null)
+                  .length
+              }
+              /4 (within 0.15 m for 1 s). Touchdown:{" "}
+              {missionMetrics.touchdown_time_s?.toFixed(3) ?? "not reached"} s;{" "}
+              pre-contact descent speed:{" "}
+              {missionMetrics.touchdown_descent_speed_m_s?.toFixed(3) ??
+                "unavailable"}{" "}
+              m/s. Maximum penetration:{" "}
+              {(missionMetrics.max_penetration_m * 1000).toFixed(2)} mm. Contact
+              readings use the last measured sample; full-rate measurements
+              determine the outcome.
+            </p>
+          )}
           {windMetrics && (
             <p>
               Wind-window RMSE:{" "}

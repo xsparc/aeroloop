@@ -73,3 +73,14 @@ when its same-seed attitude-only reference is in the bundle. It verifies matched
 wind, initial position and provenance before showing the reference error curve.
 The camera follows each selected drone; the SVG view fits the full trajectory.
 See [the wind workflow](../../docs/turbulence.md) for measured-recording commands.
+
+## Ground-contact mission
+
+Version 4 recordings show takeoff, waypoint flight and contact-latched landing.
+The white box represents the physical collider; the gold route marks the commanded
+waypoints. Pink indicates measured normal support, excluding friction. Phase and
+contact readings hold their last measured sample while pose and thrust interpolate.
+Events expose liftoff, touchdown and disarm. See the
+[mission workflow](../../docs/ground-mission.md). For the full browser suite, prepare
+three runs: a mission first, then a retained position-step and force-pulse recording.
+CPU CI skips the GPU-specific mission and wind checks explicitly.
