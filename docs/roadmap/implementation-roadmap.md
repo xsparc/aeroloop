@@ -19,6 +19,8 @@ Public deployment and merges are separate decisions.
 | AL-007 | Seeded turbulent wind, pressure-centre drag and measured stabilization against a matching reference | Verified: 10/10 clean-revision PhysX trials, 5/5 paired comparisons and eight measured browser checks |
 | AL-008 | Ground-contact takeoff, waypoint route, measured landing and 3D replay | Verified: 5/5 clean-revision PhysX missions, four waypoint holds per run, contact-latched landing and measured 3D replay |
 
+| AL-009 | Turbulent takeoff, waypoint route, contact landing and combined 3D replay | Implemented; development seed 73 passes; clean five-seed validation pending |
+
 ## Next gate
 
 The maintainer requested further simulation-only drone development with physics
@@ -39,9 +41,12 @@ baselines. The maintainer merged AL-007 and requested autonomous continuation on
 AL-007's [retained results](../evidence/isaac-wind-validation.md) show 98.7–98.9%
 less wind-window position RMSE than the reference across all five seeds.
 
-After AL-008, the next proposed extension combines mission flight and turbulent
-wind, with new acceptance criteria for waypoint tracking and landing. It must not
-inherit a success claim from the separate airborne wind and calm contact suites.
+AL-008 was squash-merged and autonomous continuation was requested on 2026-09-21.
+AL-009 combines mission flight and turbulent wind under
+[decision 006](../architecture/decisions/006-turbulent-contact-mission.md), with
+[its own validation](../evidence/isaac-wind-mission-validation.md) and
+[workflow](../wind-mission.md). The next proposed extension examines sensor noise
+and delay robustness; it needs separate model assumptions and acceptance gates.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration

@@ -393,3 +393,105 @@ test("contact mission requires version 4, preserves discrete support readings an
     );
   }
 });
+
+test("turbulent contact replay requires both evidence families and mission-specific metrics", () => {
+  const entry = {
+    run_id: "isaac-ground-mission-wind-0-123456789abc",
+    scenario: "ground-mission-wind",
+    seed: 0,
+    status: "passed",
+  };
+  const replay = {
+    schema_version: 5,
+    kind: "recorded_simulation",
+    run_id: entry.run_id,
+    samples: samples.map((s, i) => ({
+      ...s,
+      rotor_thrust_n: [0, 0, 0, 0],
+      wind_velocity_m_s: [2, 0, 0.1],
+      external_force_n: [0.1, 0, 0.01],
+      external_moment_nm: [0, 0.003, 0],
+      mission_phase: i ? "landed" : "grounded",
+      contact_normal_force_n: [0, 0, 9.8],
+      support_clearance_m: 0,
+    })),
+  };
+  const manifest = {
+    ...entry,
+    schema_version: 5,
+    fixture: false,
+    kind: "recorded_simulation",
+    experiment: "isaac-quadrotor",
+    model: "quadrotor-x-contact-wind-v1",
+    controller: "rate-pid-v1",
+    world_frame: "ENU",
+    body_frame: "FLU",
+    quaternion_order: "wxyz",
+    units: "SI",
+    source_commit: "a".repeat(40),
+    source_dirty: false,
+    failure_reason: null,
+    source_tree_sha256: "b".repeat(64),
+    controller_binary_sha256: "c".repeat(64),
+    lock_sha256: "d".repeat(64),
+  };
+  const metrics = {
+    position_rmse_m: 0.1,
+    samples: 2,
+    measurement_window_s: [0, 1],
+    mission: {
+      liftoff_time_s: 3,
+      touchdown_time_s: 44,
+      landed_time_s: 44.1,
+      touchdown_descent_speed_m_s: 0.05,
+      touchdown_horizontal_speed_m_s: 0.1,
+      waypoint_band_m: 0.35,
+      waypoint_reached_s: [7, 15, 23, 31],
+      max_penetration_m: 0,
+      peak_tilt_deg: 8,
+      initial_support: { mean_vertical_balance_error_n: 0 },
+      final_support: { mean_vertical_balance_error_n: 0 },
+    },
+  };
+  const events = [
+    { time_s: 0, type: "grounded" },
+    { time_s: 0, type: "wind_start" },
+  ];
+  const result = validateRecording(entry, replay, manifest, metrics, events);
+  assert.equal(result.manifest.model, "quadrotor-x-contact-wind-v1");
+  assert.deepEqual(
+    sampleAt(result.samples, 0.5).wind_velocity_m_s,
+    [2, 0, 0.1],
+  );
+  const index = {
+    schema_version: 5,
+    learning_validated: false,
+    kind: "recorded_simulation",
+    release_status: "research_preview",
+    runs: [entry],
+    checksums: Object.fromEntries(
+      ["replay", "manifest", "metrics", "events", "config", "samples"].map(
+        (k) => [`${entry.run_id}/${k}.json`, "a".repeat(64)],
+      ),
+    ),
+  };
+  validateIndex(index);
+  assert.throws(() => validateIndex({ ...index, schema_version: 4 }));
+  for (const mutate of [
+    (f) => (f.manifest.model = "quadrotor-x-contact-v1"),
+    (f) => delete f.replay.samples[0].wind_velocity_m_s,
+    (f) => delete f.replay.samples[0].mission_phase,
+    (f) => (f.metrics.mission.waypoint_band_m = 0.15),
+    (f) =>
+      (f.metrics.mission.final_support.mean_vertical_balance_error_n =
+        Infinity),
+    (f) => (f.metrics.turbulence = {}),
+    (f) => f.events.push({ time_s: 1, type: "wind_end" }),
+  ]) {
+    const f = structuredClone({ replay, manifest, metrics, events });
+    mutate(f);
+    assert.throws(() =>
+      validateRecording(entry, f.replay, f.manifest, f.metrics, f.events),
+    );
+  }
+});

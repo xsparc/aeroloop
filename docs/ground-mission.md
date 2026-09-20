@@ -53,4 +53,5 @@ timing, geometry and acceptance limits. [Validation](evidence/isaac-mission-vali
 records execution evidence. This calm, perfect-state example uses illustrative
 contact parameters and omits propeller aerodynamics, ground effect, battery and
 hardware. The [wind demonstration](turbulence.md) remains a separate airborne
-experiment; it does not establish this route's performance in turbulence.
+experiment. The [turbulent mission](wind-mission.md) separately combines route
+tracking and contact landing with wind under its own acceptance criteria.

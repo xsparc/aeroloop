@@ -84,3 +84,10 @@ Events expose liftoff, touchdown and disarm. See the
 [mission workflow](../../docs/ground-mission.md). For the full browser suite, prepare
 three runs: a mission first, then a retained position-step and force-pulse recording.
 CPU CI skips the GPU-specific mission and wind checks explicitly.
+
+Version 5 combines contact and wind fields for `ground-mission-wind`. Its route
+camera stays fixed while wind, drag and support vectors remain visible together.
+The 0.35 m waypoint band, pre-impact horizontal speed and final vertical force
+balance are shown explicitly. Prepare this mission first, then retained step and
+force-pulse runs to exercise the measured turbulent-mission browser check. See
+the [turbulent mission workflow](../../docs/wind-mission.md).

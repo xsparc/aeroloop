@@ -70,6 +70,9 @@ def metrics(samples, scenario):
     from .mission import SCENARIO as MISSION, mission_metrics
     if scenario == MISSION:
         result["mission"] = mission_metrics(samples)
+    from . import wind_mission
+    if scenario == wind_mission.SCENARIO:
+        result["mission"] = wind_mission.metrics(samples)
     return result
 
 
@@ -133,8 +136,8 @@ def record(result, output_root):
         raise ValidationError("unsupported recording experiment")
     rotor_flight = experiment == "isaac-quadrotor"
     from .wind import WIND_SCENARIOS
-    wind = result["config"]["scenario"] in WIND_SCENARIOS
-    mission = result["config"]["scenario"] == "ground-mission"
+    wind = result["config"]["scenario"] in (*WIND_SCENARIOS, "ground-mission-wind")
+    mission = result["config"]["scenario"] in ("ground-mission", "ground-mission-wind")
     if (wind or mission) and not rotor_flight:
         raise ValidationError("wind experiments require Isaac rotor physics")
     prefix = "isaac" if rotor_flight else "cpu"
@@ -146,9 +149,9 @@ def record(result, output_root):
     # Hash all implementation inputs to retain provenance even for a dirty checkout.
     source_files = sorted([* (ROOT / "src/aeroloop").glob("*.py"), *(ROOT / "firmware/control_core").glob("*.*"), ROOT / "CMakeLists.txt"])
     source_digest = sha256(b"".join(path.relative_to(ROOT).as_posix().encode()+b"\0"+path.read_bytes()+b"\0" for path in source_files))
-    manifest = {"schema_version": 4 if mission else 3 if wind else 2 if rotor_flight else 1, "run_id": run_id, "kind": "recorded_simulation", "fixture": False,
+    manifest = {"schema_version": 5 if mission and wind else 4 if mission else 3 if wind else 2 if rotor_flight else 1, "run_id": run_id, "kind": "recorded_simulation", "fixture": False,
                 "captured_at": datetime.now(timezone.utc).isoformat(), "experiment": experiment,
-                "model": "quadrotor-x-contact-v1" if mission else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if rotor_flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "scenario": result["config"]["scenario"],
+                "model": "quadrotor-x-contact-wind-v1" if mission and wind else "quadrotor-x-contact-v1" if mission else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if rotor_flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "scenario": result["config"]["scenario"],
                 "seed": result["config"]["seed"], "source_commit": source_commit, "source_dirty": dirty,
                 "source_tree_sha256": source_digest, "controller_binary_sha256": result["controller_binary_sha256"],
                 "config_sha256": sha256(encoded(result["config"])), "lock_sha256": sha256((ROOT / "versions.lock.json").read_bytes()),

@@ -127,6 +127,26 @@ class MissionTests(unittest.TestCase):
             runs.pop(0)
             with self.assertRaises(ValidationError): reporter.report("unused")
 
+    def test_wind_report_retains_trials_that_stop_before_descent(self):
+        import importlib.util
+        from pathlib import Path
+        from aeroloop import wind_mission
+        spec = importlib.util.spec_from_file_location("mission_report", Path(__file__).resolve().parents[1] / "tools/mission_report.py")
+        reporter = importlib.util.module_from_spec(spec); spec.loader.exec_module(reporter)
+        config = {k: {} for k in ("model", "actuator", "mission", "physics_options", "simulator_versions", "wind", "trajectory_control")}
+        config.update(dt_s=.005, duration_s=50.)
+        runs = [{"manifest.json": {"scenario": wind_mission.SCENARIO, "seed": seed, "source_dirty": False,
+                  **{k: "a"*64 for k in ("source_commit", "source_tree_sha256", "controller_binary_sha256", "lock_sha256", "config_sha256")},
+                  "run_id": str(seed), "status": "failed", "failure_reason": "wind_mission_threshold"},
+                 "config.json": config, "samples.json": [{"time_s": 0., "wind_velocity_m_s": [0]*3,
+                    "rotor_thrust_n": [0]*4, "allocation_scale": 1}], "metrics.json": {}, "events.json": []} for seed in range(5)]
+        with patch.object(reporter, "load_json", return_value={"wall_time_s": 1}), patch.object(reporter, "validate_flight_result", return_value=runs):
+            result = reporter.report("unused", wind_mission.SCENARIO)
+            self.assertEqual((result["trials"], result["passed"]), (5, 0))
+            for trial in result["results"]:
+                self.assertIsNone(trial["peak_descent_wind_m_s"])
+                self.assertIsNone(trial["final_wind_speed_range_m_s"])
+
 
 if __name__ == '__main__':
     unittest.main()

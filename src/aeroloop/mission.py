@@ -104,7 +104,7 @@ def dwell(samples, start, end, predicate, seconds):
     return None
 
 
-def mission_metrics(samples):
+def mission_metrics(samples, waypoint_band=.15):
     liftoff = next((s["time_s"] for s in samples if s["time_s"] >= 2. and s["support_clearance_m"] > .05), None)
     touch_index = next((i for i, s in enumerate(samples) if s["time_s"] >= 34. and s["contact_normal_force_n"][2] > .1), None)
     touchdown = samples[touch_index]["time_s"] if touch_index is not None else None
@@ -124,7 +124,7 @@ def mission_metrics(samples):
             "peak_xy_error_m": max(math.hypot(*s["position_m"][:2]) for s in window)}
     return {"liftoff_time_s": liftoff, "touchdown_time_s": touchdown,
             "touchdown_descent_speed_m_s": approach_speed, "landed_time_s": landed,
-            "waypoint_reached_s": [dwell(samples, a, b, lambda s, p=p: math.dist(s["position_m"], p) <= .15, 1.) for a, b, p in WAYPOINTS],
+            "waypoint_reached_s": [dwell(samples, a, b, lambda s, p=p: math.dist(s["position_m"], p) <= waypoint_band, 1.) for a, b, p in WAYPOINTS],
             "peak_tilt_deg": max(tilt_degrees(s["quaternion_wxyz"]) for s in samples),
             "max_penetration_m": max(0., -min(s["support_clearance_m"] for s in samples)),
             "unexpected_contact_samples": sum(1 for s in samples if liftoff is not None and liftoff <= s["time_s"] < 34. and s["contact_normal_force_n"][2] > .1),

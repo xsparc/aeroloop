@@ -34,6 +34,9 @@ export type Recording = {
       touchdown_descent_speed_m_s: number | null;
       landed_time_s: number | null;
       waypoint_reached_s: (number | null)[];
+      waypoint_band_m?: number;
+      touchdown_horizontal_speed_m_s?: number | null;
+      final_support?: { mean_vertical_balance_error_n: number } | null;
       max_penetration_m: number;
       peak_tilt_deg: number;
     };
@@ -51,7 +54,8 @@ export type Recording = {
       | "ideal-body-wrench-v1"
       | "quadrotor-x-v1"
       | "quadrotor-x-wind-v1"
-      | "quadrotor-x-contact-v1";
+      | "quadrotor-x-contact-v1"
+      | "quadrotor-x-contact-wind-v1";
     source_commit: string;
     source_dirty: boolean;
     source_tree_sha256?: string;
@@ -75,7 +79,7 @@ export const MISSION_PHASES = [
 ];
 export const HASH = /^[0-9a-f]{64}$/;
 const ID =
-  /^(cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only|ground-mission)-\d{1,10}-[0-9a-f]{12}$/;
+  /^(cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only|ground-mission|ground-mission-wind)-\d{1,10}-[0-9a-f]{12}$/;
 const finite = (n: unknown): n is number =>
   typeof n === "number" && Number.isFinite(n);
 const vector = (v: unknown, n: number) =>
@@ -91,7 +95,7 @@ export function validateIndex(value: unknown): Index {
   const data = object(value);
   assertContract(
     ((data.schema_version === 1 && data.isaac_validated === false) ||
-      ([2, 3, 4].includes(Number(data.schema_version)) &&
+      ([2, 3, 4, 5].includes(Number(data.schema_version)) &&
         typeof data.schema_version === "number" &&
         data.learning_validated === false &&
         !("isaac_validated" in data))) &&
@@ -118,6 +122,7 @@ export function validateIndex(value: unknown): Index {
         "turbulence-hold",
         "turbulence-attitude-only",
         "ground-mission",
+        "ground-mission-wind",
       ].includes(String(run.scenario)) &&
         Number.isInteger(run.seed) &&
         Number(run.seed) >= 0 &&
@@ -125,18 +130,23 @@ export function validateIndex(value: unknown): Index {
     );
     if (String(run.scenario).startsWith("turbulence-"))
       assertContract(
-        [3, 4].includes(Number(data.schema_version)) &&
+        [3, 4, 5].includes(Number(data.schema_version)) &&
           run.run_id.startsWith("isaac-"),
       );
     assertContract(
       (run.run_id.startsWith(`cpu-${run.scenario}-${run.seed}-`) ||
-        ([2, 3, 4].includes(Number(data.schema_version)) &&
+        ([2, 3, 4, 5].includes(Number(data.schema_version)) &&
           run.run_id.startsWith(`isaac-${run.scenario}-${run.seed}-`))) &&
         ["passed", "failed"].includes(String(run.status)),
     );
     if (run.scenario === "ground-mission")
       assertContract(
-        data.schema_version === 4 && run.run_id.startsWith("isaac-"),
+        [4, 5].includes(Number(data.schema_version)) &&
+          run.run_id.startsWith("isaac-"),
+      );
+    if (run.scenario === "ground-mission-wind")
+      assertContract(
+        data.schema_version === 5 && run.run_id.startsWith("isaac-"),
       );
     seen.add(run.run_id);
     for (const name of [
@@ -166,9 +176,10 @@ export function validateRecording(
     manifest = object(manifestValue),
     metrics = object(metricsValue);
   const flight = entry.run_id.startsWith("isaac-");
-  const wind = entry.scenario.startsWith("turbulence-");
-  const contact = entry.scenario === "ground-mission";
-  const schema = contact ? 4 : wind ? 3 : flight ? 2 : 1;
+  const windMission = entry.scenario === "ground-mission-wind";
+  const wind = entry.scenario.startsWith("turbulence-") || windMission;
+  const contact = entry.scenario === "ground-mission" || windMission;
+  const schema = windMission ? 5 : contact ? 4 : wind ? 3 : flight ? 2 : 1;
   assertContract(!(wind || contact) || flight);
   assertContract(
     replay.schema_version === schema &&
@@ -184,13 +195,15 @@ export function validateRecording(
   assertContract(
     manifest.experiment === (flight ? "isaac-quadrotor" : "cpu-rigid-body") &&
       manifest.model ===
-        (contact
-          ? "quadrotor-x-contact-v1"
-          : wind
-            ? "quadrotor-x-wind-v1"
-            : flight
-              ? "quadrotor-x-v1"
-              : "ideal-body-wrench-v1") &&
+        (windMission
+          ? "quadrotor-x-contact-wind-v1"
+          : contact
+            ? "quadrotor-x-contact-v1"
+            : wind
+              ? "quadrotor-x-wind-v1"
+              : flight
+                ? "quadrotor-x-v1"
+                : "ideal-body-wrench-v1") &&
       manifest.controller === "rate-pid-v1",
   );
   assertContract(
@@ -220,6 +233,8 @@ export function validateRecording(
       "turbulence_hold_threshold",
       "mission_threshold",
       "mission_support_threshold",
+      "wind_mission_threshold",
+      "wind_mission_support_threshold",
     ].includes(manifest.failure_reason as string | null),
   );
   assertContract(
@@ -298,7 +313,7 @@ export function validateRecording(
       Number(metrics.samples) <= 120001,
   );
   assertContract(vector(metrics.measurement_window_s, 2));
-  if (wind) {
+  if (wind && !contact) {
     const turbulence = object(metrics.turbulence);
     for (const field of ["wind_position_rmse_m", "recovery_time_s"])
       assertContract(
@@ -324,6 +339,19 @@ export function validateRecording(
   } else assertContract(metrics.turbulence === undefined);
   if (contact) {
     const mission = object(metrics.mission);
+    if (windMission) {
+      assertContract(mission.waypoint_band_m === 0.35);
+      assertContract(
+        mission.touchdown_horizontal_speed_m_s === null ||
+          (finite(mission.touchdown_horizontal_speed_m_s) &&
+            mission.touchdown_horizontal_speed_m_s >= 0),
+      );
+      for (const field of ["initial_support", "final_support"])
+        assertContract(
+          mission[field] === null ||
+            finite(object(mission[field]).mean_vertical_balance_error_n),
+        );
+    }
     for (const field of [
       "liftoff_time_s",
       "touchdown_time_s",
@@ -373,7 +401,12 @@ export function validateRecording(
     );
     assertContract(
       (contact
-        ? [...MISSION_PHASES, "liftoff", "touchdown"]
+        ? [
+            ...MISSION_PHASES,
+            "liftoff",
+            "touchdown",
+            ...(windMission ? ["wind_start", "gust_start", "gust_end"] : []),
+          ]
         : wind
           ? ["wind_start", "gust_start", "gust_end", "wind_end"]
           : ["target_step", "force_start", "force_end"]

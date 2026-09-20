@@ -196,8 +196,8 @@ export default function Scene({
     scene.add(
       target,
       new THREE.GridHelper(
-        windy ? 120 : 6,
-        windy ? 120 : 12,
+        windy && !contact ? 120 : 6,
+        windy && !contact ? 120 : 12,
         0x52748c,
         0x29465c,
       ),
@@ -212,7 +212,7 @@ export default function Scene({
     draw.current = (s) => {
       if (disposed) return;
       aircraft.position.set(...enuToView(s.position_m));
-      if (windy) {
+      if (windy && !contact) {
         const delta = aircraft.position.clone().sub(lastPosition);
         camera.position.add(delta);
         controls.target.add(delta);
@@ -282,7 +282,7 @@ export default function Scene({
         );
         controls.target.set(0.35, 0.7, -0.35);
       }
-      if (windy) {
+      if (windy && !contact) {
         const offset = aircraft.position
           .clone()
           .sub(new THREE.Vector3(0, 1.5, 0));
