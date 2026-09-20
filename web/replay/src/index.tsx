@@ -288,7 +288,10 @@ export function ReplayViewer({
     target = sample ? projection(sample.target_m) : [340, 150];
   const rotorFlight = recording?.manifest.experiment === "isaac-quadrotor";
   const windFlight = recording?.manifest.model === "quadrotor-x-wind-v1";
-  const contactFlight = recording?.manifest.model === "quadrotor-x-contact-v1";
+  const windMission =
+    recording?.manifest.model === "quadrotor-x-contact-wind-v1";
+  const contactFlight =
+    recording?.manifest.model === "quadrotor-x-contact-v1" || windMission;
   const missionMetrics = recording?.metrics.mission;
   const held = recording?.entry.scenario === "turbulence-hold";
   const windMetrics = recording?.metrics.turbulence;
@@ -328,9 +331,12 @@ export function ReplayViewer({
             waypoints, return home and land on a physical floor.
           </p>
           <p>
-            Calm air, perfect state and illustrative contact parameters. The
-            white wireframe shows the actual 0.4 x 0.4 x 0.1 m body collider;
-            the rotor drawing is schematic.
+            {windMission
+              ? "Turbulent wind stays active through landing and after motor shutdown. A stronger gust acts during descent at 40-42 s. Trajectory feedforward and bounded integral feedback stabilize the route. "
+              : "Calm air. "}
+            Perfect state and illustrative contact parameters. The white
+            wireframe shows the actual 0.4 x 0.4 x 0.1 m body collider; the
+            rotor drawing is schematic.
           </p>
         </div>
       )}
@@ -470,15 +476,17 @@ export function ReplayViewer({
           </SceneBoundary>
         )}
         <span className="al-stage-note">
-          {three && contactFlight
-            ? "White collider / gold route / green thrust / pink ground support"
-            : three && windFlight
-              ? "Violet wind / orange drag / green thrust · camera follows drone"
-              : three
-                ? "3D attitude / gold nose and target"
-                : windFlight
-                  ? "Position schematic fits full path / gold target"
-                  : "Position schematic / gold target"}
+          {three && windMission
+            ? "White collider / violet wind / orange drag / pink support"
+            : three && contactFlight
+              ? "White collider / gold route / green thrust / pink ground support"
+              : three && windFlight
+                ? "Violet wind / orange drag / green thrust · camera follows drone"
+                : three
+                  ? "3D attitude / gold nose and target"
+                  : windFlight
+                    ? "Position schematic fits full path / gold target"
+                    : "Position schematic / gold target"}
         </span>
       </div>
       {sample?.mission_phase && (
@@ -513,13 +521,19 @@ export function ReplayViewer({
           <div>
             <dt>Wind phase</dt>
             <dd>
-              {time < 5
-                ? "Calm"
-                : time >= 25
-                  ? "Recovery in calm air"
-                  : time >= 12 && time < 14
-                    ? "Stronger gust"
-                    : "Turbulent wind"}
+              {windMission
+                ? time < 1
+                  ? "Wind ramp"
+                  : time >= 40 && time < 42
+                    ? "Landing gust"
+                    : "Turbulent wind"
+                : time < 5
+                  ? "Calm"
+                  : time >= 25
+                    ? "Recovery in calm air"
+                    : time >= 12 && time < 14
+                      ? "Stronger gust"
+                      : "Turbulent wind"}
             </dd>
           </div>
           <div>
@@ -730,7 +744,8 @@ export function ReplayViewer({
                 missionMetrics.waypoint_reached_s.filter((t) => t !== null)
                   .length
               }
-              /4 (within 0.15 m for 1 s). Touchdown:{" "}
+              /4 (within {missionMetrics.waypoint_band_m ?? 0.15} m for 1 s).
+              Touchdown:{" "}
               {missionMetrics.touchdown_time_s?.toFixed(3) ?? "not reached"} s;{" "}
               pre-contact descent speed:{" "}
               {missionMetrics.touchdown_descent_speed_m_s?.toFixed(3) ??
@@ -739,6 +754,19 @@ export function ReplayViewer({
               {(missionMetrics.max_penetration_m * 1000).toFixed(2)} mm. Contact
               readings use the last measured sample; full-rate measurements
               determine the outcome.
+            </p>
+          )}
+          {windMission && missionMetrics && (
+            <p aria-label="Wind landing measurements">
+              Pre-contact horizontal speed:{" "}
+              {missionMetrics.touchdown_horizontal_speed_m_s?.toFixed(3) ??
+                "unavailable"}{" "}
+              m/s. Final mean vertical force-balance error:{" "}
+              {missionMetrics.final_support?.mean_vertical_balance_error_n.toFixed(
+                3,
+              ) ?? "unavailable"}{" "}
+              N, including wind and the preceding rotor interval. Normal support
+              excludes friction and need not equal weight in vertical wind.
             </p>
           )}
           {windMetrics && (

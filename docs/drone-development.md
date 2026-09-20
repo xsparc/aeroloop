@@ -83,3 +83,7 @@ position hold. The [ground-contact mission](ground-mission.md) adds version 4
 calm takeoff, a waypoint route and measured landing from stopped motors. These
 are separate experiments with explicit model contracts and acceptance gates.
 The default `--scenario all` continues to run the original three airborne cases.
+
+The [turbulent mission](wind-mission.md) adds version 5 route tracking with wind
+through descent and contact landing. Its controller and support-force gates have
+separate validation; it preserves all earlier recording contracts.

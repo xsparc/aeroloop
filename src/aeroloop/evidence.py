@@ -6,13 +6,13 @@ from pathlib import Path
 import re
 from .contracts import ValidationError, finite, load_json
 from .frames import vector
-from . import mission
+from . import mission, wind_mission
 from .simulation import SCENARIOS, ROOT, encoded, metrics, sha256
 from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, wind_outcome, flight_setpoint
 
 FILES = {"manifest.json", "config.json", "samples.json", "events.json", "metrics.json"}
 HASH = re.compile(r"[0-9a-f]{64}\Z")
-RUN_ID = re.compile(r"(?:cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only|ground-mission)-[0-9]{1,10}-[0-9a-f]{12}\Z")
+RUN_ID = re.compile(r"(?:cpu|isaac)-(hover|position-step|lateral-force-pulse|turbulence-hold|turbulence-attitude-only|ground-mission|ground-mission-wind)-[0-9]{1,10}-[0-9a-f]{12}\Z")
 MANIFEST_FIELDS = {"schema_version", "run_id", "kind", "fixture", "captured_at", "experiment", "model", "controller", "scenario", "seed", "source_commit", "source_dirty", "source_tree_sha256", "controller_binary_sha256", "config_sha256", "lock_sha256", "world_frame", "body_frame", "quaternion_order", "units", "status", "failure_reason"}
 SAMPLE_FIELDS = {"time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "thrust_n", "external_force_n"}
 ROTOR_FIELDS = {"thrust_setpoint_n", "rotor_command_n", "rotor_thrust_n", "moment_nm", "allocation_scale"}
@@ -31,13 +31,13 @@ def keys(value, expected):
 
 def validate_manifest(m):
     keys(m, MANIFEST_FIELDS)
-    require(type(m["schema_version"]) is int and m["schema_version"] in (1, 2, 3, 4), "unsupported manifest version")
-    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] == 3, m["schema_version"] == 4
+    require(type(m["schema_version"]) is int and m["schema_version"] in (1, 2, 3, 4, 5), "unsupported manifest version")
+    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5), m["schema_version"] in (4, 5)
     require(isinstance(m["run_id"], str) and RUN_ID.fullmatch(m["run_id"]), "invalid run identifier")
     require(m["kind"] == "recorded_simulation" and m["fixture"] is False, "fixtures are not publishable evidence")
-    for field, value in {"experiment": "isaac-quadrotor" if flight else "cpu-rigid-body", "model": "quadrotor-x-contact-v1" if contact else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "world_frame": "ENU", "body_frame": "FLU", "quaternion_order": "wxyz", "units": "SI"}.items():
+    for field, value in {"experiment": "isaac-quadrotor" if flight else "cpu-rigid-body", "model": "quadrotor-x-contact-wind-v1" if contact and wind else "quadrotor-x-contact-v1" if contact else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "world_frame": "ENU", "body_frame": "FLU", "quaternion_order": "wxyz", "units": "SI"}.items():
         require(m[field] == value, "unsupported evidence convention")
-    require(m["scenario"] in ((mission.SCENARIO,) if contact else WIND_SCENARIOS if wind else SCENARIOS), "unsupported scenario")
+    require(m["scenario"] in ((wind_mission.SCENARIO,) if contact and wind else (mission.SCENARIO,) if contact else WIND_SCENARIOS if wind else SCENARIOS), "unsupported scenario")
     require(type(m["seed"]) is int and 0 <= m["seed"] <= 2**31-1, "invalid seed")
     prefix = "isaac" if flight else "cpu"
     require(m["run_id"].startswith(f"{prefix}-{m['scenario']}-{m['seed']}-"), "run identifier does not match backend, scenario and seed")
@@ -46,7 +46,7 @@ def validate_manifest(m):
     for field in ("source_tree_sha256", "controller_binary_sha256", "config_sha256", "lock_sha256"):
         require(isinstance(m[field], str) and HASH.fullmatch(m[field]), "invalid provenance hash")
     require(m["status"] in ("passed", "failed"), "incomplete run")
-    require(m["failure_reason"] in (None, "model_bounds_exceeded", "mission_threshold", "mission_support_threshold") if contact else m["failure_reason"] in (None, "model_bounds_exceeded", "attitude_altitude_threshold", "turbulence_hold_threshold") if wind else m["failure_reason"] in (None, "model_bounds_exceeded", "hover_threshold", "recovery_threshold", "step_did_not_settle"), "invalid failure reason")
+    require(m["failure_reason"] in (None, "model_bounds_exceeded", "wind_mission_threshold", "wind_mission_support_threshold") if contact and wind else m["failure_reason"] in (None, "model_bounds_exceeded", "mission_threshold", "mission_support_threshold") if contact else m["failure_reason"] in (None, "model_bounds_exceeded", "attitude_altitude_threshold", "turbulence_hold_threshold") if wind else m["failure_reason"] in (None, "model_bounds_exceeded", "hover_threshold", "recovery_threshold", "step_did_not_settle"), "invalid failure reason")
     require((m["status"] == "passed") == (m["failure_reason"] is None), "inconsistent outcome")
     require(isinstance(m["captured_at"], str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?\+00:00", m["captured_at"]), "UTC timestamp required")
     try:
@@ -56,8 +56,8 @@ def validate_manifest(m):
 
 
 def validate_config(c, m):
-    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] == 3, m["schema_version"] == 4
-    keys(c, {"model", "initial_state", "dt_s", "duration_s", "scenario", "seed", "controller", "position_kp", "position_kd", "attitude_kp", "rate_gains"} | ({"actuator", "simulator_versions", "physics_options"} if flight else set()) | ({"wind", "horizontal_position_hold"} if wind else set()) | ({"mission"} if contact else set()))
+    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5), m["schema_version"] in (4, 5)
+    keys(c, {"model", "initial_state", "dt_s", "duration_s", "scenario", "seed", "controller", "position_kp", "position_kd", "attitude_kp", "rate_gains"} | ({"actuator", "simulator_versions", "physics_options"} if flight else set()) | ({"wind", "trajectory_control" if contact else "horizontal_position_hold"} if wind else set()) | ({"mission"} if contact else set()))
     require(c["scenario"] == m["scenario"] and c["seed"] == m["seed"] and c["controller"] == m["controller"], "configuration mismatch")
     require(finite(c["dt_s"]) and .001 <= c["dt_s"] <= .02 and finite(c["duration_s"]) and 6 <= c["duration_s"] <= 120, "invalid timing")
     require(abs(.5/c["dt_s"]-round(.5/c["dt_s"])) < 1e-7, "unaligned event interval")
@@ -88,12 +88,15 @@ def validate_config(c, m):
         for version in c["simulator_versions"].values():
             require(isinstance(version, str) and re.fullmatch(r"[0-9][a-zA-Z0-9.+-]{0,31}", version), "invalid simulator version")
         if contact:
-            require(encoded(c["mission"]) == encoded(mission.configuration()), "unsupported contact mission")
+            require(encoded(c["mission"]) == encoded(wind_mission.contact_configuration() if wind else mission.configuration()), "unsupported contact mission")
             require(encoded(c["initial_state"]) == encoded(asdict(mission.initial_state(c["seed"]))), "mission initial condition disagrees with seed")
         if wind or contact:
             require((c["position_kp"], c["position_kd"], c["attitude_kp"]) == (2.5, 2.8, 5.), "unsupported flight gains")
             require(c["rate_gains"] == {"p": [.6]*3, "i": [.1]*3, "d": [.005]*3, "ff": [0.]*3, "integral_limit": [.3]*3}, "unsupported rate gains")
-        if wind:
+        if wind and contact:
+            require(encoded(c["wind"]) == encoded(asdict(wind_mission.wind_model())), "unsupported mission wind")
+            require(encoded(c["trajectory_control"]) == encoded(wind_mission.control_configuration()), "unsupported trajectory controller")
+        if wind and not contact:
             import random
             from .physics import State
             rng = random.Random(c["seed"])
@@ -122,19 +125,23 @@ def validate_rotors(sample, config, previous):
     return applied
 
 
-def validate_wind(sample, expected_wind, scenario):
-    from .physics import State, Model
-    force, moment = WindModel().wrench(sample["velocity_m_s"], sample["quaternion_wxyz"], sample["rates_rad_s"], expected_wind)
+def validate_wind_wrench(sample, expected_wind, model):
+    force, moment = model.wrench(sample["velocity_m_s"], sample["quaternion_wxyz"], sample["rates_rad_s"], expected_wind)
     for name, values in {"wind_velocity_m_s": expected_wind, "external_force_n": force, "external_moment_nm": moment}.items():
         measured = vector(sample[name])
         require(all(abs(a-b) <= 1e-9 for a, b in zip(values, measured)), "wind evidence disagrees with physics inputs")
+
+
+def validate_wind(sample, expected_wind, scenario):
+    from .physics import State, Model
+    validate_wind_wrench(sample, expected_wind, WindModel())
     require(sample["target_m"] == [0., 0., 1.5], "incorrect wind experiment target")
     state = State(tuple(sample["position_m"]), tuple(sample["velocity_m_s"]), tuple(sample["quaternion_wxyz"]), tuple(sample["rates_rad_s"]))
     thrust, rate = flight_setpoint(state, sample["target_m"], Model(), scenario)
     require(abs(thrust-sample["thrust_setpoint_n"]) <= 1e-9 and all(abs(a-b) <= 1e-9 for a, b in zip(rate, sample["rate_setpoint_rad_s"])), "control mode disagrees with recorded setpoints")
 
 
-def validate_mission(sample, route):
+def validate_mission(sample, route, tracking=None, allocation_saturated=False):
     from .physics import State
     force = vector(sample["contact_normal_force_n"])
     require(-1e-6 <= force[2] <= 10000 and max(abs(v) for v in force[:2]) <= 1e-4, "invalid ground normal force")
@@ -142,8 +149,13 @@ def validate_mission(sample, route):
     phase, target, armed, bottom = route.update(sample["time_s"], state, force)
     require(sample["mission_phase"] == phase and all(abs(a-b) <= 1e-9 for a, b in zip(vector(sample["target_m"]), target)), "mission phase or target mismatch")
     require(finite(sample["support_clearance_m"]) and abs(sample["support_clearance_m"]-bottom) <= 1e-9, "collider clearance mismatch")
-    require(all(v == 0 for v in sample["external_force_n"]), "calm mission has external force")
-    thrust, rate = mission.setpoint(state, target, armed)
+    if tracking:
+        thrust, rate, expected = tracking.step(sample["time_s"], state, target, armed, .005, allocation_saturated)
+        for field, values in expected.items():
+            require(all(abs(a-b) <= 1e-9 for a, b in zip(vector(sample[field]), values)), "trajectory feedback or feedforward mismatch")
+    else:
+        require(all(v == 0 for v in sample["external_force_n"]), "calm mission has external force")
+        thrust, rate = mission.setpoint(state, target, armed)
     require(abs(sample["thrust_setpoint_n"]-thrust) <= 1e-9 and all(abs(a-b) <= 1e-9 for a, b in zip(rate, sample["rate_setpoint_rad_s"])), "mission control setpoint mismatch")
     require(armed or all(v == 0 for v in sample["effort_normalized"]), "disarmed mission commands control effort")
 
@@ -168,14 +180,16 @@ def read_run(directory):
     m, c, samples, events = (data[k] for k in ("manifest.json", "config.json", "samples.json", "events.json"))
     validate_manifest(m)
     validate_config(c, m)
-    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] == 3, m["schema_version"] == 4
+    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5), m["schema_version"] in (4, 5)
     route = mission.Mission() if contact else None
+    tracking = wind_mission.TrackingController() if contact and wind else None
     motors = (0.,)*4 if contact else (c["model"]["mass"]*c["model"]["gravity"]/4,)*4
     require(sha256(encoded(c)) == m["config_sha256"], "configuration hash mismatch")
     require(isinstance(samples, list) and 2 <= len(samples) <= 120001, "invalid sample count")
-    winds = iter(WindModel().velocities(c["seed"], c["dt_s"], len(samples))) if wind else None
+    wind_model = wind_mission.wind_model() if contact and wind else WindModel()
+    winds = iter(wind_model.velocities(c["seed"], c["dt_s"], len(samples))) if wind else None
     for i, sample in enumerate(samples):
-        keys(sample, SAMPLE_FIELDS | (ROTOR_FIELDS if flight else set()) | (WIND_FIELDS if wind else set()) | (MISSION_FIELDS if contact else set()))
+        keys(sample, SAMPLE_FIELDS | (ROTOR_FIELDS if flight else set()) | (WIND_FIELDS if wind else set()) | (MISSION_FIELDS if contact else set()) | (wind_mission.CONTROL_FIELDS if tracking else set()))
         require(type(sample["sequence"]) is int and sample["sequence"] == i, "missing or unordered samples")
         require(finite(sample["time_s"]) and abs(sample["time_s"] - i*c["dt_s"]) <= 1e-8, "invalid simulation timestamps")
         for name in SAMPLE_FIELDS - {"time_s", "sequence", "thrust_n", "quaternion_wxyz"}:
@@ -186,10 +200,12 @@ def read_run(directory):
         require(all(abs(v) <= 1 for v in sample["effort_normalized"]), "invalid normalized effort")
         if flight:
             motors = validate_rotors(sample, c, motors)
-        if wind:
+        if tracking:
+            validate_wind_wrench(sample, next(winds), wind_model)
+        elif wind:
             validate_wind(sample, next(winds), m["scenario"])
         if contact:
-            validate_mission(sample, route)
+            validate_mission(sample, route, tracking, i > 0 and samples[i-1]["allocation_scale"] < 1.-1e-12)
         if wind or contact:
             if i == 0:
                 for key, initial_key in (("position_m", "position"), ("velocity_m_s", "velocity"), ("quaternion_wxyz", "quaternion"), ("rates_rad_s", "rates")):
@@ -203,15 +219,15 @@ def read_run(directory):
         if t <= samples[-1]["time_s"]:
             expected_events.append({"time_s": t, "type": kind})
     if contact:
-        expected_events = route.events
+        expected_events = wind_mission.events(route.events, samples[-1]["time_s"]) if tracking else route.events
     require(events == expected_events, "event sequence mismatch")
     recomputed = metrics(samples, m["scenario"])
     require(encoded(recomputed) == encoded(data["metrics.json"]), "metrics do not match full-resolution samples")
-    if wind:
+    if wind and not contact:
         reason = "model_bounds_exceeded" if any(s["position_m"][2] <= 0 or math.hypot(*s["position_m"]) > 100 for s in samples) else wind_outcome(recomputed, m["scenario"])
         require(m["failure_reason"] == reason, "wind outcome disagrees with measured gates")
     if contact:
-        reason = "model_bounds_exceeded" if any(s["position_m"][2] <= 0 or math.hypot(*s["position_m"]) > 100 for s in samples) else mission.outcome(recomputed)
+        reason = "model_bounds_exceeded" if any(s["position_m"][2] <= 0 or math.hypot(*s["position_m"]) > 100 for s in samples) else wind_mission.outcome(recomputed) if tracking else mission.outcome(recomputed)
         require(m["failure_reason"] == reason, "mission outcome disagrees with measured gates")
     if m["status"] == "passed":
         require(all(s["position_m"][2] > 0 and math.hypot(*s["position_m"]) <= 100 for s in samples), "successful run violates model bounds")
@@ -243,7 +259,7 @@ def export_bundle(run_directories, output):
         for event in events:
             i = round(event["time_s"] / run["config.json"]["dt_s"])
             indices.update(j for j in (i-1, i, i+1) if 0 <= j < len(samples))
-        replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] >= 2 else ()) + (("wind_velocity_m_s", "external_force_n", "external_moment_nm") if m["schema_version"] == 3 else ()) + (("mission_phase", "contact_normal_force_n", "support_clearance_m") if m["schema_version"] == 4 else ())
+        replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] >= 2 else ()) + (("wind_velocity_m_s", "external_force_n", "external_moment_nm") if m["schema_version"] in (3, 5) else ()) + (("mission_phase", "contact_normal_force_n", "support_clearance_m") if m["schema_version"] in (4, 5) else ())
         replay = {"schema_version": m["schema_version"], "kind": "recorded_simulation", "run_id": run_id,
                   "samples": [{k: sample[k] for k in replay_fields}
                               for i, sample in enumerate(samples) if i in indices]}

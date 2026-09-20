@@ -44,6 +44,13 @@ requests zero rotor thrust while preserving motor lag. The evidence verifier
 reconstructs mission phases, targets, events and gates; the viewer depicts the
 collider and route. See [decision 005](decisions/005-ground-contact-mission.md).
 
+Version 5 combines route tracking, wind and physical ground contact. Analytic
+trajectory velocity/acceleration and bounded horizontal integral feedback drive
+the existing attitude controller, native rate core and rotors. Evidence verifies
+the feedback recurrence and interval-aligned support balance. Wind remains active
+after contact-latched disarming; the replay shows both wind and support vectors.
+See [decision 006](decisions/006-turbulent-contact-mission.md).
+
 PX4 flight execution and Pegasus transport are no longer MVP dependencies. No CPU
 result can stand in for Isaac validation. The CPU body-wrench model does not model
 propeller aerodynamics, individual motors, estimation error, contact or hardware.

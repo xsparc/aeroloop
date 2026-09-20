@@ -9,7 +9,7 @@ from .frames import normalize, rotate
 from .physics import Model, State
 from .rotors import RotorModel
 from .simulation import encoded, metrics, record, sha256
-from . import mission
+from . import mission, wind_mission
 from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, flight_setpoint, wind_outcome, comparisons
 
 
@@ -33,9 +33,9 @@ def flight(output: Path, launcher_args):
             physics=physics_cfg, save_logs_to_file=False))
         vehicle = body_config()
         vehicle.spawn.rigid_props.enable_gyroscopic_forces = True
-        contact_mission = launcher_args.scenarios == (mission.SCENARIO,)
+        contact_mission = launcher_args.scenarios in ((mission.SCENARIO,), (wind_mission.SCENARIO,))
         if contact_mission:
-            contact_cfg = mission.configuration()
+            contact_cfg = wind_mission.contact_configuration() if launcher_args.scenarios == (wind_mission.SCENARIO,) else mission.configuration()
             material = sim_utils.RigidBodyMaterialCfg(**{k: contact_cfg[k] for k in ("static_friction", "dynamic_friction", "restitution")})
             collision = sim_utils.CollisionPropertiesCfg(contact_offset=contact_cfg["contact_offset_m"], rest_offset=contact_cfg["rest_offset_m"])
             vehicle.spawn.size = tuple(contact_cfg["collider_size_m"])
@@ -56,6 +56,8 @@ def flight(output: Path, launcher_args):
             for seed in launcher_args.seeds:
                 duration = mission.DURATION if contact_mission else 35.
                 route = mission.Mission() if contact_mission else None
+                tracking = wind_mission.TrackingController() if scenario == wind_mission.SCENARIO else None
+                previous_scale = 1.
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
                 if route:
@@ -72,7 +74,7 @@ def flight(output: Path, launcher_args):
                 previous_rate, saturation = (0., 0., 0.), (0, 0, 0)
                 samples, events = [], []
                 status, reason = "passed", None
-                wind_model = WindModel() if scenario in WIND_SCENARIOS else None
+                wind_model = wind_mission.wind_model() if tracking else WindModel() if scenario in WIND_SCENARIOS else None
                 winds = list(wind_model.velocities(seed, dt, round(duration/dt)+1)) if wind_model else None
                 with RateController() as controller:
                     library_hash = sha256(controller.path.read_bytes())
@@ -90,7 +92,8 @@ def flight(output: Path, launcher_args):
                         external_moment = (0., 0., 0.)
                         if wind_model:
                             external, external_moment = wind_model.wrench(state.velocity, state.quaternion, rate, winds[step])
-                            events.extend({"time_s": t, "type": kind} for instant, kind in WIND_EVENTS if t == instant)
+                            if not tracking:
+                                events.extend({"time_s": t, "type": kind} for instant, kind in WIND_EVENTS if t == instant)
                         if scenario == "position-step" and t in (10., 25.):
                             events.append({"time_s": t, "type": "target_step"})
                         if scenario == "lateral-force-pulse" and t in (15., 15.5):
@@ -99,7 +102,10 @@ def flight(output: Path, launcher_args):
                         if route:
                             normal_force = tuple(sensor.data.net_normal_forces_w.torch[0, 0].cpu().tolist()) if step else (0., 0., 0.)
                             phase, target, armed, bottom = route.update(t, state, normal_force)
-                            thrust_request, rate_request = mission.setpoint(state, target, armed)
+                            if tracking:
+                                thrust_request, rate_request, tracking_sample = tracking.step(t, state, target, armed, dt, previous_scale < 1.-1e-12)
+                            else:
+                                thrust_request, rate_request = mission.setpoint(state, target, armed)
                         else:
                             thrust_request, rate_request = flight_setpoint(state, target, model, scenario)
                         effort = controller.step(rate, rate_request, state.acceleration, dt, saturation, armed=armed)
@@ -117,6 +123,8 @@ def flight(output: Path, launcher_args):
                             "rotor_thrust_n": motors, "moment_nm": moment, "allocation_scale": scale})
                         if route:
                             samples[-1].update(mission_phase=phase, contact_normal_force_n=normal_force, support_clearance_m=bottom)
+                        if tracking:
+                            samples[-1].update(tracking_sample)
                         if wind_model:
                             samples[-1].update(wind_velocity_m_s=winds[step], external_moment_nm=external_moment)
                         if state.position[2] <= 0 or sum(v*v for v in state.position) > 100**2:
@@ -136,14 +144,15 @@ def flight(output: Path, launcher_args):
                         if sensor:
                             sensor.update(dt, force_recompute=True)
                         previous_rate = rate
+                        previous_scale = scale
                 if route:
-                    events = route.events
+                    events = wind_mission.events(route.events, samples[-1]["time_s"]) if tracking else route.events
                 measured = metrics(samples, scenario)
                 if status == "passed":
                     if route:
-                        reason = mission.outcome(measured)
+                        reason = wind_mission.outcome(measured) if tracking else mission.outcome(measured)
                         status = "failed" if reason else "passed"
-                    if wind_model:
+                    if wind_model and not tracking:
                         reason = wind_outcome(measured, scenario)
                         status = "failed" if reason else "passed"
                     if scenario == "hover" and (measured["position_rmse_m"] is None or measured["position_rmse_m"] > .25):
@@ -161,7 +170,11 @@ def flight(output: Path, launcher_args):
                 if route:
                     config["mission"] = contact_cfg
                 if wind_model:
-                    config.update(wind=asdict(wind_model), horizontal_position_hold=scenario == "turbulence-hold")
+                    config["wind"] = asdict(wind_model)
+                    if tracking:
+                        config["trajectory_control"] = wind_mission.control_configuration()
+                    else:
+                        config["horizontal_position_hold"] = scenario == "turbulence-hold"
                 run = record({"experiment": "isaac-quadrotor", "config": config, "samples": samples,
                     "events": events, "metrics": measured, "status": status, "failure_reason": reason,
                     "controller_binary_sha256": library_hash}, output)

@@ -22,7 +22,7 @@ def main():
     parser.add_argument("--split", choices=("validation", "held_out"), default="validation")
     parser.add_argument("--num-envs", type=int, default=32)
     parser.add_argument("--iterations", type=int, default=300)
-    parser.add_argument("--scenario", choices=(*SCENARIOS, *WIND_SCENARIOS, "ground-mission", "all", "turbulence"), default="all")
+    parser.add_argument("--scenario", choices=(*SCENARIOS, *WIND_SCENARIOS, "ground-mission", "ground-mission-wind", "all", "turbulence"), default="all")
     parser.add_argument("--seeds", type=int, nargs="+", default=list(range(5)))
     args = parser.parse_args()
     options = []

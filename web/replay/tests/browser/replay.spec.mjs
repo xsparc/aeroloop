@@ -338,3 +338,66 @@ test("contact mission shows liftoff, physical support and motor-off landing in 3
     .screenshot({ path: "test-results/mission-landed.png" });
   expect(errors).toEqual([]);
 });
+
+test("turbulent contact mission keeps wind visible through descent and motor-off support", async ({
+  page,
+}) => {
+  test.skip(
+    index.runs[0].scenario !== "ground-mission-wind",
+    "Requires measured Isaac turbulent mission evidence.",
+  );
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await start(page);
+  const readings = page.getByLabel("Mission and ground contact");
+  const value = (name) =>
+    readings.getByText(name, { exact: true }).locator("..").locator("dd");
+  await expect(
+    page.getByText(/Wind stays|wind stays|wind remains|wind.*stays/i),
+  ).toHaveCount(1);
+  await expect(
+    page.getByRole("button", { name: "Compare reference", exact: true }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Enable 3D view" }).click();
+  await expect(page.locator("canvas")).toHaveCount(1);
+  await page.getByRole("slider").fill("24");
+  await expect(value("Mission phase")).toHaveText("east hold");
+  await expect(value("Motors")).toHaveText("Armed");
+  await expect(value("Normal ground support")).toHaveText("0.00 N");
+  await page.getByRole("slider").fill("41");
+  await expect(value("Mission phase")).toHaveText("landing");
+  await expect(page.getByText("Landing gust", { exact: true })).toBeVisible();
+  await page
+    .locator(".al-stage")
+    .screenshot({ path: "test-results/wind-mission-descent.png" });
+  await page.getByRole("button", { name: /s \/ touchdown$/ }).click();
+  expect(
+    parseFloat(await value("Normal ground support").textContent()),
+  ).toBeGreaterThan(0.1);
+  await page.getByRole("slider").fill("49");
+  await expect(value("Mission phase")).toHaveText("landed");
+  await expect(value("Motors")).toHaveText("Disarmed");
+  await expect(page.getByText("Turbulent wind", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Recovery in calm air", { exact: true }),
+  ).toHaveCount(0);
+  const speed = page
+    .getByLabel("Wind and stabilization")
+    .getByText("Wind speed", { exact: true })
+    .locator("..")
+    .locator("dd");
+  expect(parseFloat(await speed.textContent())).toBeGreaterThan(0);
+  for (const meter of await page.getByRole("meter").all())
+    expect(Number(await meter.getAttribute("value"))).toBeLessThan(0.01);
+  await expect(page.getByLabel("Mission measurements")).toContainText(
+    "Waypoints reached: 4/4 (within 0.35 m for 1 s)",
+  );
+  await expect(page.getByLabel("Wind landing measurements")).toContainText(
+    "force-balance error",
+  );
+  await page.getByRole("button", { name: "Side view", exact: true }).click();
+  await page
+    .locator(".al-stage")
+    .screenshot({ path: "test-results/wind-mission-landed.png" });
+  expect(errors).toEqual([]);
+});

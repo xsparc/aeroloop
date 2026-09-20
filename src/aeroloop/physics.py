@@ -58,6 +58,11 @@ def desired_wrench(state, target, model):
     # Position PD determines a desired thrust direction; orientation error yields body rates.
     acceleration = tuple(max(-4., min(4., 2.5*(target[i]-state.position[i])-2.8*state.velocity[i]))
                          + (model.gravity if i == 2 else 0.) for i in range(3))
+    return acceleration_wrench(state, acceleration, model)
+
+
+def acceleration_wrench(state, acceleration, model):
+    """Map desired world acceleration including gravity to thrust and body rates."""
     magnitude = math.hypot(*acceleration)
     z = tuple(a / magnitude for a in acceleration)
     x_raw = cross((0., 1., 0.), z)

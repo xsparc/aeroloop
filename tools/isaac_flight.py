@@ -15,7 +15,7 @@ def main():
     from aeroloop.wind import WIND_SCENARIOS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--scenario", choices=(*SCENARIOS, *WIND_SCENARIOS, "ground-mission", "all", "turbulence"), default="all")
+    parser.add_argument("--scenario", choices=(*SCENARIOS, *WIND_SCENARIOS, "ground-mission", "ground-mission-wind", "all", "turbulence"), default="all")
     parser.add_argument("--seeds", type=int, nargs="+", default=list(range(5)))
     add_launcher_args(parser)
     parser.set_defaults(headless=True, visualizer=["none"], device="cuda:0", livestream=0)

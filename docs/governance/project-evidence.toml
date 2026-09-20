@@ -281,3 +281,35 @@ observed_on = "2026-09-21"
 reviewed_on = "2026-09-21"
 review_due = "2026-10-21"
 decision_ref = "docs/architecture/decisions/005-ground-contact-mission.md"
+
+[[requirements]]
+id = "REQ-WIND-MISSION"
+statement = "Complete takeoff, waypoint flight and contact landing under seeded turbulent wind with measured control and 3D evidence."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/decisions/006-turbulent-contact-mission.md"]
+implementation_refs = ["src/aeroloop/wind_mission.py", "src/aeroloop/isaac_flight.py", "src/aeroloop/evidence.py", "tools/mission_report.py", "web/replay/src/scene.tsx"]
+verification_refs = ["tests/test_wind_mission.py", "tests/test_mission.py", "web/replay/tests/contracts.test.mjs", "web/replay/tests/browser/replay.spec.mjs"]
+validation_refs = ["docs/evidence/isaac-wind-mission-validation.md", "docs/evidence/isaac-wind-mission-001.json"]
+risk_refs = ["docs/architecture/decisions/006-turbulent-contact-mission.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-009"
+title = "Turbulent takeoff, waypoint route and contact landing"
+status = "verified"
+requirement_ids = ["REQ-WIND-MISSION", "REQ-TURBULENCE", "REQ-GROUND-MISSION", "REQ-REUSABLE-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-21-turbulent-mission-continuation"
+acceptance_refs = ["docs/architecture/decisions/006-turbulent-contact-mission.md"]
+evidence_refs = ["docs/research/2026-09-21-wind-mission.json", "docs/evidence/isaac-wind-mission-validation.md", "docs/evidence/isaac-wind-mission-001.json"]
+
+[[research_decisions]]
+id = "RD-WIND-MISSION"
+finding = "Trajectory feedback and interval-aligned support balance allow explicit verification of a turbulent contact mission."
+disposition = "adopted"
+source_urls = ["https://vnav.mit.edu/material/06-Control1-notes.pdf", "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/", "https://isaac-sim.github.io/IsaacLab/main/source/overview/core-concepts/sensors/contact_sensor.html"]
+observed_on = "2026-09-21"
+reviewed_on = "2026-09-21"
+review_due = "2026-10-21"
+decision_ref = "docs/architecture/decisions/006-turbulent-contact-mission.md"

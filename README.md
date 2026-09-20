@@ -16,6 +16,8 @@ The [turbulence demonstration](docs/turbulence.md) adds seeded wind and drag,
 with a matching reference that makes the effect of position hold visible.
 The [ground-contact mission](docs/ground-mission.md) adds calm takeoff, waypoint
 flight and measured landing with motor shutdown on a physical floor.
+The [turbulent mission](docs/wind-mission.md) tracks that route with wind throughout
+takeoff and landing, including a descent gust and continuing wind after shutdown.
 
 Python 3.11+ runs the dependency-free CPU tooling directly from a checkout:
 
