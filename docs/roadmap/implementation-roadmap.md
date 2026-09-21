@@ -19,6 +19,7 @@ Public deployment and merges are separate decisions.
 | AL-007 | Seeded turbulent wind, pressure-centre drag and measured stabilization against a matching reference | Verified: 10/10 clean-revision PhysX trials, 5/5 paired comparisons and eight measured browser checks |
 | AL-008 | Ground-contact takeoff, waypoint route, measured landing and 3D replay | Verified: 5/5 clean-revision PhysX missions, four waypoint holds per run, contact-latched landing and measured 3D replay |
 | AL-009 | Turbulent takeoff, waypoint route, contact landing and combined 3D replay | Verified: 5/5 clean-revision PhysX missions with wind through landing, four waypoint holds per run and combined 3D replay |
+| AL-010 | Independent force/contact accuracy and timestep refinement in Isaac | Implemented; final two-mode matrix pending; default yaw refinement under investigation |
 
 ## Next gate
 
@@ -44,8 +45,12 @@ AL-008 was squash-merged and autonomous continuation was requested on 2026-09-21
 AL-009 combines mission flight and turbulent wind under
 [decision 006](../architecture/decisions/006-turbulent-contact-mission.md), with
 [its own validation](../evidence/isaac-wind-mission-validation.md) and
-[workflow](../wind-mission.md). The next proposed extension examines sensor noise
-and delay robustness; it needs separate model assumptions and acceptance gates.
+[workflow](../wind-mission.md). After merging AL-009, the maintainer prioritized
+simulation and physics. AL-010 now measures isolated force, actuator and contact
+accuracy at three timesteps under [decision 007](../architecture/decisions/007-physics-accuracy-suite.md).
+The next physics work should resolve the observed default yaw-refinement behavior
+and evaluate closed-loop mission timestep sensitivity with fixed controller and
+wind update timing. Sensor noise and delay remain deferred until this is understood.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration

@@ -313,3 +313,35 @@ observed_on = "2026-09-21"
 reviewed_on = "2026-09-21"
 review_due = "2026-10-21"
 decision_ref = "docs/architecture/decisions/006-turbulent-contact-mission.md"
+
+[[requirements]]
+id = "REQ-PHYSICS-ACCURACY"
+statement = "Verify the simulated drone force bridge, numerical integration and contact response against independent physics references."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md"]
+implementation_refs = ["src/aeroloop/physics_audit.py", "src/aeroloop/isaac_physics.py", "tools/physics_report.py"]
+verification_refs = ["tests/test_physics_audit.py", "tests/test_physics.py"]
+validation_refs = ["docs/evidence/isaac-physics-validation.md"]
+risk_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-010"
+title = "Physics accuracy and timestep refinement suite"
+status = "in-progress"
+requirement_ids = ["REQ-PHYSICS-ACCURACY", "REQ-PHYSICS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-21-simulation-physics-continuation"
+acceptance_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md"]
+evidence_refs = ["docs/research/2026-09-21-physics-accuracy.json", "docs/evidence/isaac-physics-validation.md"]
+
+[[research_decisions]]
+id = "RD-PHYSICS-ACCURACY"
+finding = "Independent solutions and timestep refinement expose numerical errors outside controller acceptance."
+disposition = "adopted"
+source_urls = ["https://isaac-sim.github.io/IsaacLab/release/3.0.0/source/api/lab/isaaclab.sim.html", "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/", "https://isaac-sim.github.io/IsaacLab/main/source/overview/core-concepts/sensors/contact_sensor.html"]
+observed_on = "2026-09-21"
+reviewed_on = "2026-09-21"
+review_due = "2026-10-21"
+decision_ref = "docs/architecture/decisions/007-physics-accuracy-suite.md"

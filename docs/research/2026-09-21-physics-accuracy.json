@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "f2d7aba81b422fe745ec096965b384eb8b2e4272",
+  "scanned_at": "2026-09-21",
+  "coverage": [
+    "Physics time-step configuration",
+    "Independent force and drag solutions",
+    "Measured contact normal-force timing",
+    "PhysX collision margins and CCD limitations"
+  ],
+  "findings": [
+    {
+      "finding": "Independent analytical trajectories and timestep refinement can expose force-frame, motor-input and integration errors that successful controlled flight can mask. Contact force must be aligned with the integrated interval.",
+      "source_event_date": null,
+      "citations": [
+        "https://isaac-sim.github.io/IsaacLab/release/3.0.0/source/api/lab/isaaclab.sim.html",
+        "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "https://isaac-sim.github.io/IsaacLab/main/source/overview/core-concepts/sensors/contact_sensor.html",
+        "https://docs.omniverse.nvidia.com/kit/docs/omni_physics/110.1/dev_guide/rigid_bodies_articulations/rigid_bodies.html"
+      ],
+      "confidence": "high",
+      "relevance": "Verify the physics bridge underlying drone development",
+      "direction_alignment": "The maintainer explicitly prioritizes simulation and physics after merging the turbulent mission.",
+      "opportunity_or_risk": "This checks numerical implementation, not physical calibration or closed-loop convergence.",
+      "engineering_cost": "One bounded six-case physics suite at three timesteps",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-010 numerical physics accuracy before sensor noise and delay",
+      "verification_needed": "Analytical CPU tests, actual PhysX matrix, complete traces, independent evidence verification and convergence gates"
+    }
+  ],
+  "overall_recommendation": "Prioritize explicit numerical physics verification while preserving flight and training baselines.",
+  "evidence_gaps": [
+    "Final clean-source matrix pending",
+    "Default TGS yaw errors meet absolute bounds but development refinement fails",
+    "No hardware-derived drag, rotor or contact calibration"
+  ]
+}

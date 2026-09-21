@@ -51,6 +51,13 @@ the feedback recurrence and interval-aligned support balance. Wind remains activ
 after contact-latched disarming; the replay shows both wind and support vectors.
 See [decision 006](decisions/006-turbulent-contact-mission.md).
 
+The separate [physics accuracy suite](../physics-accuracy.md) verifies force
+isolation cases at 200/400/800 Hz against independent continuous-time solutions.
+Its strict traces and public summary preserve numerical failures and distinguish
+absolute error from timestep refinement. The default TGS mode and a deprecated
+per-step force diagnostic are reported separately; neither changes the existing
+flight scenes. See [decision 007](decisions/007-physics-accuracy-suite.md).
+
 PX4 flight execution and Pegasus transport are no longer MVP dependencies. No CPU
 result can stand in for Isaac validation. The CPU body-wrench model does not model
 propeller aerodynamics, individual motors, estimation error, contact or hardware.

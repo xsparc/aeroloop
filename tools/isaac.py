@@ -13,7 +13,7 @@ from aeroloop.wind import WIND_SCENARIOS
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", choices=("smoke", "train", "evaluate", "flight"))
+    parser.add_argument("mode", choices=("smoke", "train", "evaluate", "flight", "physics"))
     executable = "Scripts/python.exe" if sys.platform == "win32" else "bin/python"
     parser.add_argument("--python", type=Path, default=ROOT / ".local/IsaacLab/.venv" / executable)
     parser.add_argument("--output", type=Path, required=True)
@@ -24,8 +24,12 @@ def main():
     parser.add_argument("--iterations", type=int, default=300)
     parser.add_argument("--scenario", choices=(*SCENARIOS, *WIND_SCENARIOS, "ground-mission", "ground-mission-wind", "all", "turbulence"), default="all")
     parser.add_argument("--seeds", type=int, nargs="+", default=list(range(5)))
+    parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
+    parser.add_argument("--force-mode", choices=("per-iteration", "per-step"), default="per-iteration")
     args = parser.parse_args()
     options = []
+    if args.mode == "physics":
+        options = ["--physics-dt", str(args.physics_dt), "--force-mode", args.force_mode]
     if args.mode == "train":
         options = ["--num-envs", str(args.num_envs), "--iterations", str(args.iterations)]
     elif args.mode == "evaluate":
@@ -48,6 +52,9 @@ def main():
             print("Isaac flight did not retain the complete requested trial set.", file=sys.stderr)
             return 1
     if args.mode == "evaluate" and not result["trained_meets_threshold"]:
+        return 2
+    if args.mode == "physics" and (result["dt_s"] != args.physics_dt or result["passed"] != result["trials"]
+            or result["configuration"]["solver"].get("external_forces_every_iteration", True) != (args.force_mode == "per-iteration")):
         return 2
     if args.mode == "flight" and result["passed"] != result["trials"]:
         return 2
