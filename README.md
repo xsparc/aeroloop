@@ -18,6 +18,8 @@ The [ground-contact mission](docs/ground-mission.md) adds calm takeoff, waypoint
 flight and measured landing with motor shutdown on a physical floor.
 The [turbulent mission](docs/wind-mission.md) tracks that route with wind throughout
 takeoff and landing, including a descent gust and continuing wind after shutdown.
+The [physics accuracy suite](docs/physics-accuracy.md) checks isolated forces,
+motor lag and ground impact against analytical references at three timesteps.
 
 Python 3.11+ runs the dependency-free CPU tooling directly from a checkout:
 
