@@ -19,7 +19,7 @@ Public deployment and merges are separate decisions.
 | AL-007 | Seeded turbulent wind, pressure-centre drag and measured stabilization against a matching reference | Verified: 10/10 clean-revision PhysX trials, 5/5 paired comparisons and eight measured browser checks |
 | AL-008 | Ground-contact takeoff, waypoint route, measured landing and 3D replay | Verified: 5/5 clean-revision PhysX missions, four waypoint holds per run, contact-latched landing and measured 3D replay |
 | AL-009 | Turbulent takeoff, waypoint route, contact landing and combined 3D replay | Verified: 5/5 clean-revision PhysX missions with wind through landing, four waypoint holds per run and combined 3D replay |
-| AL-010 | Independent force/contact accuracy and timestep refinement in Isaac | Implemented; final two-mode matrix pending; default yaw refinement under investigation |
+| AL-010 | Independent force/contact accuracy and timestep refinement in Isaac | Harness delivered: 36/36 accuracy cases pass; default yaw refinement fails; numerical acceptance remains open |
 
 ## Next gate
 

@@ -30,8 +30,8 @@
   ],
   "overall_recommendation": "Prioritize explicit numerical physics verification while preserving flight and training baselines.",
   "evidence_gaps": [
-    "Final clean-source matrix pending",
-    "Default TGS yaw errors meet absolute bounds but development refinement fails",
+    "Final matrix passes 36/36 absolute accuracy cases but default yaw refinement fails; root cause remains open",
+    "No closed-loop timestep convergence study",
     "No hardware-derived drag, rotor or contact calibration"
   ]
 }

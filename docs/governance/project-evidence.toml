@@ -323,7 +323,7 @@ roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 design_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md"]
 implementation_refs = ["src/aeroloop/physics_audit.py", "src/aeroloop/isaac_physics.py", "tools/physics_report.py"]
 verification_refs = ["tests/test_physics_audit.py", "tests/test_physics.py"]
-validation_refs = ["docs/evidence/isaac-physics-validation.md"]
+validation_refs = ["docs/evidence/isaac-physics-validation.md", "docs/evidence/isaac-physics-001.json"]
 risk_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md", "SECURITY.md"]
 
 [[work_items]]
@@ -334,7 +334,7 @@ requirement_ids = ["REQ-PHYSICS-ACCURACY", "REQ-PHYSICS"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-21-simulation-physics-continuation"
 acceptance_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md"]
-evidence_refs = ["docs/research/2026-09-21-physics-accuracy.json", "docs/evidence/isaac-physics-validation.md"]
+evidence_refs = ["docs/research/2026-09-21-physics-accuracy.json", "docs/evidence/isaac-physics-validation.md", "docs/evidence/isaac-physics-001.json"]
 
 [[research_decisions]]
 id = "RD-PHYSICS-ACCURACY"
