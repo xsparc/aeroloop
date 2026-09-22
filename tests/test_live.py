@@ -90,6 +90,27 @@ class LiveTests(unittest.TestCase):
         b['samples.json'][0]['wind_velocity_m_s'][0] = 2
         with self.assertRaises(ValidationError): compare(a,b)
 
+    def test_monitor_rejects_linked_snapshot_and_assets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory); assets=root/'ui'; assets.mkdir(); (assets/'assets').mkdir()
+            (assets/'monitor.html').write_text('<h1>monitor</h1>')
+            session=root/'session'; session.mkdir()
+            target=root/'other.json'; target.write_bytes(encoded(FlightClock().snapshot(0,.005,sample())))
+            try:
+                (session/'live.json').symlink_to(target)
+            except OSError:
+                self.skipTest('Host does not permit symbolic link creation')
+            server=monitor_server(session,assets,0)
+            thread=Thread(target=server.serve_forever,daemon=True); thread.start()
+            try:
+                c=HTTPConnection('127.0.0.1',server.server_port,timeout=3)
+                c.request('GET','/api/live'); response=c.getresponse()
+                self.assertEqual(response.status,503); response.read(); c.close()
+            finally:
+                server.shutdown(); server.server_close(); thread.join()
+            (assets/'assets'/'linked.js').symlink_to(target)
+            with self.assertRaises(ValidationError): monitor_server(session,assets,0)
+
     def test_timing_rejects_invented_fields_and_impossible_counts(self):
         good = {'paced':True,'elapsed_s':51.,'simulation_s':50.,'max_lag_s':1.,'late_steps':5,'monitor_enabled':True}
         self.assertAlmostEqual(timing(good,50.)['real_time_factor'],50/51)
