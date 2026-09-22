@@ -17,9 +17,14 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--scenario", choices=(*SCENARIOS, *WIND_SCENARIOS, "ground-mission", "ground-mission-wind", "all", "turbulence"), default="all")
     parser.add_argument("--seeds", type=int, nargs="+", default=list(range(5)))
+    parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
+    parser.add_argument("--monitor", action="store_true")
+    parser.add_argument("--realtime", action="store_true")
     add_launcher_args(parser)
     parser.set_defaults(headless=True, visualizer=["none"], device="cuda:0", livestream=0)
     args = parser.parse_args()
+    if (args.physics_dt != .005 or args.monitor or args.realtime) and args.scenario != "ground-mission-wind":
+        parser.error("Substeps, monitoring and pacing require ground-mission-wind.")
     if len(args.seeds) > 5 or len(set(args.seeds)) != len(args.seeds) or any(s < 0 or s > 2**31-1 for s in args.seeds):
         parser.error("Use one to five distinct nonnegative 32-bit seeds.")
     if args.device != "cuda:0" or not args.headless or args.livestream != 0:

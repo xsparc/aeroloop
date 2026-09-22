@@ -6,7 +6,7 @@ import unittest
 
 from aeroloop import mission, wind_mission
 from aeroloop.contracts import ValidationError
-from aeroloop.evidence import read_run, validate_mission
+from aeroloop.evidence import read_run, validate_mission, validate_config
 from aeroloop.physics import Model, State
 from aeroloop.rotors import RotorModel
 from aeroloop.simulation import encoded, metrics, record, sha256
@@ -88,6 +88,16 @@ class WindMissionTests(unittest.TestCase):
             'actuator': asdict(RotorModel()), 'simulator_versions': {'isaacsim': '6.1', 'isaaclab': '17.0', 'torch': '2.11'},
             'physics_options': {'gyroscopic_forces': True}, 'mission': wind_mission.contact_configuration(),
             'wind': asdict(wind), 'trajectory_control': wind_mission.control_configuration()}
+        manifest = {'schema_version':5, 'scenario':wind_mission.SCENARIO, 'seed':73, 'controller':'rate-pid-v1'}
+        for count in (2,4):
+            substepped = copy.deepcopy(config)
+            substepped['physics_options'].update(physics_dt_s=.005/count, substeps=count,
+                input_hold='world-force-body-moment', contact_force='interval-mean')
+            validate_config(substepped,manifest)
+            for mutate in (lambda o: o.update(substeps=3), lambda o: o.update(physics_dt_s=.005),
+                           lambda o: o.update(contact_force='last-substep'), lambda o: o.update(private_path='private')):
+                invalid = copy.deepcopy(substepped); mutate(invalid['physics_options'])
+                with self.assertRaises(ValidationError): validate_config(invalid,manifest)
         with tempfile.TemporaryDirectory() as directory:
             path = record({'experiment': 'isaac-quadrotor', 'config': config, 'samples': samples,
                 'events': wind_mission.events(route.events, .005), 'metrics': metrics(samples, wind_mission.SCENARIO),

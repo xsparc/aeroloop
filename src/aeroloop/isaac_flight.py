@@ -9,6 +9,7 @@ from .frames import normalize, rotate
 from .physics import Model, State
 from .rotors import RotorModel
 from .simulation import encoded, metrics, record, sha256
+from .live import FlightClock, write_snapshot
 from . import mission, wind_mission
 from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, flight_setpoint, wind_outcome, comparisons
 
@@ -22,6 +23,13 @@ def flight(output: Path, launcher_args):
     output.mkdir(parents=True, exist_ok=False)
     started = time.perf_counter()
     dt, duration = .005, 35.
+    physics_dt = launcher_args.physics_dt
+    substeps = round(dt / physics_dt)
+    monitor, paced = launcher_args.monitor, launcher_args.realtime
+    from .physics_audit import provenance
+    source = provenance()
+    if monitor:
+        write_snapshot(output, FlightClock(paced).snapshot(launcher_args.seeds[0], physics_dt, state="starting"))
     model, rotors = Model(), RotorModel()
     results = []
     with launch_simulation(PhysxCfg(), launcher_args) as physics_cfg:
@@ -29,7 +37,7 @@ def flight(output: Path, launcher_args):
         from isaaclab.assets import RigidObject
         import isaaclab.sim as sim_utils
         sim = sim_utils.SimulationContext(sim_utils.SimulationCfg(
-            dt=dt, gravity=(0., 0., -model.gravity), device=launcher_args.device,
+            dt=physics_dt, gravity=(0., 0., -model.gravity), device=launcher_args.device,
             physics=physics_cfg, save_logs_to_file=False))
         vehicle = body_config()
         vehicle.spawn.rigid_props.enable_gyroscopic_forces = True
@@ -76,10 +84,13 @@ def flight(output: Path, launcher_args):
                 status, reason = "passed", None
                 wind_model = wind_mission.wind_model() if tracking else WindModel() if scenario in WIND_SCENARIOS else None
                 winds = list(wind_model.velocities(seed, dt, round(duration/dt)+1)) if wind_model else None
+                clock = FlightClock(paced)
+                interval_normal = (0., 0., 0.)
                 with RateController() as controller:
                     library_hash = sha256(controller.path.read_bytes())
                     for step in range(round(duration/dt)+1):
                         t = round(step*dt, 9)
+                        clock.tick(t)
                         q = body.data.root_quat_w.torch[0].cpu().tolist()  # Lab 3: xyzw
                         rate = tuple(body.data.root_ang_vel_b.torch[0].cpu().tolist())
                         state = State(
@@ -100,7 +111,7 @@ def flight(output: Path, launcher_args):
                             events.append({"time_s": t, "type": "force_start" if t == 15. else "force_end"})
                         armed = True
                         if route:
-                            normal_force = tuple(sensor.data.net_normal_forces_w.torch[0, 0].cpu().tolist()) if step else (0., 0., 0.)
+                            normal_force = interval_normal
                             phase, target, armed, bottom = route.update(t, state, normal_force)
                             if tracking:
                                 thrust_request, rate_request, tracking_sample = tracking.step(t, state, target, armed, dt, previous_scale < 1.-1e-12)
@@ -127,22 +138,33 @@ def flight(output: Path, launcher_args):
                             samples[-1].update(tracking_sample)
                         if wind_model:
                             samples[-1].update(wind_velocity_m_s=winds[step], external_moment_nm=external_moment)
+                        if monitor and step % 20 == 0:
+                            write_snapshot(output, clock.snapshot(seed, physics_dt, samples[-1]))
                         if state.position[2] <= 0 or sum(v*v for v in state.position) > 100**2:
                             status, reason = "failed", "model_bounds_exceeded"
                             break
                         if step == round(duration/dt):
                             break
-                        inverse = (state.quaternion[0], *(-v for v in state.quaternion[1:]))
-                        body_external = rotate(inverse, external)
-                        forces[0, 0] = torch.tensor((body_external[0], body_external[1], thrust+body_external[2]), device=sim.device)
                         torques[0, 0] = torch.tensor(tuple(m+e for m, e in zip(moment, external_moment)), device=sim.device)
-                        body.permanent_wrench_composer.set_forces_and_torques_index(
-                            forces=forces, torques=torques, is_global=False)
-                        body.write_data_to_sim()
-                        sim.step(render=False)
-                        body.update(dt)
-                        if sensor:
-                            sensor.update(dt, force_recompute=True)
+                        normals = []
+                        for substep in range(substeps):
+                            attitude = state.quaternion
+                            if substep:
+                                xyzw = body.data.root_quat_w.torch[0].cpu().tolist()
+                                attitude = normalize((xyzw[3], *xyzw[:3]))
+                            inverse = (attitude[0], *(-v for v in attitude[1:]))
+                            body_external = rotate(inverse, external)
+                            forces[0, 0] = torch.tensor((body_external[0], body_external[1], thrust+body_external[2]), device=sim.device)
+                            body.permanent_wrench_composer.set_forces_and_torques_index(
+                                forces=forces, torques=torques, is_global=False)
+                            body.write_data_to_sim()
+                            sim.step(render=False)
+                            body.update(physics_dt)
+                            if sensor:
+                                sensor.update(physics_dt, force_recompute=True)
+                                normals.append(tuple(sensor.data.net_normal_forces_w.torch[0, 0].cpu().tolist()))
+                        if normals:
+                            interval_normal = tuple(sum(row[axis] for row in normals)/substeps for axis in range(3))
                         previous_rate = rate
                         previous_scale = scale
                 if route:
@@ -169,16 +191,26 @@ def flight(output: Path, launcher_args):
                     "physics_options": {"gyroscopic_forces": True}}
                 if route:
                     config["mission"] = contact_cfg
+                if substeps > 1:
+                    config["physics_options"].update(physics_dt_s=physics_dt, substeps=substeps,
+                        input_hold="world-force-body-moment", contact_force="interval-mean")
                 if wind_model:
                     config["wind"] = asdict(wind_model)
                     if tracking:
                         config["trajectory_control"] = wind_mission.control_configuration()
                     else:
                         config["horizontal_position_hold"] = scenario == "turbulence-hold"
+                if provenance() != source:
+                    raise RuntimeError("flight source changed during capture")
+                if monitor:
+                    write_snapshot(output, clock.snapshot(seed, physics_dt, samples[-1], "verifying"))
                 run = record({"experiment": "isaac-quadrotor", "config": config, "samples": samples,
                     "events": events, "metrics": measured, "status": status, "failure_reason": reason,
                     "controller_binary_sha256": library_hash}, output)
                 summary = {"run_id": run.name, "scenario": scenario, "seed": seed, "status": status, "metrics": measured}
+                summary["timing"] = {"paced": paced, "elapsed_s": clock.elapsed,
+                    "simulation_s": samples[-1]["time_s"], "max_lag_s": clock.max_lag,
+                    "late_steps": clock.late_steps, "monitor_enabled": monitor}
                 results.append(summary)
                 print(encoded(summary).decode(), end="", flush=True)
         result = {"schema_version": 1, "kind": "isaac_quadrotor_flight", "backend": "isaacsim_physx",
