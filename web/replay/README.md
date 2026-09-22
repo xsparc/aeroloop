@@ -91,3 +91,7 @@ The 0.35 m waypoint band, pre-impact horizontal speed and final vertical force
 balance are shown explicitly. Prepare this mission first, then retained step and
 force-pulse runs to exercise the measured turbulent-mission browser check. See
 the [turbulent mission workflow](../../docs/wind-mission.md).
+
+The [flight evaluation explorer](../../docs/flight-evaluation.md) adds a complete seed/frequency matrix,
+individual acceptance gates, guided mission chapters and synchronized paired 3D.
+It reuses verified PhysX recordings and preserves the open numerical findings.

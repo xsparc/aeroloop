@@ -37,7 +37,7 @@ def compare(reference, candidate):
     return result
 
 
-def report(directories):
+def read_study(directories):
     require(len(directories) == 3, "three physics frequency directories required")
     runs, timing_rows = {}, {}
     for directory in directories:
@@ -53,6 +53,10 @@ def report(directories):
             timing_rows[key] = timing(row.get("timing"), run["samples.json"][-1]["time_s"])
             require(timing_rows[key]["paced"] and timing_rows[key]["monitor_enabled"], "study requires paced, monitored sessions")
     require(set(runs) == {(dt, seed) for dt in (.005, .0025, .00125) for seed in range(3)}, "incomplete flight study matrix")
+    return runs, timing_rows
+
+
+def summarize(runs, timing_rows):
     first = runs[(.005, 0)]
     provenance = {key: first["manifest.json"][key] for key in ("source_commit", "source_tree_sha256", "controller_binary_sha256", "lock_sha256")}
     entries, comparisons = [], []
@@ -74,3 +78,7 @@ def report(directories):
             "comparisons": comparisons, "accepted": all(r["status"] == "passed" for r in entries) and all(c["passed"] for c in comparisons),
             "limitations": ["Bounded timestep sensitivity, not numerical convergence", "Independent yaw refinement remains unresolved",
                             "Perfect state feedback and simplified wind, rotors and contact", "Wall timing excludes startup and evidence serialization; soft real-time only"]}
+
+
+def report(directories):
+    return summarize(*read_study(directories))

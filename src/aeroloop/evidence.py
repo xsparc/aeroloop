@@ -247,6 +247,24 @@ def read_run(directory):
     return data
 
 
+def replay_document(run):
+    """Event-preserving display samples, distinct from full-rate evaluation."""
+    m = run["manifest.json"]
+    run_id = m["run_id"]
+    # Preserve both sides of discontinuities as well as event instants and endpoints.
+    samples, events = run["samples.json"], run["events.json"]
+    stride = max(1, round(.05 / run["config.json"]["dt_s"]))
+    indices = set(range(0, len(samples), stride)) | {len(samples)-1}
+    for event in events:
+        i = round(event["time_s"] / run["config.json"]["dt_s"])
+        indices.update(j for j in (i-1, i, i+1) if 0 <= j < len(samples))
+    replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] >= 2 else ()) + (("wind_velocity_m_s", "external_force_n", "external_moment_nm") if m["schema_version"] in (3, 5) else ()) + (("mission_phase", "contact_normal_force_n", "support_clearance_m") if m["schema_version"] in (4, 5) else ())
+    replay = {"schema_version": m["schema_version"], "kind": "recorded_simulation", "run_id": run_id,
+              "samples": [{k: sample[k] for k in replay_fields}
+                          for i, sample in enumerate(samples) if i in indices]}
+    return replay
+
+
 def export_bundle(run_directories, output):
     require(1 <= len(run_directories) <= 30, "export requires 1 to 30 runs")
     require(sum((Path(directory) / name).stat().st_size for directory in run_directories for name in FILES) <= 128*1024*1024, "input batch exceeds size budget")
@@ -259,17 +277,7 @@ def export_bundle(run_directories, output):
     for run in data:
         m = run["manifest.json"]
         run_id = m["run_id"]
-        # Preserve both sides of discontinuities as well as event instants and endpoints.
-        samples, events = run["samples.json"], run["events.json"]
-        stride = max(1, round(.05 / run["config.json"]["dt_s"]))
-        indices = set(range(0, len(samples), stride)) | {len(samples)-1}
-        for event in events:
-            i = round(event["time_s"] / run["config.json"]["dt_s"])
-            indices.update(j for j in (i-1, i, i+1) if 0 <= j < len(samples))
-        replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] >= 2 else ()) + (("wind_velocity_m_s", "external_force_n", "external_moment_nm") if m["schema_version"] in (3, 5) else ()) + (("mission_phase", "contact_normal_force_n", "support_clearance_m") if m["schema_version"] in (4, 5) else ())
-        replay = {"schema_version": m["schema_version"], "kind": "recorded_simulation", "run_id": run_id,
-                  "samples": [{k: sample[k] for k in replay_fields}
-                              for i, sample in enumerate(samples) if i in indices]}
+        replay = replay_document(run)
         for name, value in {**run, "replay.json": replay}.items():
             payloads[f"{run_id}/{name}"] = encoded(value)
         entries.append({"run_id": run_id, "scenario": m["scenario"], "status": m["status"], "seed": m["seed"]})

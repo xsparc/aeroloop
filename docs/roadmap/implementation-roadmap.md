@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Scope revised 2026-09-21: physics simulation replaces PX4 execution; Isaac physics
+Scope revised 2026-09-23: physics simulation replaces PX4 execution; Isaac physics
 and learning remain in the MVP. Incremental PRs target `main`; after a squash merge,
 verify that every reviewed change reached `main` before starting the next slice.
 Public deployment and merges are separate decisions.
@@ -21,6 +21,8 @@ Public deployment and merges are separate decisions.
 | AL-009 | Turbulent takeoff, waypoint route, contact landing and combined 3D replay | Verified: 5/5 clean-revision PhysX missions with wind through landing, four waypoint holds per run and combined 3D replay |
 | AL-010 | Independent force/contact accuracy and timestep refinement in Isaac | Harness delivered: 36/36 accuracy cases pass; default yaw refinement fails; numerical acceptance remains open |
 | AL-011 | Fixed-cadence PhysX flight-controller study and read-only live 3D monitoring | Verified: 9/9 missions, 6/6 sensitivity comparisons, live GPU 3D and lag reporting |
+
+| AL-012 | Full-rate acceptance explorer, seed/frequency matrix and guided paired 3D | Verified: nine retained missions revalidated, 216 gates, six pair results and measured browser inspection |
 
 ## Next gate
 
@@ -59,6 +61,10 @@ close it. Sensor noise and delay remain deferred.
 AL-011's [measured study](../evidence/isaac-live-flight-validation.md) passed with
 at most 0.858 mm position difference across the compared frequencies. 200 Hz
 achieved approximately 1x wall speed; higher frequencies reported their lag.
+After AL-011 was merged, the maintainer prioritized evaluation and demonstration
+on 2026-09-23. AL-012 now exposes the retained results under
+[decision 009](../architecture/decisions/009-evaluation-demonstration.md), with
+[a guided explorer](../flight-evaluation.md) and explicit full-rate gates.
 Continue by isolating AL-010's constant-spin/torque and pose-sampling behavior
 before adding estimator noise or latency. Keep live monitoring available during
 that investigation and preserve the current controlled-flight baseline.

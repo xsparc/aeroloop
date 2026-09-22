@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "2c0022690f3a9d4d41ede2a12cad65ba7e0b0f2b",
+  "scanned_at": "2026-09-23",
+  "coverage": ["Bounded verified display data", "Accessible guided comparison"],
+  "findings": [{
+    "finding": "Digest verification requires buffered input; compact bounded display documents and explicit motion controls support an inspectable recorded-flight demonstration.",
+    "source_event_date": null,
+    "citations": ["https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest", "https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html"],
+    "confidence": "high",
+    "relevance": "Flight evaluation and measured 3D comparison",
+    "direction_alignment": "The maintainer requested evaluation and demonstration improvements after merging the live study.",
+    "opportunity_or_risk": "Display samples must not replace full-rate acceptance; missing and failed evidence must remain visible.",
+    "engineering_cost": "One compact exporter and a standalone evaluation explorer",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-012 presents the retained study; AL-010 remains open",
+    "verification_needed": "Revalidate nine recordings, preserve gates, test malformed evidence and synchronized playback, inspect actual measured 3D"
+  }],
+  "overall_recommendation": "Make the existing full-rate evaluation inspectable alongside guided paired replay.",
+  "evidence_gaps": ["Independent yaw refinement remains unresolved", "No new solver measurements in this presentation slice", "Models remain uncalibrated"]
+}

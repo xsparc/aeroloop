@@ -80,3 +80,10 @@ ignored. Public bundles contain no raw host metadata or arbitrary source paths.
 
 See [MVP design](../DESIGN_AND_MVP_PLAN.md), [decision 001](decisions/001-physics-first.md)
 and [roadmap](../roadmap/implementation-roadmap.md).
+
+The [flight evaluation explorer](../flight-evaluation.md) re-verifies the complete
+study and separates full-rate acceptance from event-preserving display samples.
+A compact pinned index binds selected-pair manifests, metrics, events and replay.
+The read-only explorer shares one timeline between two optional 3D views and
+retains every trial, missing measurement and failure. Decision 009 records this
+presentation boundary; it does not extend the numerical accuracy claim.
