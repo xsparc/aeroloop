@@ -6,8 +6,8 @@ source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation
 dhf_is_authoritative = false
 
 [review]
-last_reviewed = "2026-09-21"
-review_due = "2026-10-21"
+last_reviewed = "2026-09-23"
+review_due = "2026-10-23"
 
 [[objectives]]
 id = "OBJ-MVP"
@@ -345,3 +345,35 @@ observed_on = "2026-09-21"
 reviewed_on = "2026-09-21"
 review_due = "2026-10-21"
 decision_ref = "docs/architecture/decisions/007-physics-accuracy-suite.md"
+
+[[requirements]]
+id = "REQ-LIVE-FLIGHT-TESTS"
+statement = "Observe the native controller in live 3D PhysX missions and verify fixed-cadence timestep sensitivity."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/decisions/008-live-physics-flight-tests.md"]
+implementation_refs = ["src/aeroloop/isaac_flight.py", "src/aeroloop/live.py", "src/aeroloop/flight_study.py", "tools/monitor.py", "web/replay/src/live.tsx"]
+verification_refs = ["tests/test_live.py", "tests/test_wind_mission.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs"]
+validation_refs = ["docs/evidence/isaac-live-flight-validation.md", "docs/evidence/isaac-flight-study-001.json"]
+risk_refs = ["docs/architecture/decisions/008-live-physics-flight-tests.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-011"
+title = "Live monitored flight-controller timestep study"
+status = "verified"
+requirement_ids = ["REQ-LIVE-FLIGHT-TESTS", "REQ-DRONE-CONTROL", "REQ-WIND-MISSION"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-22-physics-controller-live-monitoring"
+acceptance_refs = ["docs/architecture/decisions/008-live-physics-flight-tests.md"]
+evidence_refs = ["docs/research/2026-09-22-live-flight-tests.json", "docs/evidence/isaac-live-flight-validation.md", "docs/evidence/isaac-flight-study-001.json"]
+
+[[research_decisions]]
+id = "RD-LIVE-FLIGHT-TESTS"
+finding = "Fixed control cadence isolates physics-step sensitivity while a separate live monitor reports measured state and wall-clock lag."
+disposition = "adopted"
+source_urls = ["https://isaac-sim.github.io/IsaacLab/main/source/tutorials/03_envs/create_direct_rl_env.html", "https://developer.mozilla.org/en-US/docs/Web/API/Performance/now"]
+observed_on = "2026-09-22"
+reviewed_on = "2026-09-22"
+review_due = "2026-10-22"
+decision_ref = "docs/architecture/decisions/008-live-physics-flight-tests.md"

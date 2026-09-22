@@ -62,6 +62,13 @@ PX4 flight execution and Pegasus transport are no longer MVP dependencies. No CP
 result can stand in for Isaac validation. The CPU body-wrench model does not model
 propeller aerodynamics, individual motors, estimation error, contact or hardware.
 
+The [live flight test station](../live-flight-tests.md) holds controller, wind and
+motor updates at 200 Hz while testing PhysX at 200/400/800 Hz. A separate read-only
+loopback server serves bounded, provisional snapshots and a live 3D monitor.
+Wall pacing reports lag without changing simulation dt or skipping updates.
+Full recordings, not live frames, determine mission acceptance. See
+[decision 008](decisions/008-live-physics-flight-tests.md).
+
 Runtime Python has no third-party dependencies for CPU work. C++14 builds through
 CMake; Isaac retains a separate Python environment. Configuration uses strict JSON
 to avoid adding a YAML parser to the CPU trust boundary. Dependency candidates and

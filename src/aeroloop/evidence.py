@@ -82,7 +82,14 @@ def validate_config(c, m):
         require(encoded(c["actuator"]) == encoded(asdict(RotorModel())), "unsupported rotor model")
         require(encoded(c["model"]) == encoded(asdict(Model())), "unsupported rotor body model")
         require(c["dt_s"] == .005 and c["duration_s"] == (mission.DURATION if contact else 35.), "unsupported rotor experiment timing")
-        keys(c["physics_options"], {"gyroscopic_forces"})
+        substepped = "substeps" in c["physics_options"]
+        keys(c["physics_options"], {"gyroscopic_forces"} | ({"physics_dt_s", "substeps", "input_hold", "contact_force"} if substepped else set()))
+        if substepped:
+            options = c["physics_options"]
+            require(wind and contact and type(options["substeps"]) is int and options["substeps"] in (2, 4)
+                    and options["physics_dt_s"] == .005/options["substeps"]
+                    and options["input_hold"] == "world-force-body-moment"
+                    and options["contact_force"] == "interval-mean", "unsupported flight substeps")
         require(c["physics_options"]["gyroscopic_forces"] is True, "gyroscopic forces must be enabled")
         keys(c["simulator_versions"], {"isaacsim", "isaaclab", "torch"})
         for version in c["simulator_versions"].values():

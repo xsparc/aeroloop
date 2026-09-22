@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "1e762cb35fdecd40bf450aaa95ddcd828a80eee0",
+  "scanned_at": "2026-09-22",
+  "coverage": ["Isaac physics and control decimation", "Monotonic live timing and browser monitoring"],
+  "findings": [{
+    "finding": "Holding control cadence fixed while changing physics decimation isolates solver-step sensitivity; separate wall pacing and live observation can expose slow execution without altering simulated dynamics.",
+    "source_event_date": null,
+    "citations": ["https://isaac-sim.github.io/IsaacLab/main/source/tutorials/03_envs/create_direct_rl_env.html", "https://developer.mozilla.org/en-US/docs/Web/API/Performance/now"],
+    "confidence": "high",
+    "relevance": "Measured flight-controller testing and live inspection",
+    "direction_alignment": "The maintainer requested realistic physics tests and real-time monitoring after merging the numerical audit.",
+    "opportunity_or_risk": "A live display must not imply completed validation or hard real-time execution; the unresolved yaw finding limits convergence claims.",
+    "engineering_cost": "One bounded flight study with read-only local monitoring",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-011 adds observed fixed-cadence missions; AL-010 remains open",
+    "verification_needed": "Three frequencies and three seeds, exact shared wind, unchanged mission gates, live GPU browser observation, stale/error/security tests"
+  }],
+  "overall_recommendation": "Measure closed-loop sensitivity and execution timing while retaining the independent yaw-refinement finding.",
+  "evidence_gaps": ["No calibrated sensor or aerodynamic model", "No hard real-time guarantee", "Yaw-refinement root cause remains open"]
+}

@@ -1,5 +1,7 @@
 # AeroLoop
 
+For live physics-based controller testing, see the [flight test monitor](docs/live-flight-tests.md).
+
 A physics-based flight-control and learning laboratory with a C++ controller,
 repeatable simulation experiments and recorded browser replay.
 
