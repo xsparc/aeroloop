@@ -23,6 +23,7 @@ Public deployment and merges are separate decisions.
 | AL-011 | Fixed-cadence PhysX flight-controller study and read-only live 3D monitoring | Verified: 9/9 missions, 6/6 sensitivity comparisons, live GPU 3D and lag reporting |
 | AL-012 | Full-rate acceptance explorer, seed/frequency matrix and guided paired 3D | Verified: nine retained missions revalidated, 216 gates, six pair results and measured browser inspection |
 | AL-013 | Independent yaw, pose sampling and solver-iteration diagnostics | Verified: 30/30 diagnostic cases, matching read channels and reproduced original refinement failure; AL-010 remains open |
+| AL-014 | CUDA arithmetic controls compared with fresh PhysX constant spin | In progress: fixed comparison limits, selected runtime fingerprints and complete retained traces |
 
 ## Next gate
 

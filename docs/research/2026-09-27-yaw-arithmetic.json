@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "04dcc208cf62b587a6029558e7ebf7e28238d361",
+  "scanned_at": "2026-09-27",
+  "coverage": [
+    "Public GPU TGS rotation accumulation",
+    "CUDA floating-point intrinsics",
+    "Installed PhysX package and GPU library identity"
+  ],
+  "findings": [
+    {
+      "finding": "Public TGS rotation accumulation uses fast sine/cosine. A matched float32/float64 arithmetic experiment can test the observed constant-spin signature without modifying PhysX.",
+      "source_event_date": null,
+      "citations": [
+        "https://github.com/NVIDIA-Omniverse/PhysX/blob/main/physx/source/gpusolver/src/CUDA/solverMultiBlockTGS.cu",
+        "https://docs.nvidia.com/cuda/floating-point/index.html"
+      ],
+      "confidence": "medium",
+      "relevance": "Open AL-010 yaw refinement finding",
+      "direction_alignment": "Continue the merged AL-013 numerical investigation",
+      "opportunity_or_risk": "A matching signature supports a mechanism but does not attest the installed kernel or establish a safe vendor patch.",
+      "engineering_cost": "One bounded GPU arithmetic probe and repeated physics matrix",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-014 compares controlled arithmetic with measured PhysX constant spin",
+      "verification_needed": "Predeclared comparison bounds, full traces, installation fingerprints, independent metrics and plots"
+    }
+  ],
+  "overall_recommendation": "Compare fast and library trigonometry before proposing runtime changes.",
+  "evidence_gaps": [
+    "Exact installed kernel instruction path remains unobserved",
+    "Torque substep rates are not exposed",
+    "No physical calibration claim"
+  ]
+}
