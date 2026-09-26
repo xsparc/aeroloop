@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Scope revised 2026-09-23: physics simulation replaces PX4 execution; Isaac physics
+Scope revised 2026-09-27: physics simulation replaces PX4 execution; Isaac physics
 and learning remain in the MVP. Incremental PRs target `main`; after a squash merge,
 verify that every reviewed change reached `main` before starting the next slice.
 Public deployment and merges are separate decisions.
@@ -21,8 +21,8 @@ Public deployment and merges are separate decisions.
 | AL-009 | Turbulent takeoff, waypoint route, contact landing and combined 3D replay | Verified: 5/5 clean-revision PhysX missions with wind through landing, four waypoint holds per run and combined 3D replay |
 | AL-010 | Independent force/contact accuracy and timestep refinement in Isaac | Harness delivered: 36/36 accuracy cases pass; default yaw refinement fails; numerical acceptance remains open |
 | AL-011 | Fixed-cadence PhysX flight-controller study and read-only live 3D monitoring | Verified: 9/9 missions, 6/6 sensitivity comparisons, live GPU 3D and lag reporting |
-
 | AL-012 | Full-rate acceptance explorer, seed/frequency matrix and guided paired 3D | Verified: nine retained missions revalidated, 216 gates, six pair results and measured browser inspection |
+| AL-013 | Independent yaw, pose sampling and solver-iteration diagnostics | Verified: 30/30 diagnostic cases, matching read channels and reproduced original refinement failure; AL-010 remains open |
 
 ## Next gate
 
@@ -65,9 +65,12 @@ After AL-011 was merged, the maintainer prioritized evaluation and demonstration
 on 2026-09-23. AL-012 now exposes the retained results under
 [decision 009](../architecture/decisions/009-evaluation-demonstration.md), with
 [a guided explorer](../flight-evaluation.md) and explicit full-rate gates.
-Continue by isolating AL-010's constant-spin/torque and pose-sampling behavior
-before adding estimator noise or latency. Keep live monitoring available during
-that investigation and preserve the current controlled-flight baseline.
+After the evaluation explorer merge, the 2026-09-27 continuation delivered
+[AL-013 yaw diagnostics](../evidence/isaac-yaw-validation.md). Cached/direct reads
+agree; constant-spin drift and solver-iteration sensitivity remain measurable.
+Next reproduce small-angle integration arithmetic and check the shared runtime
+readout path before changing the solver or adding estimator noise/latency.
+Preserve the existing controlled-flight baseline and decision 007's criteria.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration
