@@ -87,3 +87,10 @@ A compact pinned index binds selected-pair manifests, metrics, events and replay
 The read-only explorer shares one timeline between two optional 3D views and
 retains every trial, missing measurement and failure. Decision 009 records this
 presentation boundary; it does not extend the numerical accuracy claim.
+
+The [yaw diagnostic suite](../yaw-diagnostics.md) separates constant-spin and
+torque responses from flight control, comparing cached and direct world-frame
+read channels at three timesteps and two solver iteration counts. Its strict
+verifier preserves diagnostic outcomes separately from the original refinement
+criterion. It introduces no change to flight scene configuration. See
+[decision 010](decisions/010-yaw-orientation-audit.md).

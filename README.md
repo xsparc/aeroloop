@@ -82,3 +82,6 @@ See the [MVP plan](docs/DESIGN_AND_MVP_PLAN.md), [roadmap](docs/roadmap/implemen
 The [flight evaluation explorer](docs/flight-evaluation.md) adds a complete seed/frequency matrix,
 individual acceptance gates, guided mission chapters and synchronized paired 3D.
 It reuses verified PhysX recordings and preserves the open numerical findings.
+
+The [yaw diagnostic workflow](docs/yaw-diagnostics.md) investigates orientation
+error with constant-spin and torque experiments and independent pose reads.

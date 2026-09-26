@@ -73,8 +73,10 @@ hardcoded `project.identity` mismatch. No generic strict success is claimed.
 Raw traces, host logs and diagnostic PNGs remain ignored; the public JSON contains
 only declared metadata, measurements and hashes.
 
-Next physics work: isolate the yaw discrepancy with constant-spin and torque
-experiments, checking pose sampling and solver integration separately. Then study
-closed-loop mission timestep sensitivity while keeping controller and wind update
-cadences fixed. These isolated tests do not validate full-flight convergence,
-physical aerodynamic/contact calibration, sensors, hardware or learned control.
+Follow-up [yaw diagnostics](isaac-yaw-validation.md) found matching direct/public
+pose channels, constant-spin drift and iteration sensitivity. The original yaw
+refinement failure is reproduced and remains open. The separate
+[closed-loop study](isaac-live-flight-validation.md) measured bounded mission
+sensitivity with fixed control cadence. Next investigate small-angle integration
+and the shared runtime readout path. These isolated tests do not validate
+full-flight convergence, physical calibration, sensors, hardware or learned control.

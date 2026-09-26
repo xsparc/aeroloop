@@ -51,3 +51,7 @@ open findings, including the default solver's yaw-refinement result. Peak impact
 force is not a timestep-independent quantity; use impulse/momentum and resting
 support for contact checks. Full mission convergence and physical-model fidelity
 require separate studies.
+
+The [yaw diagnostics](yaw-diagnostics.md) add matched public/direct pose reads,
+constant-spin cases and solver-iteration comparisons to investigate the open
+refinement finding. They preserve the original criteria and flight settings.

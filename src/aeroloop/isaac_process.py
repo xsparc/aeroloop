@@ -8,7 +8,8 @@ from .contracts import ValidationError, load_json
 
 ROOT = Path(__file__).resolve().parents[2]
 KINDS = {"smoke": "isaac_physics_smoke", "train": "isaac_hover_training",
-         "evaluate": "isaac_hover_evaluation", "flight": "isaac_quadrotor_flight", "physics": "isaac_physics_accuracy"}
+         "evaluate": "isaac_hover_evaluation", "flight": "isaac_quadrotor_flight", "physics": "isaac_physics_accuracy",
+         "yaw": "isaac_yaw_diagnostics"}
 
 
 def _execute(command, timeout):
@@ -36,7 +37,7 @@ def run_worker(python, mode, output, options=(), timeout=3600):
     # An old successful result must never mask a failed new process.
     if output.exists():
         raise ValidationError("Isaac output directory already exists")
-    script = ROOT / "tools" / ("isaac_smoke.py" if mode == "smoke" else "isaac_flight.py" if mode == "flight" else "isaac_physics.py" if mode == "physics" else "isaac_train.py")
+    script = ROOT / "tools" / ("isaac_smoke.py" if mode == "smoke" else "isaac_flight.py" if mode == "flight" else "isaac_physics.py" if mode == "physics" else "isaac_yaw.py" if mode == "yaw" else "isaac_train.py")
     command = [str(Path(python).resolve()), str(script)]
     if mode in ("train", "evaluate"):
         command.append(mode)
@@ -55,6 +56,9 @@ def run_worker(python, mode, output, options=(), timeout=3600):
     if mode == "physics":
         from .physics_audit import read_physics
         result, _ = read_physics(output)
+    if mode == "yaw":
+        from .yaw_audit import read_yaw
+        result, _ = read_yaw(output)
     return result
 
 
