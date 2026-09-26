@@ -94,3 +94,9 @@ read channels at three timesteps and two solver iteration counts. Its strict
 verifier preserves diagnostic outcomes separately from the original refinement
 criterion. It introduces no change to flight scene configuration. See
 [decision 010](decisions/010-yaw-orientation-audit.md).
+
+The [arithmetic study](../yaw-arithmetic.md) compares isolated CUDA recurrences
+with a fresh full-rate yaw matrix. A CPU verifier separates arithmetic controls,
+mechanism evidence and original physics acceptance. Selected runtime fingerprints
+and clean source checks bind the captures; the experiment cannot change the
+flight backend. See [decision 011](decisions/011-yaw-arithmetic-study.md).

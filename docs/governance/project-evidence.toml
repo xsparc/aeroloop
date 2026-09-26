@@ -320,10 +320,10 @@ statement = "Verify the simulated drone force bridge, numerical integration and 
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md", "docs/architecture/decisions/010-yaw-orientation-audit.md"]
-implementation_refs = ["src/aeroloop/physics_audit.py", "src/aeroloop/isaac_physics.py", "tools/physics_report.py", "src/aeroloop/yaw_audit.py", "src/aeroloop/isaac_yaw.py", "tools/yaw_report.py"]
-verification_refs = ["tests/test_physics_audit.py", "tests/test_physics.py", "tests/test_yaw_audit.py"]
-validation_refs = ["docs/evidence/isaac-physics-validation.md", "docs/evidence/isaac-physics-001.json", "docs/evidence/isaac-yaw-validation.md", "docs/evidence/isaac-yaw-001.json"]
+design_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md", "docs/architecture/decisions/010-yaw-orientation-audit.md", "docs/architecture/decisions/011-yaw-arithmetic-study.md"]
+implementation_refs = ["src/aeroloop/physics_audit.py", "src/aeroloop/isaac_physics.py", "tools/physics_report.py", "src/aeroloop/yaw_audit.py", "src/aeroloop/isaac_yaw.py", "tools/yaw_report.py", "src/aeroloop/yaw_arithmetic.py", "src/aeroloop/yaw_arithmetic_gpu.py", "tools/yaw_arithmetic.py"]
+verification_refs = ["tests/test_physics_audit.py", "tests/test_physics.py", "tests/test_yaw_audit.py", "tests/test_yaw_arithmetic.py"]
+validation_refs = ["docs/evidence/isaac-physics-validation.md", "docs/evidence/isaac-physics-001.json", "docs/evidence/isaac-yaw-validation.md", "docs/evidence/isaac-yaw-001.json", "docs/evidence/isaac-yaw-arithmetic-validation.md", "docs/evidence/isaac-yaw-arithmetic-001.json"]
 risk_refs = ["docs/architecture/decisions/007-physics-accuracy-suite.md", "SECURITY.md"]
 
 [[work_items]]
@@ -435,12 +435,12 @@ decision_ref = "docs/architecture/decisions/010-yaw-orientation-audit.md"
 [[work_items]]
 id = "AL-014"
 title = "Yaw arithmetic signature study"
-status = "in-progress"
+status = "verified"
 requirement_ids = ["REQ-PHYSICS-ACCURACY"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-27-post-pr14-continuation"
 acceptance_refs = ["docs/architecture/decisions/011-yaw-arithmetic-study.md"]
-evidence_refs = ["docs/research/2026-09-27-yaw-arithmetic.json"]
+evidence_refs = ["docs/research/2026-09-27-yaw-arithmetic.json", "docs/evidence/isaac-yaw-arithmetic-validation.md", "docs/evidence/isaac-yaw-arithmetic-001.json"]
 
 [[research_decisions]]
 id = "RD-YAW-ARITHMETIC"
@@ -451,3 +451,13 @@ observed_on = "2026-09-27"
 reviewed_on = "2026-09-27"
 review_due = "2026-10-27"
 decision_ref = "docs/architecture/decisions/011-yaw-arithmetic-study.md"
+
+[[research_decisions]]
+id = "RD-OBSERVATION-STUDY"
+finding = "Explicit observation history and delay support a separate follow-up study while keeping ground-truth physics and existing numerical gates intact."
+disposition = "monitoring"
+source_urls = ["https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.utils.html#isaaclab.utils.buffers.DelayBuffer"]
+observed_on = "2026-09-27"
+reviewed_on = "2026-09-27"
+review_due = "2026-10-27"
+decision_ref = "docs/roadmap/implementation-roadmap.md"

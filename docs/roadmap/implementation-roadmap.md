@@ -23,7 +23,7 @@ Public deployment and merges are separate decisions.
 | AL-011 | Fixed-cadence PhysX flight-controller study and read-only live 3D monitoring | Verified: 9/9 missions, 6/6 sensitivity comparisons, live GPU 3D and lag reporting |
 | AL-012 | Full-rate acceptance explorer, seed/frequency matrix and guided paired 3D | Verified: nine retained missions revalidated, 216 gates, six pair results and measured browser inspection |
 | AL-013 | Independent yaw, pose sampling and solver-iteration diagnostics | Verified: 30/30 diagnostic cases, matching read channels and reproduced original refinement failure; AL-010 remains open |
-| AL-014 | CUDA arithmetic controls compared with fresh PhysX constant spin | In progress: fixed comparison limits, selected runtime fingerprints and complete retained traces |
+| AL-014 | CUDA arithmetic controls compared with fresh PhysX constant spin | Verified: 18/18 signature comparisons and arithmetic controls; 30/30 fresh physics cases; original refinement still fails |
 
 ## Next gate
 
@@ -69,9 +69,12 @@ on 2026-09-23. AL-012 now exposes the retained results under
 After the evaluation explorer merge, the 2026-09-27 continuation delivered
 [AL-013 yaw diagnostics](../evidence/isaac-yaw-validation.md). Cached/direct reads
 agree; constant-spin drift and solver-iteration sensitivity remain measurable.
-Next reproduce small-angle integration arithmetic and check the shared runtime
-readout path before changing the solver or adding estimator noise/latency.
-Preserve the existing controlled-flight baseline and decision 007's criteria.
+The [AL-014 arithmetic study](../evidence/isaac-yaw-arithmetic-validation.md) now
+reproduces the constant-spin signature with fast trigonometry in all 18 comparisons.
+Keep AL-010 open and the runtime pinned. Resume the previously deferred sensor
+noise and observation-delay study with independent truth/observation channels and
+explicit robustness gates; this does not require a solver change. Any proposed
+runtime mitigation must pass the original accuracy and full-flight studies first.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration

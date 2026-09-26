@@ -5,7 +5,8 @@
   "coverage": [
     "Public GPU TGS rotation accumulation",
     "CUDA floating-point intrinsics",
-    "Installed PhysX package and GPU library identity"
+    "Installed PhysX package and GPU library identity",
+    "Observation history and explicit delay in Isaac Lab"
   ],
   "findings": [
     {
@@ -23,6 +24,21 @@
       "disposition": "adopt",
       "roadmap_delta": "AL-014 compares controlled arithmetic with measured PhysX constant spin",
       "verification_needed": "Predeclared comparison bounds, full traces, installation fingerprints, independent metrics and plots"
+    },
+    {
+      "finding": "Isaac Lab documents explicit observation history and configurable delay, supporting a separately measured controller-observation study after the numerical characterization.",
+      "source_event_date": null,
+      "citations": [
+        "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.utils.html#isaaclab.utils.buffers.DelayBuffer"
+      ],
+      "confidence": "high",
+      "relevance": "Previously deferred sensor noise and observation latency",
+      "direction_alignment": "Resume realistic flight-controller testing while preserving the known runtime accuracy limitation",
+      "opportunity_or_risk": "Observation perturbations must not modify ground-truth physics or conceal the yaw gate; exact parameters and acceptance belong to a later bounded slice.",
+      "engineering_cost": "Separate follow-up, no observation implementation in AL-014",
+      "disposition": "monitor",
+      "roadmap_delta": "Prioritize the previously deferred observation study after the arithmetic comparison",
+      "verification_needed": "Fresh research on the pinned API, explicit truth/observation contract, seeded perturbations and held-fixed physics gates"
     }
   ],
   "overall_recommendation": "Compare fast and library trigonometry before proposing runtime changes.",

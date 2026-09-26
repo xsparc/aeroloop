@@ -40,3 +40,6 @@ patch. Selected extension manifests and GPU libraries are fingerprinted, without
 host paths. Raw traces, runtime logs and generated figures remain local.
 The existing [paired 3D mission evaluation](flight-evaluation.md) continues to
 show the unchanged controlled-flight baseline.
+
+See the [measured validation](evidence/isaac-yaw-arithmetic-validation.md) for all
+18 comparisons, selected runtime identity and the still-open refinement result.

@@ -85,3 +85,6 @@ It reuses verified PhysX recordings and preserves the open numerical findings.
 
 The [yaw diagnostic workflow](docs/yaw-diagnostics.md) investigates orientation
 error with constant-spin and torque experiments and independent pose reads.
+
+The [CUDA arithmetic study](docs/yaw-arithmetic.md) compares the yaw drift with
+fast and library trigonometry while preserving the open physics accuracy gate.
