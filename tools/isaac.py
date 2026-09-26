@@ -13,7 +13,7 @@ from aeroloop.wind import WIND_SCENARIOS
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", choices=("smoke", "train", "evaluate", "flight", "physics"))
+    parser.add_argument("mode", choices=("smoke", "train", "evaluate", "flight", "physics", "yaw"))
     executable = "Scripts/python.exe" if sys.platform == "win32" else "bin/python"
     parser.add_argument("--python", type=Path, default=ROOT / ".local/IsaacLab/.venv" / executable)
     parser.add_argument("--output", type=Path, required=True)
@@ -26,16 +26,23 @@ def main():
     parser.add_argument("--seeds", type=int, nargs="+", default=list(range(5)))
     parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
     parser.add_argument("--force-mode", choices=("per-iteration", "per-step"), default="per-iteration")
+    parser.add_argument("--solver-iterations", type=int, choices=(1, 4), default=4)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     args = parser.parse_args()
     if args.output.exists():
         parser.error("Output already exists; choose a new session directory.")
+    if args.mode != "yaw" and args.solver_iterations != 4:
+        parser.error("Solver iteration diagnostics require yaw mode.")
+    if args.mode == "yaw" and args.force_mode != "per-iteration":
+        parser.error("Yaw diagnostics retain default per-iteration forces.")
     if (args.monitor or args.realtime) and (args.mode != "flight" or args.scenario != "ground-mission-wind"):
         parser.error("Monitoring and pacing require flight --scenario ground-mission-wind.")
     options = []
     if args.mode == "physics":
         options = ["--physics-dt", str(args.physics_dt), "--force-mode", args.force_mode]
+    if args.mode == "yaw":
+        options = ["--physics-dt", str(args.physics_dt), "--solver-iterations", str(args.solver_iterations)]
     if args.mode == "train":
         options = ["--num-envs", str(args.num_envs), "--iterations", str(args.iterations)]
     elif args.mode == "evaluate":
@@ -80,6 +87,9 @@ def main():
         return 2
     if args.mode == "physics" and (result["dt_s"] != args.physics_dt or result["passed"] != result["trials"]
             or result["configuration"]["solver"].get("external_forces_every_iteration", True) != (args.force_mode == "per-iteration")):
+        return 2
+    if args.mode == "yaw" and (result["dt_s"] != args.physics_dt or result["passed"] != result["trials"]
+            or result["configuration"]["position_iterations"] != args.solver_iterations):
         return 2
     if args.mode == "flight" and result["passed"] != result["trials"]:
         return 2

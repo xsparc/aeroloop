@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "2149c644c05e81792be1e302ea6fed00571bf307",
+  "scanned_at": "2026-09-27",
+  "coverage": ["PhysX angular state and solver iterations", "Pinned Isaac Lab pose caching", "Retained signed yaw errors"],
+  "findings": [{
+    "finding": "Independent angular-velocity initialization and solver iteration settings allow constant-spin and torque experiments to separate readout disagreement from integrated orientation error.",
+    "source_event_date": null,
+    "citations": ["https://github.com/NVIDIA-Omniverse/PhysX/blob/main/physx/include/PxRigidDynamic.h", "https://github.com/NVIDIA-Omniverse/PhysX/blob/main/physx/source/lowleveldynamics/src/DyBodyCoreIntegrator.h"],
+    "confidence": "medium",
+    "relevance": "Open yaw-refinement finding in the installed GPU runtime",
+    "direction_alignment": "Continue simulation development after the evaluation explorer merge by investigating the remaining numerical discrepancy.",
+    "opportunity_or_risk": "Current public integration source does not establish which GPU kernel the pinned binary executes; matched read channels narrow the investigation but do not prove a vendor root cause.",
+    "engineering_cost": "One bounded 30-case diagnostic matrix and strict offline verifier",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-013 isolates yaw sampling and iteration sensitivity; original AL-010 criteria remain unchanged",
+    "verification_needed": "Clean-source GPU traces at three timesteps and two iteration counts, dual read channels, analytic references, corruption tests and measured plots"
+  }],
+  "overall_recommendation": "Measure signed yaw and read-channel consistency before considering a solver or controller change.",
+  "evidence_gaps": ["Installed GPU kernel behavior has not been independently localized", "Yaw-refinement root cause remains open", "No aircraft calibration or estimator model"]
+}
