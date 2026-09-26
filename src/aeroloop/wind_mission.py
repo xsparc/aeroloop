@@ -89,22 +89,56 @@ def metrics(samples):
     return result
 
 
-def outcome(measured):
+def evaluation(measured):
+    """Decision 006 gates, evaluated on full-rate metrics (never display samples)."""
     m = measured["mission"]
-    if (measured["samples"] != 10001 or m["liftoff_time_s"] is None or not 2. <= m["liftoff_time_s"] < 7.
-            or any(t is None for t in m["waypoint_reached_s"]) or measured["peak_error_m"] > 1.
-            or measured["position_rmse_m"] is None or measured["position_rmse_m"] > .5
-            or m["peak_tilt_deg"] > 25. or m["max_penetration_m"] > .003 or m["unexpected_contact_samples"]
-            or m["touchdown_time_s"] is None or m["touchdown_time_s"] >= 48.
-            or m["touchdown_descent_speed_m_s"] > .35 or m["touchdown_horizontal_speed_m_s"] > .5
-            or m["landed_time_s"] is None or m["landed_time_s"] >= 48.):
-        return "wind_mission_threshold"
+    rows = []
+
+    def gate(identity, label, value, unit, operator, limit, group="mission"):
+        present = isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+        passed = present and {"eq": lambda: value == limit, "le": lambda: value <= limit,
+                              "lt": lambda: value < limit, "ge": lambda: value >= limit,
+                              "abs_le": lambda: abs(value) <= limit}[operator]()
+        rows.append({"id": identity, "label": label, "group": group, "value": value if present else None,
+                     "unit": unit, "operator": operator, "limit": limit,
+                     "status": "passed" if passed else "failed" if present else "not_measured"})
+
+    gate("samples", "Control samples", measured["samples"], "count", "eq", 10001)
+    gate("liftoff_start", "Liftoff earliest", m["liftoff_time_s"], "s", "ge", 2.)
+    gate("liftoff_end", "Liftoff deadline", m["liftoff_time_s"], "s", "lt", 7.)
+    gate("waypoints", "Waypoint dwells reached", sum(t is not None for t in m["waypoint_reached_s"]), "count", "eq", 4)
+    for identity, label, value, unit, operator, limit in (
+        ("peak_error", "Peak position error", measured["peak_error_m"], "m", "le", 1.),
+        ("rmse", "Position RMSE", measured["position_rmse_m"], "m", "le", .5),
+        ("tilt", "Peak tilt", m["peak_tilt_deg"], "deg", "le", 25.),
+        ("penetration", "Peak penetration", m["max_penetration_m"], "m", "le", .003),
+        ("contact", "Unexpected contact samples", m["unexpected_contact_samples"], "count", "eq", 0),
+        ("touchdown", "Touchdown deadline", m["touchdown_time_s"], "s", "lt", 48.),
+        ("descent", "Touchdown descent speed", m["touchdown_descent_speed_m_s"], "m/s", "le", .35),
+        ("horizontal", "Touchdown horizontal speed", m["touchdown_horizontal_speed_m_s"], "m/s", "le", .5),
+        ("landed", "Landed deadline", m["landed_time_s"], "s", "lt", 48.),
+    ):
+        gate(identity, label, value, unit, operator, limit)
     for label, count in (("initial_support", 200), ("final_support", 401)):
-        support = m[label]
-        if (support is None or support["samples"] != count
-                or abs(support["mean_vertical_balance_error_n"]) > .05*Model().gravity
-                or support["peak_rotor_thrust_n"] > .01
-                or (label == "final_support" and (support["peak_height_error_m"] > .003 or support["peak_speed_m_s"] > .05
-                    or support["peak_tilt_deg"] > 3. or support["peak_xy_error_m"] > .35))):
-            return "wind_mission_support_threshold"
+        support = m[label] or {}
+        for field, description, unit, operator, limit in (
+            ("samples", "samples", "count", "eq", count),
+            ("mean_vertical_balance_error_n", "mean vertical balance error", "N", "abs_le", .05*Model().gravity),
+            ("peak_rotor_thrust_n", "peak rotor thrust", "N", "le", .01),
+        ) + ((
+            ("peak_height_error_m", "peak height error", "m", "le", .003),
+            ("peak_speed_m_s", "peak speed", "m/s", "le", .05),
+            ("peak_tilt_deg", "peak tilt", "deg", "le", 3.),
+            ("peak_xy_error_m", "peak horizontal error", "m", "le", .35),
+        ) if label == "final_support" else ()):
+            gate(f"{label}_{field}", f"{label.replace('_', ' ').capitalize()}: {description}",
+                 support.get(field), unit, operator, limit, "support")
+    return rows
+
+
+def outcome(measured):
+    rows = evaluation(measured)
+    for group, reason in (("mission", "wind_mission_threshold"), ("support", "wind_mission_support_threshold")):
+        if any(row["status"] != "passed" for row in rows if row["group"] == group):
+            return reason
     return None

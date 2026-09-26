@@ -377,3 +377,35 @@ observed_on = "2026-09-22"
 reviewed_on = "2026-09-22"
 review_due = "2026-10-22"
 decision_ref = "docs/architecture/decisions/008-live-physics-flight-tests.md"
+
+[[requirements]]
+id = "REQ-FLIGHT-EVALUATION"
+statement = "Inspect full-rate mission gates and seed/frequency sensitivity alongside synchronized recorded 3D demonstrations."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md"]
+implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts"]
+verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs"]
+validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json"]
+risk_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-012"
+title = "Flight evaluation explorer and guided paired demonstration"
+status = "verified"
+requirement_ids = ["REQ-FLIGHT-EVALUATION", "REQ-WIND-MISSION", "REQ-LIVE-FLIGHT-TESTS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-23-evaluation-demonstration"
+acceptance_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md"]
+evidence_refs = ["docs/research/2026-09-23-evaluation.json", "docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json"]
+
+[[research_decisions]]
+id = "RD-FLIGHT-EVALUATION"
+finding = "Compact verified display data and explicit motion controls make retained full-rate evaluation inspectable."
+disposition = "adopted"
+source_urls = ["https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest", "https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html"]
+observed_on = "2026-09-23"
+reviewed_on = "2026-09-23"
+review_due = "2026-10-23"
+decision_ref = "docs/architecture/decisions/009-evaluation-demonstration.md"

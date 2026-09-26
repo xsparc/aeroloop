@@ -87,3 +87,7 @@ The default `--scenario all` continues to run the original three airborne cases.
 The [turbulent mission](wind-mission.md) adds version 5 route tracking with wind
 through descent and contact landing. Its controller and support-force gates have
 separate validation; it preserves all earlier recording contracts.
+
+The [flight evaluation explorer](flight-evaluation.md) adds a complete seed/frequency matrix,
+individual acceptance gates, guided mission chapters and synchronized paired 3D.
+It reuses verified PhysX recordings and preserves the open numerical findings.

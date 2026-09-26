@@ -78,3 +78,7 @@ and served-site validation, with the remaining hosted-check limitation.
 See the [MVP plan](docs/DESIGN_AND_MVP_PLAN.md), [roadmap](docs/roadmap/implementation-roadmap.md),
 [architecture](docs/architecture/overview.md), [compatibility](docs/compatibility.md) and
 [security policy](SECURITY.md). Original code is licensed under Apache-2.0.
+
+The [flight evaluation explorer](docs/flight-evaluation.md) adds a complete seed/frequency matrix,
+individual acceptance gates, guided mission chapters and synchronized paired 3D.
+It reuses verified PhysX recordings and preserves the open numerical findings.
