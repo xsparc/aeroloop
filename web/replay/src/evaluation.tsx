@@ -1,5 +1,6 @@
+import {PROFILES} from "./observation-contract.js";
 import {Component, lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode} from "react";
-import {sampleAt, tiltDegrees, type Recording, type Sample} from "./contracts.js";
+import {sampleAt, recordedSampleAt, tiltDegrees, type Recording, type Sample} from "./contracts.js";
 import {evidenceBase} from "./load.js";
 import {loadEvaluation, loadEvaluationRecording, type Case, type Evaluation, type Gate} from "./evaluation-contract.js";
 import "./evaluation.css";
@@ -7,6 +8,8 @@ import "./evaluation.css";
 const Scene=lazy(()=>import("./scene.js"));
 const fmt=(n:number|null|undefined,d=3)=>n==null?"Not measured":n.toFixed(d);
 const frequency=(c:Case)=>Math.round(1/c.physics_dt_s);
+const caseLabel=(c:Case)=>c.profile??`${frequency(c)} Hz`;
+const dimension=(c:Case)=>c.profile??String(c.physics_dt_s);
 class RenderBoundary extends Component<{children:ReactNode; onFailure:()=>void},{failed:boolean}> {
   state={failed:false};
   static getDerivedStateFromError(){return {failed:true};}
@@ -24,11 +27,11 @@ function PathView({samples,current}:{samples:Sample[];current:Sample}) {
     <text x="276" y="228" fill="#a9c1cf">E</text><text x="50" y="25" fill="#a9c1cf">N</text>
   </svg>;
 }
-function ErrorPlot({recordings,time}:{recordings:Recording[];time:number}) {
+function ErrorPlot({recordings,time,observed}:{recordings:Recording[];time:number;observed:boolean}) {
   const end=Math.max(...recordings.map(r=>r.samples.at(-1)!.time_s));
   const errors=recordings.map(r=>r.samples.map(s=>({t:s.time_s,e:Math.hypot(...s.position_m.map((v,i)=>v-s.target_m[i]))})));
   const top=Math.max(.5,...errors.flatMap(a=>a.map(s=>s.e)));
-  return <figure className="ev-plot"><figcaption>Position error · display samples (m) <span>200 Hz / candidate</span></figcaption>
+  return <figure className="ev-plot"><figcaption>Position error · display samples (m) <span>{observed?"Ideal / candidate truth":"200 Hz / candidate"}</span></figcaption>
     <svg viewBox="0 0 900 130" role="img" aria-label="Paired position error over recorded simulation time">
       <path d="M42 8 V102 H880" stroke="#486477" fill="none"/>
       {[0,.5,1].map(f=><g key={f}><text x="0" y={103-f*88} fill="#a9c1cf" fontSize="12">{(f*top).toFixed(2)}</text>
@@ -81,7 +84,9 @@ function Pair({base,data,left,right}:{base:URL;data:Evaluation;left:Case;right:C
   if(error)return <p role="alert">The selected recordings could not be verified. Playback is unavailable.</p>;
   if(!recordings)return <p role="status">Verifying selected recordings…</p>;
   const current=recordings.map(r=>sampleAt(r.samples,time));
-  const pair=data.study.comparisons.find(c=>c.seed===right.seed&&c.physics_dt_s===right.physics_dt_s)!;
+  const captures=recordings.map(r=>recordedSampleAt(r.samples,time));
+  const observed=right.profile!==undefined;
+  const pair=data.study.comparisons.find(c=>c.seed===right.seed&&(observed?c.profile===right.profile:c.physics_dt_s===right.physics_dt_s))!;
   const seek=(t:number)=>{setPlaying(false);setTime(Math.max(0,Math.min(end,t)));};
   const chapters:[string,number|null|undefined][]=[ ["Ground support",0],["Takeoff",2],["North waypoint",15],
     ["East waypoint",23],["Home waypoint",31],["Landing gust",40],
@@ -90,7 +95,7 @@ function Pair({base,data,left,right}:{base:URL;data:Evaluation;left:Case;right:C
   return <>
     <div className="ev-pair" ref={stage}>
       {recordings.map((r,i)=><section key={r.entry.run_id} aria-label={i?"Candidate recording":"Baseline recording"}>
-        <div className="ev-panel-title"><h3>{i?frequency(right):200} Hz <small>{i?"candidate":"baseline"}</small></h3>
+        <div className="ev-panel-title"><h3>{caseLabel(i?right:left)} <small>{i?"candidate":"baseline"}</small></h3>
           <span className={`ev-status ${r.entry.status}`}>{r.entry.status}</span></div>
         <div className="ev-stage">
           {three&&!lost?<RenderBoundary onFailure={onFailure}><Suspense fallback={<p>Loading 3D…</p>}>
@@ -102,6 +107,12 @@ function Pair({base,data,left,right}:{base:URL;data:Evaluation;left:Case;right:C
           <span>Tilt <strong>{fmt(tiltDegrees(current[i].quaternion_wxyz),1)}°</strong></span>
           <span>Wind <strong>{fmt(Math.hypot(...current[i].wind_velocity_m_s!),1)} m/s</strong></span>
           <span>Support <strong>{fmt(current[i].contact_normal_force_n![2],2)} N</strong></span></div>
+        {observed&&<section aria-label="Delivered feedback" className="ev-feedback"><h4>Delivered position / velocity feedback</h4>
+          <p>Snapshot <strong>{fmt(captures[i].time_s)} s</strong> · capture <strong>{fmt(captures[i].observation!.source_time_s)} s</strong></p>
+          <div className="ev-readouts"><span>Age at delivery <strong>{fmt(captures[i].observation!.age_s*1000,0)} ms</strong></span>
+            <span>Position discrepancy <strong>{fmt(Math.hypot(...captures[i].position_m.map((v,j)=>v-captures[i].observation!.position_m[j])),4)} m</strong></span>
+            <span>Velocity discrepancy <strong>{fmt(Math.hypot(...captures[i].velocity_m_s!.map((v,j)=>v-captures[i].observation!.velocity_m_s[j])),4)} m/s</strong></span></div>
+        </section>}
       </section>)}
     </div>
     <div className="ev-transport">
@@ -113,10 +124,11 @@ function Pair({base,data,left,right}:{base:URL;data:Evaluation;left:Case;right:C
     </div>
     <p className="ev-note">{reduced?"Reduced motion: use the timeline or chapter buttons. ":""}{lost?"3D unavailable; recorded trajectory remains available. ":""}
       Gold: target / candidate curve. Teal: recorded route / baseline curve. 3D arrows show wind, force and support; drag to orbit, scroll to zoom.</p>
+    {observed&&<p className="ev-note">Both aircraft and the error plot show physics truth. Feedback readouts hold the preceding recorded display snapshot; discrepancies use truth at that same instant. Display interpolation does not generate new feedback samples.</p>}
     <nav className="ev-chapters" aria-label="Mission chapters">{chapters.map(([label,t])=><button key={label} disabled={t==null||t>end}
       onClick={()=>t!=null&&seek(t)}>{label}<small>{t==null?"not measured":`${t.toFixed(3)} s`}</small></button>)}</nav>
     {end<50&&<p role="alert">Incomplete recording: synchronized playback ends at {end.toFixed(3)} s. Full mission comparison is unavailable.</p>}
-    <ErrorPlot recordings={recordings} time={time}/>
+    <ErrorPlot recordings={recordings} time={time} observed={observed}/>
     <section><h2>Full-rate pair evaluation <span className={`ev-status ${pair.passed?"passed":"failed"}`}>{pair.passed?"passed":"failed"}</span></h2>
       {pair.reason?<p>Incomplete pair; no sensitivity metrics are claimed.</p>:<div className="ev-table-scroll"><table><thead><tr><th>Comparison metric</th><th>Measured</th><th>Acceptance limit</th></tr></thead>
         <tbody>{[
@@ -128,13 +140,13 @@ function Pair({base,data,left,right}:{base:URL;data:Evaluation;left:Case;right:C
         ].map(([label,value,limit])=><tr key={label}><th>{label}</th><td>{value}</td><td>{limit}</td></tr>)}</tbody></table></div>}
     </section>
     <section><h2>Mission acceptance gates</h2><p>Measured at 200 Hz control cadence, independently of the display. Every gate must pass.</p>
-      <div className="ev-table-scroll"><table><thead><tr><th>Gate</th><th>Limit</th><th>200 Hz · value / result</th><th>{frequency(right)} Hz · value / result</th></tr></thead>
+      <div className="ev-table-scroll"><table><thead><tr><th>Gate</th><th>Limit</th><th>{caseLabel(left)} · value / result</th><th>{caseLabel(right)} · value / result</th></tr></thead>
         <tbody>{left.gates.map(g=><tr key={g.id}><th>{g.label}</th><td>{operator[g.operator]} {g.limit} {g.unit}</td>
           {[g,right.gates.find(r=>r.id===g.id)!].map((v,i)=><td key={i}>{fmt(v.value,v.unit==="count"?0:6)} {v.value==null?"":v.unit}
             <span className={`ev-status ${v.status}`}>{v.status.replace("_"," ")}</span></td>)}</tr>)}</tbody></table></div>
-      {[left,right].filter(c=>c.failure_reason).map(c=><p key={c.run_id} className="ev-warning">{frequency(c)} Hz failure: {c.failure_reason}</p>)}
+      {[left,right].filter(c=>c.failure_reason).map(c=><p key={c.run_id} className="ev-warning">{caseLabel(c)} failure: {c.failure_reason}</p>)}
     </section>
-    <details><summary>Selected recording provenance</summary>{[left,right].map(c=><div key={c.run_id}><h3>{frequency(c)} Hz · seed {c.seed}</h3>
+    <details><summary>Selected recording provenance</summary>{[left,right].map(c=><div key={c.run_id}><h3>{caseLabel(c)} · seed {c.seed}</h3>
       <p>Run <code>{c.run_id}</code></p><p>Full samples SHA-256 <code>{c.samples_sha256}</code></p><p>Configuration SHA-256 <code>{c.config_sha256}</code></p>
       <p>{c.metrics.samples.toLocaleString()} control samples; {fmt(c.timing.real_time_factor,2)}× measured wall speed; {fmt(c.timing.max_lag_s,2)} s maximum lag.</p>
     </div>)}</details>
@@ -142,31 +154,35 @@ function Pair({base,data,left,right}:{base:URL;data:Evaluation;left:Case;right:C
 }
 
 function Explorer({base,data}:{base:URL;data:Evaluation}) {
-  const [seed,setSeed]=useState(0),[dt,setDt]=useState(.0025);
-  const left=data.cases.find(c=>c.seed===seed&&c.physics_dt_s===.005)!;
-  const right=data.cases.find(c=>c.seed===seed&&c.physics_dt_s===dt)!;
+  const observed=data.study.kind==="isaac_observation_robustness_study";
+  const baseline=observed?"ideal":"0.005";
+  const dimensions=observed?[...PROFILES]:["0.005","0.0025","0.00125"];
+  const [seed,setSeed]=useState(0),[candidate,setCandidate]=useState(observed?"noise-delay":"0.0025");
+  const left=data.cases.find(c=>c.seed===seed&&dimension(c)===baseline)!;
+  const right=data.cases.find(c=>c.seed===seed&&dimension(c)===candidate)!;
   const download=()=>{
     const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)+"\n"],{type:"application/json"}));
-    const a=document.createElement("a");a.href=url;a.download="flight-evaluation.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),0);
+    const a=document.createElement("a");a.href=url;a.download=observed?"observation-evaluation.json":"flight-evaluation.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),0);
   };
   return <>
-    <div className="ev-summary"><div><span>Mission acceptance</span><strong>{data.study.passed} / 9 passed</strong></div>
-      <div><span>Timestep pairs</span><strong>{data.study.comparisons.filter(c=>c.passed).length} / 6 passed</strong></div>
+    <div className="ev-summary"><div><span>Mission acceptance</span><strong>{data.study.passed} / {data.study.trials} passed</strong></div>
+      <div><span>{observed?"Observation pairs":"Timestep pairs"}</span><strong>{data.study.comparisons.filter(c=>c.passed).length} / {data.study.comparisons.length} passed</strong></div>
       <div><span>Control samples</span><strong>{data.cases.reduce((n,c)=>n+c.metrics.samples,0).toLocaleString()}</strong></div>
       <div><span>Study result</span><strong className={data.study.accepted?"passed":"failed"}>{data.study.accepted?"Accepted":"Not accepted"}</strong></div></div>
-    <p className="ev-warning">Independent yaw refinement remains unresolved. Mission acceptance and bounded timestep sensitivity do not establish numerical convergence.</p>
-    <section aria-label="Study matrix"><h2>Seed × physics frequency</h2><p>Select a cell to inspect that seed. The 200 Hz column is the comparison baseline.</p>
-      <div className="ev-table-scroll"><table className="ev-matrix"><thead><tr><th>Wind seed</th>{[200,400,800].map(hz=><th key={hz}>{hz} Hz</th>)}</tr></thead><tbody>
-        {[0,1,2].map(s=><tr key={s}><th>{s}</th>{[.005,.0025,.00125].map(d=>{const c=data.cases.find(c=>c.seed===s&&c.physics_dt_s===d)!;
-          return <td key={d}><button aria-label={`Seed ${s}, ${frequency(c)} Hz`} aria-pressed={s===seed&&(d===dt||d===.005)} onClick={()=>{setSeed(s);if(d!==.005)setDt(d);}}>
+    <p className="ev-warning">{observed?"Synthetic position/velocity observations only. Attitude, rates and mission/contact supervision remain ideal. Independent yaw refinement remains unresolved.":"Independent yaw refinement remains unresolved. Mission acceptance and bounded timestep sensitivity do not establish numerical convergence."}</p>
+    {observed&&<p className="ev-note">Fixed profiles: nominal position noise σ 0.01 m and velocity noise σ 0.02 m/s, clipped at 3σ; delay 40 ms after capture. Physics and control remain at 200 Hz.</p>}
+    <section aria-label="Study matrix"><h2>Seed × {observed?"observation profile":"physics frequency"}</h2><p>Select a cell to inspect that seed. {observed?"Ideal feedback":"The 200 Hz column"} is the comparison baseline.</p>
+      <div className="ev-table-scroll"><table className="ev-matrix"><thead><tr><th>Wind seed</th>{dimensions.map(d=><th key={d}>{observed?d:`${Math.round(1/Number(d))} Hz`}</th>)}</tr></thead><tbody>
+        {[0,1,2].map(s=><tr key={s}><th>{s}</th>{dimensions.map(d=>{const c=data.cases.find(c=>c.seed===s&&dimension(c)===d)!;
+          return <td key={d}><button aria-label={`Seed ${s}, ${caseLabel(c)}`} aria-pressed={s===seed&&(d===candidate||d===baseline)} onClick={()=>{setSeed(s);if(d!==baseline)setCandidate(d);}}>
             <span className={`ev-status ${c.status}`}>{c.status}</span><span>{fmt(c.metrics.position_rmse_m)} m RMSE</span><small>{fmt(c.timing.real_time_factor,2)}× wall speed</small>
           </button></td>;})}</tr>)}
       </tbody></table></div>
     </section>
     <section className="ev-demo"><div className="ev-section-title"><h2>Guided flight comparison</h2><div className="ev-selectors">
       <label>Wind seed <select value={seed} onChange={e=>setSeed(+e.target.value)}>{[0,1,2].map(s=><option key={s}>{s}</option>)}</select></label>
-      <label>Candidate physics <select value={dt} onChange={e=>setDt(+e.target.value)}><option value="0.0025">400 Hz</option><option value="0.00125">800 Hz</option></select></label>
-    </div></div><Pair key={`${seed}/${dt}`} base={base} data={data} left={left} right={right}/></section>
+      <label>{observed?"Candidate observations":"Candidate physics"} <select value={candidate} onChange={e=>setCandidate(e.target.value)}>{dimensions.slice(1).map(d=><option key={d} value={d}>{observed?d:`${Math.round(1/Number(d))} Hz`}</option>)}</select></label>
+    </div></div><Pair key={`${seed}/${candidate}`} base={base} data={data} left={left} right={right}/></section>
     <section><h2>Evidence and limitations</h2><p>{data.display}. Recorded playback; the browser does not run the flight controller or simulator.</p>
       <p>Measured source <code>{data.study.source_commit}</code>. Re-evaluation preserves this historical source identity.</p>
       <ul>{data.study.limitations.map(v=><li key={v}>{v}</li>)}</ul>

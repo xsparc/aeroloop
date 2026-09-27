@@ -263,7 +263,6 @@ def read_run(directory):
 def replay_document(run):
     """Event-preserving display samples, distinct from full-rate evaluation."""
     m = run["manifest.json"]
-    require(m["schema_version"] != 6, "observation recordings use the live monitor; replay export is not yet supported")
     run_id = m["run_id"]
     # Preserve both sides of discontinuities as well as event instants and endpoints.
     samples, events = run["samples.json"], run["events.json"]
@@ -273,6 +272,8 @@ def replay_document(run):
         i = round(event["time_s"] / run["config.json"]["dt_s"])
         indices.update(j for j in (i-1, i, i+1) if 0 <= j < len(samples))
     replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] >= 2 else ()) + (("wind_velocity_m_s", "external_force_n", "external_moment_nm") if m["schema_version"] in (3, 5, 6) else ()) + (("mission_phase", "contact_normal_force_n", "support_clearance_m") if m["schema_version"] in (4, 5, 6) else ())
+    if m["schema_version"] == 6:
+        replay_fields += ("velocity_m_s", "observation")
     replay = {"schema_version": m["schema_version"], "kind": "recorded_simulation", "run_id": run_id,
               "samples": [{k: sample[k] for k in replay_fields}
                           for i, sample in enumerate(samples) if i in indices]}
@@ -283,6 +284,7 @@ def export_bundle(run_directories, output):
     require(1 <= len(run_directories) <= 30, "export requires 1 to 30 runs")
     require(sum((Path(directory) / name).stat().st_size for directory in run_directories for name in FILES) <= 128*1024*1024, "input batch exceeds size budget")
     data = [read_run(path) for path in run_directories]
+    require(all(run["manifest.json"]["schema_version"] != 6 for run in data), "observation recordings require the observation evaluation exporter")
     ids = [run["manifest.json"]["run_id"] for run in data]
     require(len(ids) == len(set(ids)), "duplicate run identifier")
     output = Path(output)

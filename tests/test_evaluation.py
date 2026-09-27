@@ -102,3 +102,43 @@ class EvaluationTests(unittest.TestCase):
             with self.assertRaises(ValidationError):
                 export_evaluation([], Path(directory)/"invalid")
             self.assertFalse((Path(directory)/"invalid").exists())
+
+
+class ObservationEvaluationTests(unittest.TestCase):
+    def test_observation_export_preserves_snapshots_events_and_full_rate_outcomes(self):
+        from test_observation import fixture
+        from aeroloop.evidence import read_run, export_bundle
+        from aeroloop.simulation import record
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            run=read_run(record(fixture(),root))
+            row={"profile":"noise-delay","seed":73,"status":"failed","failure_reason":"wind_mission_threshold",
+                 "metrics":run["metrics.json"],"sample_count":len(run["samples.json"])}
+            summary={"results":[row]}
+            with patch("aeroloop.observation_study.read_study",return_value=({("noise-delay",73):run},{})), \
+                 patch("aeroloop.observation_study.summarize",return_value=summary):
+                target=root/"compact"
+                document=export_evaluation([],target,observations=True)
+                self.assertEqual(document["schema_version"],2)
+                self.assertEqual(document["study"],summary)
+                self.assertEqual(document["cases"][0]["status"],"failed")
+                replay=json.loads(next(target.glob("*/replay.json")).read_text())
+                originals={s["time_s"]:s for s in run["samples.json"]}
+                for sample in replay["samples"]:
+                    self.assertEqual(sample["observation"],originals[sample["time_s"]]["observation"])
+                    self.assertEqual(sample["velocity_m_s"],originals[sample["time_s"]]["velocity_m_s"])
+                self.assertIn(1.995,[s["time_s"] for s in replay["samples"]])
+                self.assertIn(2.005,[s["time_s"] for s in replay["samples"]])
+                self.assertEqual(replay["samples"][-1]["time_s"],2.045)
+                for name,digest in document["checksums"].items():
+                    self.assertEqual(sha256((target/name).read_bytes()),digest)
+                    self.assertNotIn(Path(name).name,("samples.json","config.json"))
+                with self.assertRaises(ValidationError):export_evaluation([],target,observations=True)
+                with self.assertRaises(ValidationError):export_bundle([root/run["manifest.json"]["run_id"]],root/"legacy")
+                self.assertFalse((root/"legacy").exists())
+
+    def test_invalid_observation_matrix_creates_no_bundle(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target=Path(directory)/"bundle"
+            with self.assertRaises(ValidationError):export_evaluation([],target,observations=True)
+            self.assertFalse(target.exists())

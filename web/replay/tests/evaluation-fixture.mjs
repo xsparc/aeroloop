@@ -27,34 +27,41 @@ function gates(m) {
   return rows.map(([id,label,value,unit,operator,limit,group='mission'])=>({id,label,value,unit,operator,limit,group,
     status:value===null?'not_measured':({eq:value===limit,ge:value>=limit,lt:value<limit,le:value<=limit,abs_le:Math.abs(value)<=limit}[operator]?'passed':'failed')}));
 }
-export function fixture({failed=false,incomplete=false}={}) {
-  const study=JSON.parse(readFileSync(new URL('../../../docs/evidence/isaac-flight-study-001.json',import.meta.url),'utf8'));
+export function fixture({failed=false,incomplete=false,observed=false}={}) {
+  const study=JSON.parse(readFileSync(new URL(observed?'../../../docs/evidence/isaac-observation-001.json':'../../../docs/evidence/isaac-flight-study-001.json',import.meta.url),'utf8'));
   study.source_commit='a'.repeat(40);study.source_tree_sha256='b'.repeat(64);
-  const data={schema_version:1,kind:'flight_evaluation',study,cases:[],checksums:{},display:'Synthetic test display; not flight measurements'};
+  const data={schema_version:observed?2:1,kind:'flight_evaluation',study,cases:[],checksums:{},display:'Synthetic test display; not flight measurements'};
   if(failed||incomplete){
-    const r=study.results.find(r=>r.seed===0&&r.physics_dt_s===.0025);
+    const r=study.results.find(r=>r.seed===0&&(observed?r.profile==='noise-delay':r.physics_dt_s===.0025));
     r.status='failed';r.failure_reason='wind_mission_threshold';r.metrics.position_rmse_m=.6;
     if(incomplete){
-      r.metrics.samples=2;r.timing.simulation_s=.005;r.timing.real_time_factor=.005/r.timing.elapsed_s;
+      r.metrics.samples=2;if(observed){r.sample_count=2;r.observations.max_age_s=.005;}r.timing.simulation_s=.005;r.timing.real_time_factor=.005/r.timing.elapsed_s;
       for(const f of ['liftoff_time_s','touchdown_time_s','landed_time_s','touchdown_descent_speed_m_s','touchdown_horizontal_speed_m_s'])r.metrics.mission[f]=null;
       r.metrics.mission.waypoint_reached_s=[null,null,null,null];r.metrics.mission.initial_support=null;r.metrics.mission.final_support=null;
-      const c=study.comparisons.find(c=>c.seed===0&&c.physics_dt_s===.0025);
-      Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,{seed:0,physics_dt_s:.0025,reference_dt_s:.005,passed:false,reason:'incomplete_pair'});
+      const c=study.comparisons.find(c=>c.seed===0&&(observed?c.profile==='noise-delay':c.physics_dt_s===.0025));
+      Object.keys(c).forEach(k=>delete c[k]);Object.assign(c,{seed:0,...(observed?{profile:'noise-delay',reference_profile:'ideal'}:{physics_dt_s:.0025,reference_dt_s:.005}),passed:false,reason:'incomplete_pair'});
     }else{
-      const c=study.comparisons.find(c=>c.seed===0&&c.physics_dt_s===.0025);
-      c.position_rmse_change_m=Math.abs(r.metrics.position_rmse_m-study.results.find(r=>r.seed===0&&r.physics_dt_s===.005).metrics.position_rmse_m);
+      const c=study.comparisons.find(c=>c.seed===0&&(observed?c.profile==='noise-delay':c.physics_dt_s===.0025));
+      c.position_rmse_change_m=Math.abs(r.metrics.position_rmse_m-study.results.find(r=>r.seed===0&&(observed?r.profile==='ideal':r.physics_dt_s===.005)).metrics.position_rmse_m);
       c.passed=false;
     }
-    study.passed=8;study.accepted=false;
+    study.passed=observed?11:8;study.accepted=false;
   }
   const documents={};
   for(const [i,row] of study.results.entries()) {
-    const c={...row,run_id:`isaac-ground-mission-wind-${row.seed}-${i.toString(16).padStart(12,'0')}`,scenario:'ground-mission-wind',gates:gates(row.metrics)};
+    const c={...row,...(observed?{physics_dt_s:.005}:{}),run_id:`isaac-ground-mission-wind-${row.seed}-${i.toString(16).padStart(12,'0')}`,scenario:'ground-mission-wind',gates:gates(row.metrics)};
     data.cases.push(c);
-    const manifest={schema_version:5,run_id:c.run_id,fixture:false,kind:'recorded_simulation',experiment:'isaac-quadrotor',model:'quadrotor-x-contact-wind-v1',controller:'rate-pid-v1',world_frame:'ENU',body_frame:'FLU',quaternion_order:'wxyz',units:'SI',scenario:c.scenario,seed:c.seed,status:c.status,failure_reason:c.failure_reason,source_dirty:false,config_sha256:c.config_sha256,
+    const manifest={schema_version:observed?6:5,run_id:c.run_id,fixture:false,kind:'recorded_simulation',experiment:'isaac-quadrotor',model:observed?'quadrotor-x-contact-wind-observation-v1':'quadrotor-x-contact-wind-v1',controller:'rate-pid-v1',world_frame:'ENU',body_frame:'FLU',quaternion_order:'wxyz',units:'SI',scenario:c.scenario,seed:c.seed,status:c.status,failure_reason:c.failure_reason,source_dirty:false,config_sha256:c.config_sha256,
       ...Object.fromEntries(['source_commit','source_tree_sha256','controller_binary_sha256','lock_sha256'].map(k=>[k,study[k]]))};
     const times=row.metrics.samples===2?[0,.005]:[0,2,15,23,31,40,42,44,48,50];
-    const replay={schema_version:5,kind:'recorded_simulation',run_id:c.run_id,samples:times.map(t=>({time_s:t,position_m:[t/100,0,.05+t/100],target_m:[0,0,1.5],quaternion_wxyz:[1,0,0,0],rotor_thrust_n:[2,2,2,2],wind_velocity_m_s:[1,0,0],external_force_n:[.1,0,0],external_moment_nm:[0,0,0],mission_phase:t<2?'grounded':t<40?'hover':'landing',contact_normal_force_n:[0,0,0],support_clearance_m:t/100}))};
+    const replay={schema_version:observed?6:5,kind:'recorded_simulation',run_id:c.run_id,samples:times.map(t=>({time_s:t,position_m:[t/100,0,.05+t/100],target_m:[0,0,1.5],quaternion_wxyz:[1,0,0,0],rotor_thrust_n:[2,2,2,2],wind_velocity_m_s:[1,0,0],external_force_n:[.1,0,0],external_moment_nm:[0,0,0],mission_phase:t<2?'grounded':t<40?'hover':'landing',contact_normal_force_n:[0,0,0],support_clearance_m:t/100}))};
+    if(observed)for(const sample of replay.samples){
+      const delay=row.profile.includes('delay')?8:0,noise=row.profile.includes('noise');
+      const source=Math.max(0,Math.round(sample.time_s/.005)-delay),t=source*.005;
+      sample.velocity_m_s=[.01,0,.01];
+      sample.observation={profile:row.profile,source_sequence:source,source_time_s:t,age_s:Math.min(sample.time_s,delay*.005),
+        position_m:[t/100+(noise?.01:0),0,.05+t/100],velocity_m_s:[.01,noise?.02:0,.01]};
+    }
     for(const [name,value] of Object.entries({manifest,replay,metrics:row.metrics,events:[]}))documents[`${c.run_id}/${name}.json`]=encode(value);
   }
   for(const [path,bytes] of Object.entries(documents))data.checksums[path]=hash(bytes);

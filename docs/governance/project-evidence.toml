@@ -380,14 +380,14 @@ decision_ref = "docs/architecture/decisions/008-live-physics-flight-tests.md"
 
 [[requirements]]
 id = "REQ-FLIGHT-EVALUATION"
-statement = "Inspect full-rate mission gates and seed/frequency sensitivity alongside synchronized recorded 3D demonstrations."
+statement = "Inspect full-rate mission gates and seed/frequency and observation-profile sensitivity alongside synchronized recorded 3D demonstrations."
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md"]
-implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts"]
+design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md", "docs/architecture/decisions/013-observation-replay.md", "docs/observation-evaluation.md"]
+implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts", "web/replay/src/observation-contract.ts"]
 verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs"]
-validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json"]
+validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/observation-replay-validation.md"]
 risk_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "SECURITY.md"]
 
 [[work_items]]
@@ -471,7 +471,7 @@ roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 design_refs = ["docs/architecture/decisions/012-observation-robustness.md", "docs/observation-robustness.md"]
 implementation_refs = ["src/aeroloop/observation.py", "src/aeroloop/observation_study.py", "src/aeroloop/isaac_flight.py", "src/aeroloop/evidence.py", "src/aeroloop/live.py", "web/replay/src/live-contract.ts", "web/replay/src/live.tsx"]
 verification_refs = ["tests/test_observation.py", "tests/test_live.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs"]
-validation_refs = ["docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json"]
+validation_refs = ["docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json", "docs/evidence/observation-replay-validation.md"]
 risk_refs = ["docs/architecture/decisions/012-observation-robustness.md", "SECURITY.md"]
 
 [[work_items]]
@@ -483,3 +483,24 @@ roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-27-post-pr15-continuation"
 acceptance_refs = ["docs/architecture/decisions/012-observation-robustness.md"]
 evidence_refs = ["docs/research/2026-09-27-observation.json", "docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json"]
+
+
+[[work_items]]
+id = "AL-016"
+title = "Paired recorded observation evaluation and 3D inspection"
+status = "verified"
+requirement_ids = ["REQ-FLIGHT-EVALUATION", "REQ-OBSERVATION-ROBUSTNESS", "REQ-REUSABLE-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-27-post-pr16-continuation"
+acceptance_refs = ["docs/architecture/decisions/013-observation-replay.md"]
+evidence_refs = ["docs/research/2026-09-27-observation-replay.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-observation-001.json"]
+
+[[research_decisions]]
+id = "RD-OBSERVATION-REPLAY"
+finding = "Bounded verified replay with explicit held-feedback timestamps exposes recorded robustness without inventing observations or changing physics scores."
+disposition = "adopted"
+source_urls = ["https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest", "https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html"]
+observed_on = "2026-09-27"
+reviewed_on = "2026-09-27"
+review_due = "2026-10-27"
+decision_ref = "docs/architecture/decisions/013-observation-replay.md"

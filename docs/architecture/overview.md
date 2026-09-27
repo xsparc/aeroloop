@@ -100,3 +100,17 @@ with a fresh full-rate yaw matrix. A CPU verifier separates arithmetic controls,
 mechanism evidence and original physics acceptance. Selected runtime fingerprints
 and clean source checks bind the captures; the experiment cannot change the
 flight backend. See [decision 011](decisions/011-yaw-arithmetic-study.md).
+
+Version 6 adds fixed seeded position/velocity observations and capture delay,
+while physics truth continues to determine mission supervision and scoring.
+The verifier reconstructs feedback and controller setpoints independently;
+the live monitor labels delivered feedback separately from truth. See
+[decision 012](decisions/012-observation-robustness.md).
+
+Evaluation schema two reuses the paired explorer for twelve observation flights.
+It binds all four fixed profiles and preserves full-rate scores, failed trials
+and historical source identity. Pose interpolation is separate from held
+feedback snapshots, whose capture and delivery times stay visible. The legacy
+single-run exporter remains unchanged. See
+[decision 013](decisions/013-observation-replay.md) and the
+[observation explorer](../observation-evaluation.md).

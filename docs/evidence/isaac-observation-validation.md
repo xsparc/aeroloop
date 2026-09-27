@@ -77,3 +77,7 @@ figure. Schema-six replay export is explicitly rejected for now; live 3D and the
 full-rate report provide inspection. The next slice should add recorded paired
 3D inspection of these fixed observation profiles, preserving their truth-based
 gates and visible ideal-channel limitations.
+
+Follow-up: [AL-016](observation-replay-validation.md) now provides recorded paired
+3D inspection of this unchanged study. The paragraph above records the original
+AL-015 delivery boundary.
