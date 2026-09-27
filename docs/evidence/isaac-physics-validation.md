@@ -77,6 +77,8 @@ Follow-up [yaw diagnostics](isaac-yaw-validation.md) found matching direct/publi
 pose channels, constant-spin drift and iteration sensitivity. The original yaw
 refinement failure is reproduced and remains open. The separate
 [closed-loop study](isaac-live-flight-validation.md) measured bounded mission
-sensitivity with fixed control cadence. Next investigate small-angle integration
-and the shared runtime readout path. These isolated tests do not validate
+sensitivity with fixed control cadence. The subsequent
+[arithmetic study](isaac-yaw-arithmetic-validation.md) reproduces the constant-spin
+signature with CUDA fast trigonometry; the original acceptance remains open.
+These isolated tests do not validate
 full-flight convergence, physical calibration, sensors, hardware or learned control.

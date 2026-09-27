@@ -41,3 +41,7 @@ All bounds and scope are fixed in [decision 010](architecture/decisions/010-yaw-
 See the [measured validation](evidence/isaac-yaw-validation.md) for the retained
 30-case matrix and the distinction between diagnostic success and the still-open
 default refinement finding.
+
+The follow-up [arithmetic study](yaw-arithmetic.md) reproduces the constant-spin
+error signature using CUDA fast trigonometry, with independent precision controls.
+It preserves the original refinement finding and does not change PhysX.

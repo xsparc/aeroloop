@@ -52,9 +52,10 @@ the readout path shared by both getters. They do not identify an exact GPU
 kernel defect. Current public
 [GPU TGS integration source](https://github.com/NVIDIA-Omniverse/PhysX/blob/main/physx/source/gpusolver/src/CUDA/integration.cuh)
 composes an accumulated delta quaternion with the body orientation, but that
-source is not an attestation of the kernel in the installed binary. A focused
-reproduction of small-angle arithmetic and the corresponding runtime version is
-the next step before proposing a vendor/runtime change.
+source is not an attestation of the kernel in the installed binary. The follow-up
+[arithmetic study](isaac-yaw-arithmetic-validation.md) now reproduces the constant-spin
+signature with fast trigonometry and records selected installation hashes. It
+does not establish a validated vendor/runtime fix.
 
 The initial development run compared public body-frame rates with direct
 world-frame rates. Float conversion differences up to 0.000000209 rad/s made
