@@ -97,3 +97,8 @@ pass the unchanged mission gates and all nine paired robustness checks.
 The [recorded observation explorer](docs/observation-evaluation.md) compares all
 four profiles in paired 3D, with separate truth and held-feedback readouts,
 288 mission gates and the original full-rate study results.
+
+The [capture timing study](docs/observation-timing.md) tests 50 Hz feedback and
+250 ms sensor outages while physics/control remain at 200 Hz. All twelve fresh
+PhysX missions pass; the [measured results](docs/evidence/isaac-timing-validation.md)
+retain capture ages, paired differences, post-outage dwell checks and wall lag.
