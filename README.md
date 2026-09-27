@@ -93,3 +93,7 @@ The [observation robustness study](docs/observation-robustness.md) measures seed
 position/velocity noise and 40 ms delay in turbulent flight, with a live 3D truth
 view and independently reconstructed feedback. [Twelve measured missions](docs/evidence/isaac-observation-validation.md)
 pass the unchanged mission gates and all nine paired robustness checks.
+
+The [recorded observation explorer](docs/observation-evaluation.md) compares all
+four profiles in paired 3D, with separate truth and held-feedback readouts,
+288 mission gates and the original full-rate study results.

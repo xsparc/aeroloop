@@ -1,3 +1,4 @@
+import {PROFILES, validateProfiles, type Profile} from "./observation-contract.js";
 import {HASH, validateRecording, type Entry, type Recording} from "./contracts.js";
 import {readVerified} from "./load.js";
 
@@ -6,11 +7,11 @@ export type Gate = {id:string; label:string; group:string; value:number|null; un
 export type Case = Entry & {physics_dt_s:number; failure_reason:string|null; gates:Gate[];
   config_sha256:string; samples_sha256:string; metrics:Recording["metrics"];
   timing:{real_time_factor:number; elapsed_s:number; max_lag_s:number}};
-export type Comparison = {seed:number; physics_dt_s:number; reference_dt_s:number; passed:boolean;
+export type Comparison = {seed:number; profile?:Profile; reference_profile?:"ideal"; physics_dt_s?:number; reference_dt_s?:number; passed:boolean;
   reason?:"incomplete_pair"; peak_position_difference_m?:number; position_difference_rmse_m?:number;
   peak_attitude_difference_rad?:number; position_rmse_change_m?:number; landed_time_change_s?:number|null};
 export type Evaluation = {cases:Case[]; checksums:Record<string,string>; display:string; study:{
-  accepted:boolean; trials:number; passed:number; source_commit:string; source_tree_sha256:string;
+  kind:"isaac_flight_timestep_study"|"isaac_observation_robustness_study"; accepted:boolean; trials:number; passed:number; source_commit:string; source_tree_sha256:string;
   controller_binary_sha256:string; lock_sha256:string; comparisons:Comparison[]; limitations:string[]}};
 const gateIds = ["model_bounds", "samples", "liftoff_start", "liftoff_end", "waypoints", "peak_error", "rmse",
   "tilt", "penetration", "contact", "touchdown", "descent", "horizontal", "landed",
@@ -53,28 +54,40 @@ export function gateStatus(g:Gate):Gate["status"] {
 }
 export function validateEvaluation(value:unknown):Evaluation {
   const d=obj(value), s=obj(d.study), hashes=obj(d.checksums);
-  check(d.schema_version===1 && d.kind==="flight_evaluation" && short(d.display));
-  check(s.kind==="isaac_flight_timestep_study" && s.backend==="isaacsim_physx" && s.source_dirty===false
+  const observed=d.schema_version===2;
+  const trials=observed?12:9, pairCount=observed?9:6;
+  check((d.schema_version===1||observed) && d.kind==="flight_evaluation" && short(d.display));
+  check(s.kind===(observed?"isaac_observation_robustness_study":"isaac_flight_timestep_study") && s.backend==="isaacsim_physx" && s.source_dirty===false
     && /^[a-f0-9]{40}$/.test(s.source_commit) && [s.source_tree_sha256,s.controller_binary_sha256,s.lock_sha256].every(v=>typeof v==="string"&&HASH.test(v))
-    && s.trials===9 && s.control_dt_s===.005 && JSON.stringify(s.seeds)==="[0,1,2]"
+    && s.schema_version===1 && s.trials===trials && s.control_dt_s===.005 && JSON.stringify(s.seeds)==="[0,1,2]"
     && Array.isArray(s.limitations) && s.limitations.length>=4 && s.limitations.length<=10 && s.limitations.every(short));
-  check(Array.isArray(d.cases)&&d.cases.length===9 && Array.isArray(s.results)&&s.results.length===9);
+  if(observed) {check(s.physics_dt_s===.005);validateProfiles(s.profiles);}
+  check(Array.isArray(d.cases)&&d.cases.length===trials && Array.isArray(s.results)&&s.results.length===trials);
   const matrix=new Set(), ids=new Set();
   for(const raw of d.cases) {
     const c=obj(raw);
-    check([.005,.0025,.00125].includes(c.physics_dt_s) && [0,1,2].includes(c.seed)
+    check((observed ? c.physics_dt_s===.005&&PROFILES.includes(c.profile) : c.profile===undefined&&[.005,.0025,.00125].includes(c.physics_dt_s)) && [0,1,2].includes(c.seed)
       && c.scenario==="ground-mission-wind" && typeof c.run_id==="string"
       && new RegExp(`^isaac-ground-mission-wind-${c.seed}-[a-f0-9]{12}$`).test(c.run_id)
       && ["passed","failed"].includes(c.status) && (c.status==="passed")===(c.failure_reason===null)
       && [null,"model_bounds_exceeded","wind_mission_threshold","wind_mission_support_threshold"].includes(c.failure_reason)
       && [c.config_sha256,c.samples_sha256].every(v=>typeof v==="string"&&HASH.test(v)));
-    const key=`${c.physics_dt_s}/${c.seed}`;check(!matrix.has(key)&&!ids.has(c.run_id));matrix.add(key);ids.add(c.run_id);
-    const result=s.results.find((r:any)=>r.physics_dt_s===c.physics_dt_s&&r.seed===c.seed);check(result);
+    const key=`${observed?c.profile:c.physics_dt_s}/${c.seed}`;check(!matrix.has(key)&&!ids.has(c.run_id));matrix.add(key);ids.add(c.run_id);
+    const result=s.results.find((r:any)=>(observed?r.profile===c.profile:r.physics_dt_s===c.physics_dt_s)&&r.seed===c.seed);check(result);
     for(const k of ["status","failure_reason","config_sha256","samples_sha256","metrics","timing"])
       check(JSON.stringify(c[k])===JSON.stringify(result[k]));
+    if(observed) {
+      check(c.sample_count===c.metrics.samples && result.sample_count===c.sample_count
+        && JSON.stringify(c.observations)===JSON.stringify(result.observations));
+      const o=obj(c.observations);
+      check(Object.keys(o).sort().join()===["max_age_s","position_discrepancy_rmse_m","position_discrepancy_peak_m","velocity_discrepancy_rmse_m_s","velocity_discrepancy_peak_m_s"].sort().join());
+      check(Object.values(o).every(nonnegative)&&o.max_age_s===Math.min((c.metrics.samples-1)*.005,c.profile.includes("delay")?.04:0));
+      check(o.position_discrepancy_rmse_m<=o.position_discrepancy_peak_m&&o.velocity_discrepancy_rmse_m_s<=o.velocity_discrepancy_peak_m_s);
+      if(c.profile==="ideal")check(Object.values(o).every(v=>v===0));
+    }
     const t=obj(c.timing), m=obj(c.metrics);
     check(finite(t.elapsed_s)&&t.elapsed_s>0 && nonnegative(t.max_lag_s)&&finite(t.real_time_factor)&&t.real_time_factor>0
-      && t.paced===true&&t.monitor_enabled===true && nonnegative(t.simulation_s)
+      && typeof t.paced==="boolean"&&(!observed||c.profile==="noise-delay"?t.paced===true:true)&&t.monitor_enabled===true && nonnegative(t.simulation_s)
       && Math.abs(t.real_time_factor-t.simulation_s/t.elapsed_s)<1e-12
       && Number.isInteger(m.samples)&&m.samples>=2&&m.samples<=10001
       && Math.abs(t.simulation_s-(m.samples-1)*.005)<1e-9
@@ -92,12 +105,12 @@ export function validateEvaluation(value:unknown):Evaluation {
     check((c.status==="passed")===c.gates.every((g:Gate)=>g.status==="passed"));
     for(const name of ["replay","manifest","metrics","events"])check(typeof hashes[`${c.run_id}/${name}.json`]==="string"&&HASH.test(hashes[`${c.run_id}/${name}.json`]));
   }
-  check(Object.keys(hashes).length===36 && Array.isArray(s.comparisons)&&s.comparisons.length===6);
+  check(Object.keys(hashes).length===trials*4 && Array.isArray(s.comparisons)&&s.comparisons.length===pairCount);
   const pairs=new Set();
   for(const raw of s.comparisons) {
-    const c=obj(raw);const key=`${c.physics_dt_s}/${c.seed}`;
-    check([.0025,.00125].includes(c.physics_dt_s)&&c.reference_dt_s===.005&&[0,1,2].includes(c.seed)&&!pairs.has(key));pairs.add(key);
-    const pair=d.cases.filter((r:Case)=>r.seed===c.seed&&[.005,c.physics_dt_s].includes(r.physics_dt_s));
+    const c=obj(raw);const key=`${observed?c.profile:c.physics_dt_s}/${c.seed}`;
+    check((observed?PROFILES.slice(1).includes(c.profile)&&c.reference_profile==="ideal"&&c.physics_dt_s===undefined:[.0025,.00125].includes(c.physics_dt_s)&&c.reference_dt_s===.005&&c.profile===undefined)&&[0,1,2].includes(c.seed)&&!pairs.has(key));pairs.add(key);
+    const pair=d.cases.filter((r:Case)=>r.seed===c.seed&&(observed?["ideal",c.profile].includes(r.profile):[.005,c.physics_dt_s].includes(r.physics_dt_s)));
     if(c.reason==="incomplete_pair")check(c.passed===false && pair.some((r:Case)=>r.metrics.samples!==10001)
       && Object.keys(c).length===5);
     else {
@@ -114,7 +127,7 @@ export function validateEvaluation(value:unknown):Evaluation {
     }
   }
   check(s.passed===d.cases.filter((c:Case)=>c.status==="passed").length
-    && s.accepted===(s.passed===9&&s.comparisons.every((c:Comparison)=>c.passed)));
+    && s.accepted===(s.passed===trials&&s.comparisons.every((c:Comparison)=>c.passed)));
   return d as unknown as Evaluation;
 }
 export async function loadEvaluation(base:URL,hash:string,signal:AbortSignal) {

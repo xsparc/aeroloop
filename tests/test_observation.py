@@ -82,7 +82,9 @@ class ObservationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path=record(fixture(),directory); original=read_run(path)
             self.assertEqual(original["manifest.json"]["schema_version"],6)
-            with self.assertRaises(ValidationError): replay_document(original)
+            replay = replay_document(original)
+            self.assertEqual(replay["samples"][0]["observation"], original["samples.json"][0]["observation"])
+            self.assertEqual(replay["samples"][-1]["velocity_m_s"], original["samples.json"][-1]["velocity_m_s"])
             changes=[
                 ("samples.json",lambda s:s[409]["observation"]["position_m"].__setitem__(0,.8)),
                 ("samples.json",lambda s:s[409]["observation"].update(source_sequence=409)),

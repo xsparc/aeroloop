@@ -1,6 +1,9 @@
+import {PROFILES, validateObservation, type Profile, type Observation} from "./observation-contract.js";
 export type Vec3 = [number, number, number];
 export type Wxyz = [number, number, number, number];
 export type Sample = {
+  observation?: Observation;
+  velocity_m_s?: Vec3;
   time_s: number;
   position_m: Vec3;
   target_m: Vec3;
@@ -14,6 +17,7 @@ export type Sample = {
   support_clearance_m?: number;
 };
 export type Entry = {
+  profile?: Profile;
   run_id: string;
   scenario: string;
   seed: number;
@@ -55,7 +59,8 @@ export type Recording = {
       | "quadrotor-x-v1"
       | "quadrotor-x-wind-v1"
       | "quadrotor-x-contact-v1"
-      | "quadrotor-x-contact-wind-v1";
+      | "quadrotor-x-contact-wind-v1"
+      | "quadrotor-x-contact-wind-observation-v1";
     source_commit: string;
     source_dirty: boolean;
     source_tree_sha256?: string;
@@ -179,7 +184,9 @@ export function validateRecording(
   const windMission = entry.scenario === "ground-mission-wind";
   const wind = entry.scenario.startsWith("turbulence-") || windMission;
   const contact = entry.scenario === "ground-mission" || windMission;
-  const schema = windMission ? 5 : contact ? 4 : wind ? 3 : flight ? 2 : 1;
+  const observed = windMission && entry.profile !== undefined;
+  assertContract(!observed || PROFILES.includes(entry.profile!));
+  const schema = observed ? 6 : windMission ? 5 : contact ? 4 : wind ? 3 : flight ? 2 : 1;
   assertContract(!(wind || contact) || flight);
   assertContract(
     replay.schema_version === schema &&
@@ -195,7 +202,7 @@ export function validateRecording(
   assertContract(
     manifest.experiment === (flight ? "isaac-quadrotor" : "cpu-rigid-body") &&
       manifest.model ===
-        (windMission
+        (observed ? "quadrotor-x-contact-wind-observation-v1" : windMission
           ? "quadrotor-x-contact-wind-v1"
           : contact
             ? "quadrotor-x-contact-v1"
@@ -300,6 +307,14 @@ export function validateRecording(
       (s.position_m as number[]).every((n) => Math.abs(n) <= 1000) &&
         (s.target_m as number[]).every((n) => Math.abs(n) <= 1000),
     );
+    if (observed) {
+      assertContract(Object.keys(s).sort().join() === ["time_s", "position_m", "target_m", "quaternion_wxyz", "rotor_thrust_n", "wind_velocity_m_s", "external_force_n", "external_moment_nm", "mission_phase", "contact_normal_force_n", "support_clearance_m", "velocity_m_s", "observation"].sort().join());
+      assertContract(vector(s.velocity_m_s, 3));
+      const observation = validateObservation(s.observation, s.time_s, entry.profile);
+      if (entry.profile === "ideal")
+        for (const key of ["position_m", "velocity_m_s"] as const)
+          assertContract(observation[key].every((v,i)=>v===(s[key] as number[])[i]));
+    } else assertContract(s.observation === undefined);
     previous = s.time_s;
   }
   assertContract(replay.samples[0].time_s === 0);
@@ -440,6 +455,16 @@ export function slerp(a: Wxyz, input: Wxyz, t: number): Wxyz {
     (n, i) =>
       (n * Math.sin((1 - t) * angle) + b[i] * Math.sin(t * angle)) / divisor,
   ) as Wxyz;
+}
+// Return the actual preceding display capture; do not interpolate feedback noise.
+export function recordedSampleAt(samples: Sample[], time: number): Sample {
+  if (!finite(time) || !samples.length) throw Error("Invalid replay time");
+  let low=0, high=samples.length-1;
+  while (low<high) {
+    const mid=Math.ceil((low+high)/2);
+    if (samples[mid].time_s<=time) low=mid; else high=mid-1;
+  }
+  return samples[low];
 }
 export function sampleAt(samples: Sample[], time: number): Sample {
   if (!finite(time)) throw Error("Invalid replay time");

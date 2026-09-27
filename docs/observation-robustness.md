@@ -58,10 +58,10 @@ flight. The frozen bounds are 0.15 m peak truth-position difference, 0.05 m
 absolute position-RMSE change and 0.5 s landed-time change. A failed comparison
 is retained and returns exit code 2. Existing output files are never overwritten.
 
-Keep raw traces and figures local. Schema-six recordings are currently inspected
-through the live 3D monitor and full-rate report/plot; the existing recorded replay
-export rejects them explicitly. Adding observation-aware replay and paired
-comparison is a separate incremental feature.
+Keep raw traces and figures local. The [recorded observation explorer](observation-evaluation.md)
+revalidates schema-six recordings for paired 3D comparison, with separate truth
+and held-feedback readouts. Use its `--observations` export mode; the legacy
+single-run replay exporter continues to reject this schema.
 
 See the [retained twelve-flight validation](evidence/isaac-observation-validation.md)
 for measured results and the exact source revision. Plotting requires Matplotlib

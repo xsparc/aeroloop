@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "48b8b72df0e968d042eaeae205af8e5b844ffc19",
+  "scanned_at": "2026-09-27",
+  "coverage": [
+    "Bounded browser hashing",
+    "Recorded motion controls",
+    "Retained observation evidence"
+  ],
+  "findings": [
+    {
+      "finding": "Bounded same-origin display artifacts can be verified before playback while explicit pause and reduced-motion controls retain inspection access.",
+      "source_event_date": null,
+      "citations": [
+        "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest",
+        "https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html"
+      ],
+      "confidence": "high",
+      "relevance": "Recorded observation-study evaluation",
+      "direction_alignment": "Expose measured simulation robustness through paired 3D inspection",
+      "opportunity_or_risk": "Display interpolation must not invent noisy observations or replace full-rate scoring.",
+      "engineering_cost": "Extend the existing exporter and evaluation explorer without physics changes",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-016 adds the four-profile recorded evaluation matrix",
+      "verification_needed": "Strict schema, retained full-rate revalidation, hash checks and measured browser inspection"
+    }
+  ],
+  "overall_recommendation": "Reuse measured evidence with explicit truth and held-feedback timing semantics.",
+  "evidence_gaps": [
+    "No new physical measurement or hardware validation",
+    "Sensor realism remains limited to synthetic position/velocity perturbations"
+  ]
+}

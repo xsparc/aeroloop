@@ -1,4 +1,4 @@
-"""Revalidate the full nine-flight study and prepare its compact local explorer."""
+"""Revalidate a complete flight study and prepare its compact local explorer."""
 import argparse
 import re
 import sys
@@ -12,14 +12,15 @@ from aeroloop.simulation import encoded, sha256
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("studies", nargs=3, type=Path, help="200, 400 and 800 Hz result directories")
+    parser.add_argument("studies", nargs="+", type=Path, help="three frequency or four observation-profile result directories")
+    parser.add_argument("--observations", action="store_true", help="prepare the four-profile observation study")
     parser.add_argument("--name", default="flight-evaluation", help="new local bundle name")
     args = parser.parse_args()
     if not re.fullmatch(r"[a-z][a-z0-9-]{0,39}", args.name):
         parser.error("Use a short lowercase bundle name.")
     public = ROOT/"web/replay/public"
     output = public/args.name
-    document = export_evaluation(args.studies, output)
+    document = export_evaluation(args.studies, output, observations=args.observations)
     (public/"evaluation-config.json").write_bytes(encoded({
         "baseUrl": f"/{args.name}/", "indexSha256": sha256((output/"evaluation.json").read_bytes())
     }))

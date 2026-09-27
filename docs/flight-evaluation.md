@@ -5,6 +5,10 @@ mission gates, full-rate pair metrics and synchronized recorded 3D. It makes
 the [retained study](evidence/isaac-live-flight-validation.md) inspectable; it
 does not execute a simulator or replace the [live monitor](live-flight-tests.md).
 
+The same explorer also supports the four-profile observation study through a
+separate [observation export workflow](observation-evaluation.md). The frequency
+workflow and evidence counts below remain unchanged.
+
 Prepare the three frequency directories produced by the live flight workflow:
 
 ```sh

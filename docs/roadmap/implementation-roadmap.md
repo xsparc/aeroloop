@@ -25,6 +25,7 @@ Public deployment and merges are separate decisions.
 | AL-013 | Independent yaw, pose sampling and solver-iteration diagnostics | Verified: 30/30 diagnostic cases, matching read channels and reproduced original refinement failure; AL-010 remains open |
 | AL-014 | CUDA arithmetic controls compared with fresh PhysX constant spin | Verified: 18/18 signature comparisons and arithmetic controls; 30/30 fresh physics cases; original refinement still fails |
 | AL-015 | Seeded position/velocity noise, 40 ms observation delay and truth-based robustness | Verified: 12/12 PhysX missions, 9/9 robustness pairs, unchanged ideal baseline and live 3D truth/observation monitoring |
+| AL-016 | Recorded observation-profile evaluation with paired 3D and explicit truth/feedback timing | Verified: twelve retained flights revalidated, 288 gates, nine pairs, all artifact hashes and measured 3D inspection |
 
 ## Next gate
 
@@ -58,7 +59,7 @@ and real-time monitoring on 2026-09-22. AL-011 evaluates closed-loop mission tim
 sensitivity with fixed controller and wind timing and a live local dashboard under
 [decision 008](../architecture/decisions/008-live-physics-flight-tests.md).
 The independent yaw-refinement behavior remains unresolved; this study does not
-close it. Sensor noise and delay remain deferred.
+close it. Sensor noise and delay were deferred to AL-015.
 
 AL-011's [measured study](../evidence/isaac-live-flight-validation.md) passed with
 at most 0.858 mm position difference across the compared frequencies. 200 Hz
@@ -75,10 +76,14 @@ reproduces the constant-spin signature with fast trigonometry in all 18 comparis
 Keep AL-010 open and the runtime pinned. The [AL-015 observation study](../evidence/isaac-observation-validation.md) now
 passes all twelve missions and nine paired checks for fixed position/velocity
 noise and 40 ms delay, with ideal attitude/rates and contact supervision. Its ideal
-traces exactly preserve the earlier 200 Hz baseline. Next, add recorded paired
-3D inspection of these four profiles while retaining full-rate scoring and explicit
-truth/observation labels; additional sensor models remain a later bounded study. Any proposed
-runtime mitigation must pass the original accuracy and full-flight studies first.
+traces exactly preserve the earlier 200 Hz baseline. After the AL-015 merge,
+[AL-016 recorded evaluation](../evidence/observation-replay-validation.md) now
+exposes all four profiles in paired 3D, retaining full-rate scoring and explicit
+truth/feedback timing. The complete study was revalidated without new GPU flights.
+Further sensor realism requires a separate study with frozen parameters and new
+PhysX measurements; retain the current observation reference and original accuracy
+gates. Any proposed runtime mitigation must pass the original accuracy and
+full-flight studies first.
 
 The MVP implementation and maintainer review are complete. The
 [post-merge audit](../evidence/mvp-audit.md) records successful live integration
