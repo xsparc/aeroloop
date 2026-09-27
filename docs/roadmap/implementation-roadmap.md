@@ -24,6 +24,7 @@ Public deployment and merges are separate decisions.
 | AL-012 | Full-rate acceptance explorer, seed/frequency matrix and guided paired 3D | Verified: nine retained missions revalidated, 216 gates, six pair results and measured browser inspection |
 | AL-013 | Independent yaw, pose sampling and solver-iteration diagnostics | Verified: 30/30 diagnostic cases, matching read channels and reproduced original refinement failure; AL-010 remains open |
 | AL-014 | CUDA arithmetic controls compared with fresh PhysX constant spin | Verified: 18/18 signature comparisons and arithmetic controls; 30/30 fresh physics cases; original refinement still fails |
+| AL-015 | Seeded position/velocity noise, 40 ms observation delay and truth-based robustness | Verified: 12/12 PhysX missions, 9/9 robustness pairs, unchanged ideal baseline and live 3D truth/observation monitoring |
 
 ## Next gate
 
@@ -71,9 +72,12 @@ After the evaluation explorer merge, the 2026-09-27 continuation delivered
 agree; constant-spin drift and solver-iteration sensitivity remain measurable.
 The [AL-014 arithmetic study](../evidence/isaac-yaw-arithmetic-validation.md) now
 reproduces the constant-spin signature with fast trigonometry in all 18 comparisons.
-Keep AL-010 open and the runtime pinned. Resume the previously deferred sensor
-noise and observation-delay study with independent truth/observation channels and
-explicit robustness gates; this does not require a solver change. Any proposed
+Keep AL-010 open and the runtime pinned. The [AL-015 observation study](../evidence/isaac-observation-validation.md) now
+passes all twelve missions and nine paired checks for fixed position/velocity
+noise and 40 ms delay, with ideal attitude/rates and contact supervision. Its ideal
+traces exactly preserve the earlier 200 Hz baseline. Next, add recorded paired
+3D inspection of these four profiles while retaining full-rate scoring and explicit
+truth/observation labels; additional sensor models remain a later bounded study. Any proposed
 runtime mitigation must pass the original accuracy and full-flight studies first.
 
 The MVP implementation and maintainer review are complete. The

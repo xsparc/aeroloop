@@ -122,7 +122,7 @@ class LiveTests(unittest.TestCase):
         measured = {'position_rmse_m':.1,'mission':{'landed_time_s':44.}}
         cases, results = {}, {}
         for dt in (.005,.0025,.00125):
-            cases[dt] = [{'manifest.json':{'scenario':'ground-mission-wind','seed':seed,'source_dirty':False,
+            cases[dt] = [{'manifest.json':{'schema_version':5,'scenario':'ground-mission-wind','seed':seed,'source_dirty':False,
                 'source_commit':'a'*40,'source_tree_sha256':'b'*64,'controller_binary_sha256':'c'*64,
                 'lock_sha256':'d'*64,'config_sha256':'e'*64,'status':'passed','failure_reason':None},
                 'config.json':{'seed':seed,'simulator_versions':{},'physics_options':{'physics_dt_s':dt}},
@@ -133,6 +133,9 @@ class LiveTests(unittest.TestCase):
              patch('aeroloop.flight_study.validate_flight_result',side_effect=lambda d,r:cases[float(d)]):
             directories=['.005','.0025','.00125']
             self.assertTrue(report(directories)['accepted'])
+            cases[.005][0]['manifest.json']['schema_version']=6
+            with self.assertRaises(ValidationError): report(directories)
+            cases[.005][0]['manifest.json']['schema_version']=5
             cases[.00125][0]['manifest.json']['source_dirty']=True
             with self.assertRaises(ValidationError): report(directories)
             cases[.00125][0]['manifest.json']['source_dirty']=False

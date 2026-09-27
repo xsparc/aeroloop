@@ -454,10 +454,32 @@ decision_ref = "docs/architecture/decisions/011-yaw-arithmetic-study.md"
 
 [[research_decisions]]
 id = "RD-OBSERVATION-STUDY"
-finding = "Explicit observation history and delay support a separate follow-up study while keeping ground-truth physics and existing numerical gates intact."
-disposition = "monitoring"
+finding = "Seeded position/velocity observations and explicit capture delay support bounded controller robustness measurements while preserving physics truth and existing gates."
+disposition = "adopted"
 source_urls = ["https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.utils.html#isaaclab.utils.buffers.DelayBuffer"]
 observed_on = "2026-09-27"
 reviewed_on = "2026-09-27"
 review_due = "2026-10-27"
-decision_ref = "docs/roadmap/implementation-roadmap.md"
+decision_ref = "docs/architecture/decisions/012-observation-robustness.md"
+
+[[requirements]]
+id = "REQ-OBSERVATION-ROBUSTNESS"
+statement = "Measure seeded position/velocity noise and observation-delay robustness against independent physics truth with explicit limits on ideal feedback channels."
+status = "implemented"
+objective_ids = ["OBJ-MVP"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+design_refs = ["docs/architecture/decisions/012-observation-robustness.md", "docs/observation-robustness.md"]
+implementation_refs = ["src/aeroloop/observation.py", "src/aeroloop/observation_study.py", "src/aeroloop/isaac_flight.py", "src/aeroloop/evidence.py", "src/aeroloop/live.py", "web/replay/src/live-contract.ts", "web/replay/src/live.tsx"]
+verification_refs = ["tests/test_observation.py", "tests/test_live.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs"]
+validation_refs = ["docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json"]
+risk_refs = ["docs/architecture/decisions/012-observation-robustness.md", "SECURITY.md"]
+
+[[work_items]]
+id = "AL-015"
+title = "Position and velocity observation robustness in turbulent flight"
+status = "verified"
+requirement_ids = ["REQ-OBSERVATION-ROBUSTNESS", "REQ-DRONE-CONTROL", "REQ-WIND-MISSION", "REQ-LIVE-FLIGHT-TESTS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-27-post-pr15-continuation"
+acceptance_refs = ["docs/architecture/decisions/012-observation-robustness.md"]
+evidence_refs = ["docs/research/2026-09-27-observation.json", "docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json"]

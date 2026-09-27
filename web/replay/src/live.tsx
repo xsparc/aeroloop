@@ -31,7 +31,7 @@ export function LiveMonitor() {
         if (stopped) return;
         if (next.state === "waiting") { setFrame(null); setConnection("Waiting for worker"); }
         else {
-          const nextKey = `${next.seed}/${next.physics_dt_s}`;
+          const nextKey = `${next.seed}/${next.physics_dt_s}/${next.observation_profile ?? "legacy"}`;
           if (key !== nextKey) { key = nextKey; samples = []; setHistory([]); setSceneSamples([]); }
           if (next.sample) {
             const empty = samples.length === 0;
@@ -68,6 +68,7 @@ export function LiveMonitor() {
     </header>
     <div className="al-live-grid">
       <section className="al-live-card"><h2>Measured flight</h2>
+        <p>3D pose and tracking error use physics truth.</p>
         <p>Seed {frame?.seed ?? "—"} · {s?.mission_phase?.replaceAll("_", " ") ?? "Awaiting first sample"}</p>
         <button onClick={()=>setShow3d(v=>!v)}>{show3d ? "Hide 3D" : "Enable 3D"}</button>
         {show3d && s && sceneSamples.length > 0 && !webglFailed && <Suspense fallback={<p>Loading 3D…</p>}><Scene sample={s} samples={sceneSamples} rotorFlight visible={visible} onFailure={failed}/></Suspense>}
@@ -94,6 +95,16 @@ export function LiveMonitor() {
           <div><dt>Late control samples (&gt;5 ms)</dt><dd>{frame?.late_steps ?? "—"}</dd></div>
           <div><dt>Pacing</dt><dd>{frame ? frame.paced ? "Wall clock" : "As fast as available" : "—"}</dd></div>
         </dl>
+        {frame?.observation_profile && <section aria-label="Controller observations">
+          <h3>Controller observations</h3>
+          <p>Profile: <strong>{frame.observation_profile}</strong> · position and velocity only</p>
+          <dl className="al-live-values">
+            <div><dt>Observation age</dt><dd>{number(s?.observation ? s.observation.age_s*1000 : undefined, 0)} ms</dd></div>
+            <div><dt>Position discrepancy</dt><dd>{number(s?.observation ? Math.hypot(...s.position_m.map((v,i)=>v-s.observation!.position_m[i])) : undefined, 3)} m</dd></div>
+            <div><dt>Velocity discrepancy</dt><dd>{number(s?.observation ? Math.hypot(...s.velocity_m_s.map((v,i)=>v-s.observation!.velocity_m_s[i])) : undefined, 3)} m/s</dd></div>
+          </dl>
+          <p>Synthetic feedback. Attitude, rates and the contact supervisor remain ideal.</p>
+        </section>}
         <h3>Rotor thrust</h3>
         {(s?.rotor_thrust_n ?? [0,0,0,0]).map((v,i)=><div className="al-rotor" key={i}><label htmlFor={`rotor-${i}`}>R{i+1}</label><meter id={`rotor-${i}`} min={0} max={5} value={v}/><span>{number(v,3)} N</span></div>)}
         <p>Rate effort (roll / pitch / yaw): {s ? s.effort_normalized.map(v=>number(v,3)).join(" / ") : "—"}</p>
@@ -107,6 +118,6 @@ export function LiveMonitor() {
       <p>{number(historyStart,1)}–{number(historyEnd,1)} s · {history.length}/300 received samples · dashed line: 1 m · chart clipped at 1.5 m</p>
     </section>
     <footer><p>Live samples are provisional and may skip frames. Full recordings retain every 200 Hz control sample. Rendering and wall pacing do not change the physics timestep.</p>
-      <p>Perfect state feedback, simplified wind/rotors/contact. The independent yaw-refinement finding remains open. This test does not validate hardware flight.</p></footer>
+      <p>{frame?.observation_profile ? "Position/velocity observation study; ideal attitude, rates and supervisor." : "Perfect state feedback."} Simplified wind/rotors/contact. The independent yaw-refinement finding remains open. This test does not validate hardware flight.</p></footer>
   </article>;
 }

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "be513360f6b86fafbd1240eb30f7a96b92c8e90e",
+  "scanned_at": "2026-09-27",
+  "coverage": [
+    "Isaac Lab noise and observation delay",
+    "Existing 200 Hz mission evidence"
+  ],
+  "findings": [
+    {
+      "finding": "Explicit captured observations and delayed histories permit separate feedback perturbation without changing physical state. A bounded CPU-reproducible FIFO can use an explicitly declared startup policy.",
+      "source_event_date": null,
+      "citations": [
+        "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.utils.html#isaaclab.utils.buffers.DelayBuffer",
+        "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.utils.html#module-isaaclab.utils.noise"
+      ],
+      "confidence": "high",
+      "relevance": "Trajectory-controller observation robustness",
+      "direction_alignment": "Continue measured physics development with live monitoring",
+      "opportunity_or_risk": "Synthetic noise is not sensor calibration; ideal inner-loop and contact supervision limit claims.",
+      "engineering_cost": "Four fixed profiles, strict evidence, live display and twelve retained missions",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-015 implements bounded position/velocity noise and 40 ms delay at fixed physics cadence",
+      "verification_needed": "Predeclared gates, separate truth channel, seeded reconstruction, full matrix and actual live 3D inspection"
+    }
+  ],
+  "overall_recommendation": "Test explicit position/velocity feedback profiles while preserving runtime, physics and mission gates.",
+  "evidence_gaps": [
+    "No calibrated IMU/GNSS model or estimator",
+    "Attitude/rate/contact observations remain ideal",
+    "Original yaw refinement remains open"
+  ]
+}

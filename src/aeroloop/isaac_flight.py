@@ -11,6 +11,7 @@ from .rotors import RotorModel
 from .simulation import encoded, metrics, record, sha256
 from .live import FlightClock, write_snapshot
 from . import mission, wind_mission
+from .observation import Observations
 from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, flight_setpoint, wind_outcome, comparisons
 
 
@@ -26,10 +27,11 @@ def flight(output: Path, launcher_args):
     physics_dt = launcher_args.physics_dt
     substeps = round(dt / physics_dt)
     monitor, paced = launcher_args.monitor, launcher_args.realtime
+    profile = launcher_args.observation_profile
     from .physics_audit import provenance
     source = provenance()
     if monitor:
-        write_snapshot(output, FlightClock(paced).snapshot(launcher_args.seeds[0], physics_dt, state="starting"))
+        write_snapshot(output, FlightClock(paced).snapshot(launcher_args.seeds[0], physics_dt, state="starting", observation_profile=profile))
     model, rotors = Model(), RotorModel()
     results = []
     with launch_simulation(PhysxCfg(), launcher_args) as physics_cfg:
@@ -66,6 +68,7 @@ def flight(output: Path, launcher_args):
                 route = mission.Mission() if contact_mission else None
                 tracking = wind_mission.TrackingController() if scenario == wind_mission.SCENARIO else None
                 previous_scale = 1.
+                observations = Observations(profile, seed) if profile else None
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
                 if route:
@@ -98,6 +101,7 @@ def flight(output: Path, launcher_args):
                             tuple(body.data.root_lin_vel_w.torch[0].cpu().tolist()),
                             normalize((q[3], *q[:3])), rate,
                             tuple((v-old)/dt for v, old in zip(rate, previous_rate)) if step else (0., 0., 0.))
+                        feedback, observation_sample = observations.capture(state) if observations else (state, None)
                         target = (0., 1., 1.5) if scenario == "position-step" and 10 <= t < 25 else (0., 0., 1.5)
                         external = (.5, 0., 0.) if scenario == "lateral-force-pulse" and 15 <= t < 15.5 else (0., 0., 0.)
                         external_moment = (0., 0., 0.)
@@ -114,7 +118,7 @@ def flight(output: Path, launcher_args):
                             normal_force = interval_normal
                             phase, target, armed, bottom = route.update(t, state, normal_force)
                             if tracking:
-                                thrust_request, rate_request, tracking_sample = tracking.step(t, state, target, armed, dt, previous_scale < 1.-1e-12)
+                                thrust_request, rate_request, tracking_sample = tracking.step(t, feedback, target, armed, dt, previous_scale < 1.-1e-12)
                             else:
                                 thrust_request, rate_request = mission.setpoint(state, target, armed)
                         else:
@@ -132,6 +136,8 @@ def flight(output: Path, launcher_args):
                             "effort_normalized": effort, "thrust_n": thrust, "external_force_n": external,
                             "thrust_setpoint_n": thrust_request, "rotor_command_n": commands,
                             "rotor_thrust_n": motors, "moment_nm": moment, "allocation_scale": scale})
+                        if observations:
+                            samples[-1]["observation"] = observation_sample
                         if route:
                             samples[-1].update(mission_phase=phase, contact_normal_force_n=normal_force, support_clearance_m=bottom)
                         if tracking:
@@ -139,7 +145,7 @@ def flight(output: Path, launcher_args):
                         if wind_model:
                             samples[-1].update(wind_velocity_m_s=winds[step], external_moment_nm=external_moment)
                         if monitor and step % 20 == 0:
-                            write_snapshot(output, clock.snapshot(seed, physics_dt, samples[-1]))
+                            write_snapshot(output, clock.snapshot(seed, physics_dt, samples[-1], observation_profile=profile))
                         if state.position[2] <= 0 or sum(v*v for v in state.position) > 100**2:
                             status, reason = "failed", "model_bounds_exceeded"
                             break
@@ -189,6 +195,8 @@ def flight(output: Path, launcher_args):
                     "rate_gains": {"p": [.6]*3, "i": [.1]*3, "d": [.005]*3, "ff": [0.]*3, "integral_limit": [.3]*3},
                     "actuator": asdict(rotors), "simulator_versions": package_versions,
                     "physics_options": {"gyroscopic_forces": True}}
+                if observations:
+                    config["observation_model"] = observations.config
                 if route:
                     config["mission"] = contact_cfg
                 if substeps > 1:
@@ -203,7 +211,7 @@ def flight(output: Path, launcher_args):
                 if provenance() != source:
                     raise RuntimeError("flight source changed during capture")
                 if monitor:
-                    write_snapshot(output, clock.snapshot(seed, physics_dt, samples[-1], "verifying"))
+                    write_snapshot(output, clock.snapshot(seed, physics_dt, samples[-1], "verifying", observation_profile=profile))
                 run = record({"experiment": "isaac-quadrotor", "config": config, "samples": samples,
                     "events": events, "metrics": measured, "status": status, "failure_reason": reason,
                     "controller_binary_sha256": library_hash}, output)

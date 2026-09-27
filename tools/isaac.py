@@ -27,9 +27,12 @@ def main():
     parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
     parser.add_argument("--force-mode", choices=("per-iteration", "per-step"), default="per-iteration")
     parser.add_argument("--solver-iterations", type=int, choices=(1, 4), default=4)
+    parser.add_argument("--observation-profile", choices=("ideal", "noise", "delay", "noise-delay"))
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     args = parser.parse_args()
+    if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
+        parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     if args.output.exists():
         parser.error("Output already exists; choose a new session directory.")
     if args.mode != "yaw" and args.solver_iterations != 4:
@@ -55,6 +58,8 @@ def main():
         if args.physics_dt != .005 and args.scenario != "ground-mission-wind":
             parser.error("Flight substeps require ground-mission-wind.")
         options = ["--scenario", args.scenario, "--seeds", *(str(seed) for seed in args.seeds), "--physics-dt", str(args.physics_dt)]
+        if args.observation_profile:
+            options += ["--observation-profile", args.observation_profile]
         options += (["--monitor"] if args.monitor else []) + (["--realtime"] if args.realtime else [])
     try:
         result = run_worker(args.python, args.mode, args.output, options, args.timeout)
@@ -67,7 +72,8 @@ def main():
     print(f"Completed {result['kind']}. See {args.output / 'result.json'}.")
     if args.mode == "flight":
         from aeroloop.contracts import load_json
-        if any(load_json(args.output / row["run_id"] / "config.json")["physics_options"].get("physics_dt_s", .005) != args.physics_dt
+        if any((config := load_json(args.output / row["run_id"] / "config.json"))["physics_options"].get("physics_dt_s", .005) != args.physics_dt
+               or config.get("observation_model", {}).get("profile") != args.observation_profile
                for row in result["results"]):
             if args.monitor:
                 from aeroloop.live import finish_monitor
