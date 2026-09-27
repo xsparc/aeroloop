@@ -21,15 +21,15 @@ PHASES = ("grounded", "takeoff", "hover", "north", "north_hold", "east", "east_h
 def validate_snapshot(value):
     expected = {"schema_version", "state", "seed", "physics_dt_s", "paced", "elapsed_s",
                 "lag_s", "max_lag_s", "late_steps", "updated_monotonic_s", "sample"}
-    observations = isinstance(value, dict) and value.get("schema_version") == 2
+    observations = isinstance(value, dict) and value.get("schema_version") in (2, 3)
     if observations:
-        from .observation import PROFILES
+        from .observation import PROFILES, TIMING_PROFILES
         expected.add("observation_profile")
-        if value.get("observation_profile") not in PROFILES or value.get("physics_dt_s") != .005:
+        if value.get("observation_profile") not in (TIMING_PROFILES if value["schema_version"] == 3 else PROFILES) or value.get("physics_dt_s") != .005:
             raise ValidationError("invalid live observation profile")
     if not isinstance(value, dict) or set(value) != expected:
         raise ValidationError("invalid monitor fields")
-    if (type(value["schema_version"]) is not int or value["schema_version"] not in (1, 2) or value["state"] not in STATES
+    if (type(value["schema_version"]) is not int or value["schema_version"] not in (1, 2, 3) or value["state"] not in STATES
             or type(value["seed"]) is not int or not 0 <= value["seed"] <= 2**31-1
             or value["physics_dt_s"] not in (.005, .0025, .00125) or type(value["paced"]) is not bool
             or type(value["late_steps"]) is not int or not 0 <= value["late_steps"] <= 10001):
@@ -97,7 +97,8 @@ class FlightClock:
         self.late_steps += self.lag > .005
 
     def snapshot(self, seed, dt, sample=None, state="running", observation_profile=None):
-        return {"schema_version": 2 if observation_profile else 1, **({"observation_profile": observation_profile} if observation_profile else {}), "state": state, "seed": seed, "physics_dt_s": dt,
+        from .timing_observation import PROFILES as TIMING_PROFILES
+        return {"schema_version": 3 if observation_profile in TIMING_PROFILES else 2 if observation_profile else 1, **({"observation_profile": observation_profile} if observation_profile else {}), "state": state, "seed": seed, "physics_dt_s": dt,
                 "paced": self.paced, "elapsed_s": self.elapsed, "lag_s": self.lag,
                 "max_lag_s": self.max_lag, "late_steps": self.late_steps,
                 "updated_monotonic_s": self.clock(),

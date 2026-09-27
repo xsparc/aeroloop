@@ -1,4 +1,4 @@
-import {validateObservation, type Observation} from "./observation-contract.js";
+import {validateObservation, PROFILES, TIMING_PROFILES, type Observation} from "./observation-contract.js";
 import { MISSION_PHASES, type Sample, type Vec3 } from "./contracts.js";
 
 export type LiveSample = Sample & {
@@ -20,8 +20,8 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   require(value && typeof value === "object" && !Array.isArray(value));
   const f = value as Record<string, unknown>;
   if (f.state === "waiting") { require(Object.keys(f).length === 1); return {state: "waiting"}; }
-  const observed = f.schema_version === 2;
-  const profiles = ["ideal", "noise", "delay", "noise-delay"];
+  const observed = f.schema_version === 2 || f.schema_version === 3;
+  const profiles:readonly string[] = f.schema_version === 3 ? TIMING_PROFILES : PROFILES;
   if (observed) require(typeof f.observation_profile === "string" && profiles.includes(f.observation_profile) && f.physics_dt_s === .005);
   require(Object.keys(f).sort().join() === ["schema_version", "state", "seed", "physics_dt_s", "paced", "elapsed_s", "lag_s", "max_lag_s", "late_steps", "age_s", "stale", "sample", ...(observed ? ["observation_profile"] : [])].sort().join());
   require((f.schema_version === 1 || observed) && ["starting", "running", "verifying", "completed", "failed"].includes(String(f.state)));

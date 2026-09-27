@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { historyAppend, positionError, validateLive, type LiveFrame, type LiveSample } from "./live-contract.js";
+import {capturePeriod, isTimingProfile, outageActive} from "./observation-contract.js";
 const Scene = lazy(() => import("./scene.js"));
 const number = (v: number | undefined, digits=2) => v === undefined ? "—" : v.toFixed(digits);
 
@@ -58,6 +59,8 @@ export function LiveMonitor() {
   const tilt = s ? Math.acos(Math.max(-1, Math.min(1, 1-2*(s.quaternion_wxyz[1]**2+s.quaternion_wxyz[2]**2))))*180/Math.PI : 0;
   const error = s ? positionError(s) : undefined;
   const alarm = !!s && (error! > 1 || tilt > 25 || s.support_clearance_m! < -.003);
+  const timingProfile = isTimingProfile(frame?.observation_profile);
+  const receivedObservationAge = history.length ? Math.max(...history.map(sample=>(sample.observation?.age_s ?? 0)*1000)) : undefined;
   const historyStart = history[0]?.time_s ?? 0;
   const historyEnd = history.at(-1)?.time_s ?? 1;
   const points = history.map(p=>`${10+580*(p.time_s-historyStart)/Math.max(.1,historyEnd-historyStart)},${140-120*Math.min(1.5,positionError(p))/1.5}`).join(" ");
@@ -98,11 +101,16 @@ export function LiveMonitor() {
         {frame?.observation_profile && <section aria-label="Controller observations">
           <h3>Controller observations</h3>
           <p>Profile: <strong>{frame.observation_profile}</strong> · position and velocity only</p>
+          {timingProfile&&<p>Capture cadence: <strong>{200/capturePeriod(frame.observation_profile)} Hz</strong> · holds the last successful capture.</p>}
+          {timingProfile&&frame.observation_profile.includes("dropout")&&<p>{s&&outageActive(s.time_s,frame.observation_profile)?"Scheduled capture outage active":"Outside scheduled capture outages"}. Outages: 18.000–18.250 s and 40.000–40.250 s.</p>}
           <dl className="al-live-values">
             <div><dt>Observation age</dt><dd>{number(s?.observation ? s.observation.age_s*1000 : undefined, 0)} ms</dd></div>
             <div><dt>Position discrepancy</dt><dd>{number(s?.observation ? Math.hypot(...s.position_m.map((v,i)=>v-s.observation!.position_m[i])) : undefined, 3)} m</dd></div>
             <div><dt>Velocity discrepancy</dt><dd>{number(s?.observation ? Math.hypot(...s.velocity_m_s.map((v,i)=>v-s.observation!.velocity_m_s[i])) : undefined, 3)} m/s</dd></div>
+            {timingProfile&&<><div><dt>Last successful capture</dt><dd>{number(s?.observation?.source_time_s,3)} s</dd></div>
+              <div><dt>Peak received observation age</dt><dd>{number(receivedObservationAge,0)} ms</dd></div></>}
           </dl>
+          {timingProfile&&<p>Observation age uses simulation time. Monitor sample age uses wall time. The received peak covers only recent monitor frames; the full-rate report determines the actual maximum.</p>}
           <p>Synthetic feedback. Attitude, rates and the contact supervisor remain ideal.</p>
         </section>}
         <h3>Rotor thrust</h3>

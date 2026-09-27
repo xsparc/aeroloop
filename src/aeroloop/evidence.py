@@ -7,7 +7,7 @@ import re
 from .contracts import ValidationError, finite, load_json
 from .frames import vector
 from . import mission, wind_mission
-from .observation import Observations, PROFILES, configuration, validate_capture
+from .observation import make_observations, PROFILES, TIMING_PROFILES, configuration, validate_capture
 from .simulation import SCENARIOS, ROOT, encoded, metrics, sha256
 from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, wind_outcome, flight_setpoint
 
@@ -32,11 +32,11 @@ def keys(value, expected):
 
 def validate_manifest(m):
     keys(m, MANIFEST_FIELDS)
-    require(type(m["schema_version"]) is int and m["schema_version"] in (1, 2, 3, 4, 5, 6), "unsupported manifest version")
-    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5, 6), m["schema_version"] in (4, 5, 6)
+    require(type(m["schema_version"]) is int and m["schema_version"] in (1, 2, 3, 4, 5, 6, 7), "unsupported manifest version")
+    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5, 6, 7), m["schema_version"] in (4, 5, 6, 7)
     require(isinstance(m["run_id"], str) and RUN_ID.fullmatch(m["run_id"]), "invalid run identifier")
     require(m["kind"] == "recorded_simulation" and m["fixture"] is False, "fixtures are not publishable evidence")
-    for field, value in {"experiment": "isaac-quadrotor" if flight else "cpu-rigid-body", "model": "quadrotor-x-contact-wind-observation-v1" if m["schema_version"] == 6 else "quadrotor-x-contact-wind-v1" if contact and wind else "quadrotor-x-contact-v1" if contact else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "world_frame": "ENU", "body_frame": "FLU", "quaternion_order": "wxyz", "units": "SI"}.items():
+    for field, value in {"experiment": "isaac-quadrotor" if flight else "cpu-rigid-body", "model": "quadrotor-x-contact-wind-observation-timing-v1" if m["schema_version"] == 7 else "quadrotor-x-contact-wind-observation-v1" if m["schema_version"] == 6 else "quadrotor-x-contact-wind-v1" if contact and wind else "quadrotor-x-contact-v1" if contact else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "world_frame": "ENU", "body_frame": "FLU", "quaternion_order": "wxyz", "units": "SI"}.items():
         require(m[field] == value, "unsupported evidence convention")
     require(m["scenario"] in ((wind_mission.SCENARIO,) if contact and wind else (mission.SCENARIO,) if contact else WIND_SCENARIOS if wind else SCENARIOS), "unsupported scenario")
     require(type(m["seed"]) is int and 0 <= m["seed"] <= 2**31-1, "invalid seed")
@@ -57,11 +57,11 @@ def validate_manifest(m):
 
 
 def validate_config(c, m):
-    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5, 6), m["schema_version"] in (4, 5, 6)
-    keys(c, {"model", "initial_state", "dt_s", "duration_s", "scenario", "seed", "controller", "position_kp", "position_kd", "attitude_kp", "rate_gains"} | ({"actuator", "simulator_versions", "physics_options"} if flight else set()) | ({"wind", "trajectory_control" if contact else "horizontal_position_hold"} if wind else set()) | ({"mission"} if contact else set()) | ({"observation_model"} if m["schema_version"] == 6 else set()))
-    if m["schema_version"] == 6:
+    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5, 6, 7), m["schema_version"] in (4, 5, 6, 7)
+    keys(c, {"model", "initial_state", "dt_s", "duration_s", "scenario", "seed", "controller", "position_kp", "position_kd", "attitude_kp", "rate_gains"} | ({"actuator", "simulator_versions", "physics_options"} if flight else set()) | ({"wind", "trajectory_control" if contact else "horizontal_position_hold"} if wind else set()) | ({"mission"} if contact else set()) | ({"observation_model"} if m["schema_version"] in (6, 7) else set()))
+    if m["schema_version"] in (6, 7):
         o = c["observation_model"]
-        require(isinstance(o, dict) and o.get("profile") in PROFILES, "unsupported observation profile")
+        require(isinstance(o, dict) and o.get("profile") in (TIMING_PROFILES if m["schema_version"] == 7 else PROFILES), "unsupported observation profile")
         require(encoded(o) == encoded(configuration(o.get("profile"))), "unsupported observation model")
         require(c["physics_options"] == {"gyroscopic_forces": True}, "observations require fixed 200 Hz physics")
     require(c["scenario"] == m["scenario"] and c["seed"] == m["seed"] and c["controller"] == m["controller"], "configuration mismatch")
@@ -193,10 +193,10 @@ def read_run(directory):
     m, c, samples, events = (data[k] for k in ("manifest.json", "config.json", "samples.json", "events.json"))
     validate_manifest(m)
     validate_config(c, m)
-    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5, 6), m["schema_version"] in (4, 5, 6)
+    flight, wind, contact = m["schema_version"] >= 2, m["schema_version"] in (3, 5, 6, 7), m["schema_version"] in (4, 5, 6, 7)
     route = mission.Mission() if contact else None
     tracking = wind_mission.TrackingController() if contact and wind else None
-    observations = Observations(c["observation_model"]["profile"], c["seed"]) if m["schema_version"] == 6 else None
+    observations = make_observations(c["observation_model"]["profile"], c["seed"]) if m["schema_version"] in (6, 7) else None
     motors = (0.,)*4 if contact else (c["model"]["mass"]*c["model"]["gravity"]/4,)*4
     require(sha256(encoded(c)) == m["config_sha256"], "configuration hash mismatch")
     require(isinstance(samples, list) and 2 <= len(samples) <= 120001, "invalid sample count")
@@ -263,6 +263,7 @@ def read_run(directory):
 def replay_document(run):
     """Event-preserving display samples, distinct from full-rate evaluation."""
     m = run["manifest.json"]
+    require(m["schema_version"] != 7, "timing observation recordings use the live monitor and full-rate timing report")
     run_id = m["run_id"]
     # Preserve both sides of discontinuities as well as event instants and endpoints.
     samples, events = run["samples.json"], run["events.json"]
@@ -271,8 +272,8 @@ def replay_document(run):
     for event in events:
         i = round(event["time_s"] / run["config.json"]["dt_s"])
         indices.update(j for j in (i-1, i, i+1) if 0 <= j < len(samples))
-    replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] >= 2 else ()) + (("wind_velocity_m_s", "external_force_n", "external_moment_nm") if m["schema_version"] in (3, 5, 6) else ()) + (("mission_phase", "contact_normal_force_n", "support_clearance_m") if m["schema_version"] in (4, 5, 6) else ())
-    if m["schema_version"] == 6:
+    replay_fields = ("time_s", "position_m", "target_m", "quaternion_wxyz") + (("rotor_thrust_n",) if m["schema_version"] >= 2 else ()) + (("wind_velocity_m_s", "external_force_n", "external_moment_nm") if m["schema_version"] in (3, 5, 6, 7) else ()) + (("mission_phase", "contact_normal_force_n", "support_clearance_m") if m["schema_version"] in (4, 5, 6, 7) else ())
+    if m["schema_version"] in (6, 7):
         replay_fields += ("velocity_m_s", "observation")
     replay = {"schema_version": m["schema_version"], "kind": "recorded_simulation", "run_id": run_id,
               "samples": [{k: sample[k] for k in replay_fields}
@@ -284,6 +285,7 @@ def export_bundle(run_directories, output):
     require(1 <= len(run_directories) <= 30, "export requires 1 to 30 runs")
     require(sum((Path(directory) / name).stat().st_size for directory in run_directories for name in FILES) <= 128*1024*1024, "input batch exceeds size budget")
     data = [read_run(path) for path in run_directories]
+    require(all(run["manifest.json"]["schema_version"] != 7 for run in data), "timing observation recordings use the live monitor and full-rate timing report")
     require(all(run["manifest.json"]["schema_version"] != 6 for run in data), "observation recordings require the observation evaluation exporter")
     ids = [run["manifest.json"]["run_id"] for run in data]
     require(len(ids) == len(set(ids)), "duplicate run identifier")

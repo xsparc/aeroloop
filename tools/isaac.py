@@ -27,7 +27,7 @@ def main():
     parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
     parser.add_argument("--force-mode", choices=("per-iteration", "per-step"), default="per-iteration")
     parser.add_argument("--solver-iterations", type=int, choices=(1, 4), default=4)
-    parser.add_argument("--observation-profile", choices=("ideal", "noise", "delay", "noise-delay"))
+    parser.add_argument("--observation-profile", choices=("ideal", "noise", "delay", "noise-delay", "timing-ideal", "sample-hold", "dropout", "hold-dropout"))
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     args = parser.parse_args()

@@ -3,11 +3,17 @@ from collections import deque
 from dataclasses import replace
 import random
 
+from .timing_observation import PROFILES as TIMING_PROFILES, TimingObservations
+
 PROFILES = ("ideal", "noise", "delay", "noise-delay")
+ALL_PROFILES = PROFILES + TIMING_PROFILES
 DT = .005
 
 
 def configuration(profile):
+    if profile in TIMING_PROFILES:
+        from .timing_observation import configuration as timing_configuration
+        return timing_configuration(profile)
     if profile not in PROFILES:
         raise ValueError("unsupported observation profile")
     return {"profile": profile, "position_sigma_m": .01 if "noise" in profile else 0.,
@@ -45,8 +51,12 @@ def validate_sample(value, sequence, profile=None):
     from .contracts import finite
     from .frames import vector
     keys(value, {"profile", "source_sequence", "source_time_s", "age_s", "position_m", "velocity_m_s"})
-    require(value["profile"] in PROFILES and (profile is None or value["profile"] == profile), "observation profile mismatch")
-    source = max(0, sequence-configuration(value["profile"])["delay_steps"])
+    require(value["profile"] in ALL_PROFILES and (profile is None or value["profile"] == profile), "observation profile mismatch")
+    if value["profile"] in TIMING_PROFILES:
+        from .timing_observation import source_sequence
+        source = source_sequence(sequence, value["profile"])
+    else:
+        source = max(0, sequence-configuration(value["profile"])["delay_steps"])
     require(type(value["source_sequence"]) is int and value["source_sequence"] == source,
             "observation source sequence mismatch")
     require(finite(value["source_time_s"]) and value["source_time_s"] == round(source*DT, 9)
@@ -60,3 +70,7 @@ def validate_capture(value, expected, sequence):
     validate_sample(value, sequence, expected["profile"])
     for key in ("position_m", "velocity_m_s"):
         require(all(abs(a-b) <= 1e-12 for a,b in zip(value[key], expected[key])), "observation differs from seeded truth capture")
+
+
+def make_observations(profile, seed):
+    return TimingObservations(profile, seed) if profile in TIMING_PROFILES else Observations(profile, seed)
