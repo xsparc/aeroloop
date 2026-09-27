@@ -65,3 +65,8 @@ acceptance limits. Decision 007's independent yaw-refinement failure remains ope
 successful missions do not establish solver convergence. Sensor noise, estimator
 delay, calibrated aerodynamics, battery effects and hardware tests remain outside
 this slice.
+
+For separate 200 Hz position/velocity noise and delay tests, use the
+[observation robustness workflow](observation-robustness.md). The live monitor
+displays profile, observation age and discrepancy while rendering physics truth.
+The original timestep report accepts only its perfect-state schema-five runs.

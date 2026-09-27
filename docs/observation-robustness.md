@@ -62,3 +62,8 @@ Keep raw traces and figures local. Schema-six recordings are currently inspected
 through the live 3D monitor and full-rate report/plot; the existing recorded replay
 export rejects them explicitly. Adding observation-aware replay and paired
 comparison is a separate incremental feature.
+
+See the [retained twelve-flight validation](evidence/isaac-observation-validation.md)
+for measured results and the exact source revision. Plotting requires Matplotlib
+in the reporting interpreter; GPU execution is not required to verify or plot
+existing recordings.

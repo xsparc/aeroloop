@@ -88,3 +88,8 @@ error with constant-spin and torque experiments and independent pose reads.
 
 The [CUDA arithmetic study](docs/yaw-arithmetic.md) compares the yaw drift with
 fast and library trigonometry while preserving the open physics accuracy gate.
+
+The [observation robustness study](docs/observation-robustness.md) measures seeded
+position/velocity noise and 40 ms delay in turbulent flight, with a live 3D truth
+view and independently reconstructed feedback. [Twelve measured missions](docs/evidence/isaac-observation-validation.md)
+pass the unchanged mission gates and all nine paired robustness checks.
