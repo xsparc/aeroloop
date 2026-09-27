@@ -48,3 +48,19 @@ test('live monitor rejects bad packets and reconnects without presenting them as
   down=false;data=frame('running',1100);
   await expect(page.getByRole('status')).toHaveText('Live · provisional');
 });
+
+
+test('observation profile shows delayed feedback while 3D and scores use truth',async({page})=>{
+  const data=frame('running',1000);data.schema_version=2;data.physics_dt_s=.005;data.observation_profile='noise-delay';
+  data.sample.observation={profile:'noise-delay',source_sequence:992,source_time_s:4.96,age_s:.04,position_m:[.03,0,1.5],velocity_m_s:[0,.02,0]};
+  await page.route('**/api/live',route=>route.fulfill({json:data}));
+  await page.goto('/monitor.html');
+  const observations=page.getByRole('region',{name:'Controller observations'});
+  await expect(observations).toContainText('noise-delay');
+  await expect(observations).toContainText('40 ms');
+  await expect(observations).toContainText('0.030 m');
+  await expect(page.getByText('0.000 m',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Enable 3D'}).click();
+  await expect(page.locator('canvas')).toHaveCount(1);
+  await expect(page.getByText('3D pose and tracking error use physics truth.')).toBeVisible();
+});

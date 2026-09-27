@@ -24,6 +24,7 @@ Public deployment and merges are separate decisions.
 | AL-012 | Full-rate acceptance explorer, seed/frequency matrix and guided paired 3D | Verified: nine retained missions revalidated, 216 gates, six pair results and measured browser inspection |
 | AL-013 | Independent yaw, pose sampling and solver-iteration diagnostics | Verified: 30/30 diagnostic cases, matching read channels and reproduced original refinement failure; AL-010 remains open |
 | AL-014 | CUDA arithmetic controls compared with fresh PhysX constant spin | Verified: 18/18 signature comparisons and arithmetic controls; 30/30 fresh physics cases; original refinement still fails |
+| AL-015 | Seeded position/velocity noise, 40 ms observation delay and truth-based robustness | In progress: fixed four-profile matrix, live truth/observation monitoring and strict reconstruction |
 
 ## Next gate
 

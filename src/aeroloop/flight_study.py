@@ -48,7 +48,7 @@ def read_study(directories):
             m, c = run["manifest.json"], run["config.json"]
             dt = c["physics_options"].get("physics_dt_s", .005)
             key = (dt, m["seed"])
-            require(m["scenario"] == "ground-mission-wind" and key not in runs and not m["source_dirty"], "invalid flight study case")
+            require(m["schema_version"] == 5 and m["scenario"] == "ground-mission-wind" and key not in runs and not m["source_dirty"], "invalid flight study case")
             runs[key] = run
             timing_rows[key] = timing(row.get("timing"), run["samples.json"][-1]["time_s"])
             require(timing_rows[key]["paced"] and timing_rows[key]["monitor_enabled"], "study requires paced, monitored sessions")

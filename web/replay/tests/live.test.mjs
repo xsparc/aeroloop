@@ -23,3 +23,13 @@ test('live history stays bounded, deduplicates polls and rejects regressions',()
   assert.equal(historyAppend(h,liveFixture(499).sample),h);
   assert.throws(()=>historyAppend(h,liveFixture(0).sample));
 });
+
+
+test('observation telemetry binds source age and profile without accepting private data',()=>{
+  const good=liveFixture(1000);good.schema_version=2;good.physics_dt_s=.005;good.observation_profile='noise-delay';
+  good.sample.observation={profile:'noise-delay',source_sequence:992,source_time_s:4.96,age_s:.04,position_m:[.01,0,1.5],velocity_m_s:[0,0,0]};
+  assert.equal(validateLive(good).sample.observation.age_s,.04);
+  for (const mutate of [v=>v.observation_profile='ideal',v=>v.sample.observation.source_sequence=1000,v=>v.sample.observation.age_s=0,v=>v.sample.observation.private_path='private',v=>v.schema_version=1]) {
+    const bad=structuredClone(good);mutate(bad);assert.throws(()=>validateLive(bad));
+  }
+});
