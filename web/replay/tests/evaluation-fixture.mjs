@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 export const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const encode=value=>JSON.stringify(value);
-function gates(m) {
+export function gates(m) {
   const route=m.mission;
   const rows=[['model_bounds','Model bounds exceeded',0,'count','eq',0],
     ['samples','Control samples',m.samples,'count','eq',10001],

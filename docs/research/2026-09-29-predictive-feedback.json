@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "1e0d65130bfb313da2b9b8ec09e29874dc7a734b",
+  "scanned_at": "2026-09-29",
+  "coverage": [
+    "Model propagation between captures",
+    "Retained AL-018 landing failures",
+    "Repeatable paired 3D demonstration"
+  ],
+  "findings": [
+    {
+      "finding": "Propagation between observations supports a bounded model observer; this simplified thrust/attitude predictor needs independent physics evaluation.",
+      "source_event_date": null,
+      "citations": [
+        "https://docs.px4.io/main/en/advanced_config/tuning_the_ecl_ekf"
+      ],
+      "confidence": "medium",
+      "relevance": "Missing translational feedback during turbulent flight",
+      "direction_alignment": "Improve physics-based controller evaluation and provide a working demonstration",
+      "opportunity_or_risk": "The retained one/two-second outages expose landing failures. Model error can accumulate during prediction; ideal attitude and known actuation limit realism.",
+      "engineering_cost": "Opt-in predictor, strict reconstructed evidence, fixed GPU regression matrix and recorded paired demo",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-019 evaluates bounded predictive feedback against retained held-capture flights",
+      "verification_needed": "Analytic propagation, capture/reset/expiry tests, fifteen clean candidate flights, exact no-outage regression and actual browser playback"
+    }
+  ],
+  "overall_recommendation": "Freeze a bounded predictor and preserve failed thresholds; show verified comparisons without default enablement.",
+  "evidence_gaps": [
+    "The official estimator documentation does not validate this simplified observer",
+    "Regression seeds are not unseen validation",
+    "Ideal attitude, uncalibrated wind/contact and independent yaw refinement remain"
+  ]
+}

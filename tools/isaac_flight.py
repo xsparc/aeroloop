@@ -20,11 +20,15 @@ def main():
     parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
     from aeroloop.observation import ALL_PROFILES
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
+    parser.add_argument("--predictive-feedback", action="store_true")
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     add_launcher_args(parser)
     parser.set_defaults(headless=True, visualizer=["none"], device="cuda:0", livestream=0)
     args = parser.parse_args()
+    from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.predictive_feedback and args.observation_profile not in OUTAGE_PROFILES:
+        parser.error("Predictive feedback requires a 50 Hz outage-study profile.")
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     if (args.physics_dt != .005 or args.monitor or args.realtime) and args.scenario != "ground-mission-wind":

@@ -90,11 +90,12 @@ All AL-017 post-outage dwell checks start inside the 50 mm band. AL-018 extends
 that evidence under [decision 015](../architecture/decisions/015-outage-recovery.md)
 with fixed longer outages and an equal-cadence reference. Its [measured duration
 study](../evidence/isaac-outage-validation.md) exercises three outside-band returns
-at 500 ms, while 1/2-second cases expose landing and recovery failures. Next,
-investigate a bounded stale-feedback controller mitigation through descent and
-landing against these retained failures. Preserve the no-outage and 250/500 ms
-regressions, and freeze evaluation before further measurements. Recorded replay
-for the new timing family is a separate extension. Retain both observation references and the
+at 500 ms, while 1/2-second cases expose landing and recovery failures. AL-019 now evaluates bounded predictive feedback through descent and landing
+under [decision 016](../architecture/decisions/016-predictive-outage-demo.md),
+with a [repeatable paired demo](../predictive-feedback.md). Preserve the no-outage
+and 250/500 ms regressions and all original stress failures. Prediction stays
+opt-in until the fixed regression matrix and independent validation justify any
+change in defaults. Retain both observation references and the
 original accuracy gates. Any proposed runtime mitigation must pass the original accuracy and
 full-flight studies first.
 

@@ -44,7 +44,7 @@ def read_study(directories):
     return read_timing_study(directories, profiles=PROFILES, paced_profiles=PROFILES)
 
 
-def summarize(runs, clocks):
+def summarize(runs, clocks, version=7):
     require(set(runs) == set(clocks) == {(p,s) for p in PROFILES for s in range(3)}, "incomplete outage study matrix")
     first = runs[(PROFILES[0], 0)]
     provenance = {k: first["manifest.json"][k] for k in ("source_commit", "source_tree_sha256", "controller_binary_sha256", "lock_sha256")}
@@ -55,7 +55,7 @@ def summarize(runs, clocks):
         for seed in range(3):
             run, reference = runs[(profile,seed)], runs[(PROFILES[0],seed)]
             m, c = run["manifest.json"], run["config.json"]
-            require(m["schema_version"] == 7 and not m["source_dirty"] and m["seed"] == seed
+            require(m["schema_version"] == version and not m["source_dirty"] and m["seed"] == seed
                     and c["observation_model"] == configuration(profile), "outage study identity differs")
             require(all(m[k] == v for k,v in provenance.items()), "outage study source differs")
             require(c["simulator_versions"] == first["config.json"]["simulator_versions"], "outage study runtime differs")

@@ -22,7 +22,7 @@ function obj(value:unknown):Record<string,any> {check(value && typeof value==="o
 const finite=(n:unknown):n is number=>typeof n==="number" && Number.isFinite(n);
 const nonnegative=(n:unknown)=>finite(n)&&n>=0;
 const short=(s:unknown)=>typeof s==="string"&&s.length>0&&s.length<=200;
-function expectedGates(c:Record<string,any>):Record<string,[unknown,string,string,number]> {
+export function expectedGates(c:Record<string,any>):Record<string,[unknown,string,string,number]> {
   const m=obj(c.metrics), mission=obj(m.mission);
   check(Array.isArray(mission.waypoint_reached_s)&&mission.waypoint_reached_s.length===4
     && mission.waypoint_reached_s.every((v:unknown)=>v===null||nonnegative(v)));
