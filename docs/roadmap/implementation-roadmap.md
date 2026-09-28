@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Scope revised 2026-09-27: physics simulation replaces PX4 execution; Isaac physics
+Scope revised 2026-09-28: physics simulation replaces PX4 execution; Isaac physics
 and learning remain in the MVP. Incremental PRs target `main`; after a squash merge,
 verify that every reviewed change reached `main` before starting the next slice.
 Public deployment and merges are separate decisions.
@@ -27,6 +27,8 @@ Public deployment and merges are separate decisions.
 | AL-015 | Seeded position/velocity noise, 40 ms observation delay and truth-based robustness | Verified: 12/12 PhysX missions, 9/9 robustness pairs, unchanged ideal baseline and live 3D truth/observation monitoring |
 | AL-016 | Recorded observation-profile evaluation with paired 3D and explicit truth/feedback timing | Verified: twelve retained flights revalidated, 288 gates, nine pairs, all artifact hashes and measured 3D inspection |
 | AL-017 | Fixed feedback cadence and capture outages with measured recovery and live 3D | Verified: 12/12 PhysX missions, 9/9 pairs, 12/12 post-outage dwell gates and unchanged ideal baseline |
+
+| AL-018 | Longer capture outages with sustained recovery, preserved failures and live 3D | In progress: frozen 250/500/1000/2000 ms matrix against equal-cadence reference |
 
 ## Next gate
 
@@ -85,8 +87,8 @@ AL-017 now isolates capture cadence and missing samples under
 [decision 014](../architecture/decisions/014-observation-timing.md), with fixed
 50 Hz capture and two 250 ms outage windows. The [measured study](../evidence/isaac-timing-validation.md)
 passed all twelve missions and nine pairs, with at most 29.111 mm truth separation.
-All post-outage dwell checks start inside the 50 mm band. A later bounded outage
-duration study should exercise excursions outside that band and preserve failures;
+All post-outage dwell checks start inside the 50 mm band. AL-018 now implements a fixed longer-outage
+duration study under [decision 015](../architecture/decisions/015-outage-recovery.md) to exercise excursions outside that band and preserve failures;
 these results do not yet measure the recovery margin. Recorded replay for the new
 timing family is a separate extension. Retain both observation references and the
 original accuracy gates. Any proposed runtime mitigation must pass the original accuracy and

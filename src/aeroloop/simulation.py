@@ -141,7 +141,7 @@ def record(result, output_root):
     if (wind or mission) and not rotor_flight:
         raise ValidationError("wind experiments require Isaac rotor physics")
     observations = "observation_model" in result["config"]
-    from .timing_observation import PROFILES as TIMING_PROFILES
+    from .timing_observation import ALL_PROFILES as TIMING_PROFILES
     timing_observations = result["config"].get("observation_model", {}).get("profile") in TIMING_PROFILES
     if observations and not (rotor_flight and wind and mission):
         raise ValidationError("observations require the turbulent contact mission")

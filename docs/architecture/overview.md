@@ -122,3 +122,9 @@ version 3 separates simulated source age from wall-clock monitor freshness;
 the full-rate timing report checks paired recovery dwells. Recorded replay of
 this family is explicitly unsupported. See
 [decision 014](decisions/014-observation-timing.md).
+
+The [outage duration study](../outage-recovery.md) extends the strict timing
+profile allowlist without changing recording or live data shapes. An equal-cadence
+reference isolates outages of 250/500/1000/2000 ms. Its separate report preserves
+mission and paired failures and scores the final uninterrupted recovery interval;
+the earlier timing report retains its original first-dwell semantics.

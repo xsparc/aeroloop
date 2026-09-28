@@ -18,7 +18,8 @@ def main():
     parser.add_argument("--scenario", choices=(*SCENARIOS, *WIND_SCENARIOS, "ground-mission", "ground-mission-wind", "all", "turbulence"), default="all")
     parser.add_argument("--seeds", type=int, nargs="+", default=list(range(5)))
     parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
-    parser.add_argument("--observation-profile", choices=("ideal", "noise", "delay", "noise-delay", "timing-ideal", "sample-hold", "dropout", "hold-dropout"))
+    from aeroloop.observation import ALL_PROFILES
+    parser.add_argument("--observation-profile", choices=ALL_PROFILES)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     add_launcher_args(parser)

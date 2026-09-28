@@ -1,12 +1,16 @@
 import type {Vec3} from "./contracts.js";
 export const PROFILES = ["ideal", "noise", "delay", "noise-delay"] as const;
-export const TIMING_PROFILES = ["timing-ideal", "sample-hold", "dropout", "hold-dropout"] as const;
+export const TIMING_PROFILES = ["timing-ideal", "sample-hold", "dropout", "hold-dropout", "hold-dropout-500ms", "hold-dropout-1000ms", "hold-dropout-2000ms"] as const;
 export const OUTAGE_WINDOWS = [[18,18.25],[40,40.25]] as const;
 export type Profile = typeof PROFILES[number];
 export type TimingProfile = typeof TIMING_PROFILES[number];
 export const isTimingProfile = (profile:unknown):profile is TimingProfile => TIMING_PROFILES.includes(profile as TimingProfile);
-export const capturePeriod = (profile:string) => ["sample-hold","hold-dropout"].includes(profile)?4:1;
-export const outageActive = (time:number,profile:string) => profile.includes("dropout")&&OUTAGE_WINDOWS.some(([start,end])=>time>=start&&time<end);
+export const capturePeriod = (profile:string) => profile==="sample-hold"||profile.startsWith("hold-dropout")?4:1;
+export const outageWindows = (profile:string):number[][] => {
+  const duration=profile==="hold-dropout-500ms"?.5:profile==="hold-dropout-1000ms"?1:profile==="hold-dropout-2000ms"?2:.25;
+  return profile.includes("dropout")?OUTAGE_WINDOWS.map(([start])=>[start,start+duration]):[];
+};
+export const outageActive = (time:number,profile:string) => outageWindows(profile).some(([start,end])=>time>=start&&time<end);
 export type Observation = {profile:Profile|TimingProfile; source_sequence:number; source_time_s:number; age_s:number; position_m:Vec3; velocity_m_s:Vec3};
 const finite=(v:unknown):v is number=>typeof v==="number"&&Number.isFinite(v);
 function check(v:unknown):asserts v {if(!v)throw Error("Invalid observation contract");}
@@ -34,7 +38,7 @@ export function validateObservation(value:unknown,time:number,profile:unknown):O
   let source=Math.max(0,sequence-(profile.includes("delay")?8:0));
   if(isTimingProfile(profile)) {
     const period=capturePeriod(profile);source=Math.floor(sequence/period)*period;
-    if(profile.includes("dropout"))for(const [start,end] of OUTAGE_WINDOWS)
+    for(const [start,end] of outageWindows(profile))
       if(source>=Math.round(start/.005)&&source<Math.round(end/.005))source=Math.floor((Math.round(start/.005)-1)/period)*period;
   }
   check(Math.abs(time-sequence*.005)<1e-9&&o.source_sequence===source);
