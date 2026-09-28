@@ -33,3 +33,15 @@ test('observation telemetry binds source age and profile without accepting priva
     const bad=structuredClone(good);mutate(bad);assert.throws(()=>validateLive(bad));
   }
 });
+
+
+test('capture timing validates both outage edges and rejects legacy-version aliases',()=>{
+  for(const [sequence,source,age] of [[3599,3596,.015],[3600,3596,.02],[3651,3596,.275],[3652,3652,0],[8040,7996,.22],[8052,8052,0]]) {
+    const good=liveFixture(sequence);good.schema_version=3;good.physics_dt_s=.005;good.observation_profile='hold-dropout';
+    good.sample.observation={profile:'hold-dropout',source_sequence:source,source_time_s:source*.005,age_s:age,position_m:[0,0,1.5],velocity_m_s:[0,0,0]};
+    assert.equal(validateLive(good).sample.observation.age_s,age);
+    for(const mutate of [v=>v.schema_version=2,v=>v.observation_profile='dropout',v=>v.sample.observation.source_sequence++,v=>v.sample.observation.age_s+=.005]) {
+      const bad=structuredClone(good);mutate(bad);assert.throws(()=>validateLive(bad));
+    }
+  }
+});

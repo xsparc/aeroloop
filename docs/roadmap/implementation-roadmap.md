@@ -26,6 +26,7 @@ Public deployment and merges are separate decisions.
 | AL-014 | CUDA arithmetic controls compared with fresh PhysX constant spin | Verified: 18/18 signature comparisons and arithmetic controls; 30/30 fresh physics cases; original refinement still fails |
 | AL-015 | Seeded position/velocity noise, 40 ms observation delay and truth-based robustness | Verified: 12/12 PhysX missions, 9/9 robustness pairs, unchanged ideal baseline and live 3D truth/observation monitoring |
 | AL-016 | Recorded observation-profile evaluation with paired 3D and explicit truth/feedback timing | Verified: twelve retained flights revalidated, 288 gates, nine pairs, all artifact hashes and measured 3D inspection |
+| AL-017 | Fixed feedback cadence and capture outages with measured recovery and live 3D | Verified: 12/12 PhysX missions, 9/9 pairs, 12/12 post-outage dwell gates and unchanged ideal baseline |
 
 ## Next gate
 
@@ -80,9 +81,15 @@ traces exactly preserve the earlier 200 Hz baseline. After the AL-015 merge,
 [AL-016 recorded evaluation](../evidence/observation-replay-validation.md) now
 exposes all four profiles in paired 3D, retaining full-rate scoring and explicit
 truth/feedback timing. The complete study was revalidated without new GPU flights.
-Further sensor realism requires a separate study with frozen parameters and new
-PhysX measurements; retain the current observation reference and original accuracy
-gates. Any proposed runtime mitigation must pass the original accuracy and
+AL-017 now isolates capture cadence and missing samples under
+[decision 014](../architecture/decisions/014-observation-timing.md), with fixed
+50 Hz capture and two 250 ms outage windows. The [measured study](../evidence/isaac-timing-validation.md)
+passed all twelve missions and nine pairs, with at most 29.111 mm truth separation.
+All post-outage dwell checks start inside the 50 mm band. A later bounded outage
+duration study should exercise excursions outside that band and preserve failures;
+these results do not yet measure the recovery margin. Recorded replay for the new
+timing family is a separate extension. Retain both observation references and the
+original accuracy gates. Any proposed runtime mitigation must pass the original accuracy and
 full-flight studies first.
 
 The MVP implementation and maintainer review are complete. The

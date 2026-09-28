@@ -64,3 +64,23 @@ test('observation profile shows delayed feedback while 3D and scores use truth',
   await expect(page.locator('canvas')).toHaveCount(1);
   await expect(page.getByText('3D pose and tracking error use physics truth.')).toBeVisible();
 });
+
+
+test('capture outage and resumed sensing retain truth 3D and separate telemetry freshness',async({page})=>{
+  const data=frame('running',8040);data.schema_version=3;data.physics_dt_s=.005;data.observation_profile='hold-dropout';
+  data.sample.observation={profile:'hold-dropout',source_sequence:7996,source_time_s:39.98,age_s:.22,position_m:[.08,0,1.5],velocity_m_s:[0,0,0]};
+  await page.route('**/api/live',route=>route.fulfill({json:data}));await page.goto('/monitor.html');
+  const observations=page.getByRole('region',{name:'Controller observations'});
+  await expect(observations).toContainText('Capture cadence: 50 Hz');
+  await expect(observations).toContainText('Scheduled capture outage active');
+  await expect(observations).toContainText('220 ms');
+  await expect(page.getByRole('status')).toHaveText('Live · provisional');
+  await page.getByRole('button',{name:'Enable 3D'}).click();await expect(page.locator('canvas')).toHaveCount(1);
+  data.sample.sequence=8060;data.sample.time_s=40.3;
+  data.sample.observation={...data.sample.observation,source_sequence:8060,source_time_s:40.3,age_s:0};
+  await expect(observations).toContainText('Outside scheduled capture outages');
+  await expect(observations).toContainText('40.300 s');
+  await expect(observations).toContainText('Peak received observation age220 ms');
+  data.age_s=2;data.stale=true;await expect(page.getByRole('status')).toContainText('Stale');
+  data.schema_version=2;await expect(page.getByRole('status')).toContainText('Disconnected');
+});

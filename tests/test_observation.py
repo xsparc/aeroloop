@@ -9,7 +9,7 @@ from aeroloop import mission, wind_mission
 from aeroloop.contracts import ValidationError
 from aeroloop.evidence import read_run, validate_config, replay_document
 from aeroloop.live import FlightClock, validate_snapshot
-from aeroloop.observation import Observations, PROFILES, configuration, validate_capture
+from aeroloop.observation import Observations, make_observations, PROFILES, configuration, validate_capture
 from aeroloop.observation_study import read_study, summarize
 from aeroloop.physics import Model, State
 from aeroloop.rotors import RotorModel
@@ -19,7 +19,7 @@ from aeroloop.simulation import encoded, metrics, record, sha256
 def fixture(profile="noise-delay", seed=73):
     # Synthetic failed protocol fixture; deliberately no physical integration.
     state, route, tracking = mission.initial_state(seed), mission.Mission(), wind_mission.TrackingController()
-    wind, rotors, observations = wind_mission.wind_model(), RotorModel(), Observations(profile,seed)
+    wind, rotors, observations = wind_mission.wind_model(), RotorModel(), make_observations(profile,seed)
     samples, motors, scale = [], (0.,)*4, 1.
     for i, velocity in enumerate(wind.velocities(seed,.005,410)):
         t=round(i*.005,9)

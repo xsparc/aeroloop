@@ -11,7 +11,7 @@ from .rotors import RotorModel
 from .simulation import encoded, metrics, record, sha256
 from .live import FlightClock, write_snapshot
 from . import mission, wind_mission
-from .observation import Observations
+from .observation import make_observations
 from .wind import WIND_SCENARIOS, WIND_EVENTS, WindModel, flight_setpoint, wind_outcome, comparisons
 
 
@@ -68,7 +68,7 @@ def flight(output: Path, launcher_args):
                 route = mission.Mission() if contact_mission else None
                 tracking = wind_mission.TrackingController() if scenario == wind_mission.SCENARIO else None
                 previous_scale = 1.
-                observations = Observations(profile, seed) if profile else None
+                observations = make_observations(profile, seed) if profile else None
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
                 if route:

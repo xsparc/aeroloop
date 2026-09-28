@@ -114,3 +114,11 @@ feedback snapshots, whose capture and delivery times stay visible. The legacy
 single-run exporter remains unchanged. See
 [decision 013](decisions/013-observation-replay.md) and the
 [observation explorer](../observation-evaluation.md).
+
+Version 7 isolates capture cadence and missing position/velocity samples from
+observation noise and transport delay. A fixed capture schedule supplies held
+feedback without altering the 200 Hz physics/control clock. Live telemetry
+version 3 separates simulated source age from wall-clock monitor freshness;
+the full-rate timing report checks paired recovery dwells. Recorded replay of
+this family is explicitly unsupported. See
+[decision 014](decisions/014-observation-timing.md).

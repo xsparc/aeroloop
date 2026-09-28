@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "4ed026cb822e7cafebac86248819fb2b9ef22446",
+  "scanned_at": "2026-09-27",
+  "coverage": [
+    "Sensor update cadence",
+    "Synthetic feedback outage protocol",
+    "Existing truth-based mission verification"
+  ],
+  "findings": [
+    {
+      "finding": "Separating sensor update cadence from physics permits controlled sample-and-hold tests; deterministic missing captures expose stale-feedback response.",
+      "source_event_date": null,
+      "citations": [
+        "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.sensors.html#sensor-base"
+      ],
+      "confidence": "high",
+      "relevance": "Flight-controller observation timing",
+      "direction_alignment": "Improve realistic physics testing while retaining independent truth",
+      "opportunity_or_risk": "Outage recovery must be measured from complete physics traces; slower observations must not slow the solver.",
+      "engineering_cost": "Add one fixed timing family, strict capture reconstruction, live readouts and a full-rate report",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-017 evaluates sample hold and bounded capture outages",
+      "verification_needed": "Fresh clean-revision PhysX matrix, exact ideal baseline reproduction, capture boundary tests and recovery dwell gates"
+    }
+  ],
+  "overall_recommendation": "Run a fixed cadence/outage study with unchanged controllers and physics.",
+  "evidence_gaps": [
+    "50 Hz and 250 ms are declared stress parameters, not hardware calibration",
+    "Attitude/rates and mission/contact sensing remain ideal",
+    "Yaw refinement remains unresolved"
+  ]
+}
