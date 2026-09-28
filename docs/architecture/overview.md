@@ -128,3 +128,14 @@ profile allowlist without changing recording or live data shapes. An equal-caden
 reference isolates outages of 250/500/1000/2000 ms. Its separate report preserves
 mission and paired failures and scores the final uninterrupted recovery interval;
 the earlier timing report retains its original first-dwell semantics.
+
+
+Version 8 adds bounded predictive feedback ahead of the unchanged trajectory
+and native rate controllers. The predictor consumes only successful captures,
+previous applied rotor thrust and measured attitude. Raw captures remain separate
+from estimates; CPU evidence validation reconstructs each update and setpoint.
+Live schema four exposes prediction state alongside capture age. A dedicated
+checksummed paired export presents retained version-seven and fresh version-eight
+flights without changing the older replay contract. Its full-rate outcomes remain
+separate from 20 Hz display samples. See [decision 016](decisions/016-predictive-outage-demo.md)
+and the [working demo workflow](../predictive-feedback.md).
