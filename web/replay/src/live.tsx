@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { historyAppend, positionError, validateLive, type LiveFrame, type LiveSample } from "./live-contract.js";
-import {capturePeriod, isTimingProfile, outageActive} from "./observation-contract.js";
+import {capturePeriod, isTimingProfile, outageActive, outageWindows} from "./observation-contract.js";
 const Scene = lazy(() => import("./scene.js"));
 const number = (v: number | undefined, digits=2) => v === undefined ? "—" : v.toFixed(digits);
 
@@ -102,7 +102,7 @@ export function LiveMonitor() {
           <h3>Controller observations</h3>
           <p>Profile: <strong>{frame.observation_profile}</strong> · position and velocity only</p>
           {timingProfile&&<p>Capture cadence: <strong>{200/capturePeriod(frame.observation_profile)} Hz</strong> · holds the last successful capture.</p>}
-          {timingProfile&&frame.observation_profile.includes("dropout")&&<p>{s&&outageActive(s.time_s,frame.observation_profile)?"Scheduled capture outage active":"Outside scheduled capture outages"}. Outages: 18.000–18.250 s and 40.000–40.250 s.</p>}
+          {timingProfile&&frame.observation_profile.includes("dropout")&&<p>{s&&outageActive(s.time_s,frame.observation_profile)?"Scheduled capture outage active":"Outside scheduled capture outages"}. Outages: {outageWindows(frame.observation_profile).map(([start,end])=>`${start.toFixed(3)}–${end.toFixed(3)} s`).join(" and ")}.</p>}
           <dl className="al-live-values">
             <div><dt>Observation age</dt><dd>{number(s?.observation ? s.observation.age_s*1000 : undefined, 0)} ms</dd></div>
             <div><dt>Position discrepancy</dt><dd>{number(s?.observation ? Math.hypot(...s.position_m.map((v,i)=>v-s.observation!.position_m[i])) : undefined, 3)} m</dd></div>

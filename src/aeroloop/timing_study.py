@@ -13,10 +13,10 @@ from .timing_observation import DT, PROFILES, WINDOWS, configuration
 RECOVERY = {"position_difference_m": .05, "dwell_s": 1., "deadline_s": 5.}
 
 
-def capture_metrics(samples):
+def capture_metrics(samples, outage_windows=WINDOWS):
     fresh = [s for s in samples if s["observation"]["source_sequence"] == s["sequence"]]
     windows = []
-    for start, end in WINDOWS:
+    for start, end in outage_windows:
         resumed = next((s["time_s"] for s in fresh if s["time_s"] >= end), None)
         before = [s for s in fresh if s["time_s"] < start]
         windows.append({"start_s": start, "end_s": end,
@@ -47,27 +47,27 @@ def recovery_windows(reference, candidate):
     return results
 
 
-def read_study(directories):
-    require(len(directories) == 4, "four timing profile directories required")
+def read_study(directories, profiles=PROFILES, paced_profiles=("hold-dropout",)):
+    require(len(directories) == len(profiles), "one directory required per timing profile")
     runs, clocks = {}, {}
     for directory in directories:
         result = load_json(Path(directory)/"result.json")
         verified = validate_flight_result(directory, result)
         require(len(verified) == 3, "three seeds required per timing profile")
-        profiles = set()
+        worker_profiles = set()
         for run, row in zip(verified, result["results"]):
             m, c = run["manifest.json"], run["config.json"]
             require(m["schema_version"] == 7 and not m["source_dirty"], "clean timing recording required")
             profile = c["observation_model"]["profile"]
-            profiles.add(profile)
+            worker_profiles.add(profile)
             key = (profile, m["seed"])
             require(key not in runs, "duplicate timing study case")
             runs[key] = run
             clocks[key] = timing(row.get("timing"), run["samples.json"][-1]["time_s"])
-            require(clocks[key]["monitor_enabled"] and (profile != "hold-dropout" or clocks[key]["paced"]),
+            require(clocks[key]["monitor_enabled"] and (profile not in paced_profiles or clocks[key]["paced"]),
                     "timing study requires monitoring and combined-profile pacing")
-        require(len(profiles) == 1, "mixed worker timing profiles")
-    require(set(runs) == {(p, seed) for p in PROFILES for seed in range(3)}, "incomplete timing study matrix")
+        require(len(worker_profiles) == 1, "mixed worker timing profiles")
+    require(set(runs) == {(p, seed) for p in profiles for seed in range(3)}, "incomplete timing study matrix")
     return runs, clocks
 
 

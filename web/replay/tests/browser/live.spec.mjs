@@ -84,3 +84,22 @@ test('capture outage and resumed sensing retain truth 3D and separate telemetry 
   data.age_s=2;data.stale=true;await expect(page.getByRole('status')).toContainText('Stale');
   data.schema_version=2;await expect(page.getByRole('status')).toContainText('Disconnected');
 });
+
+test('long outage monitor shows the configured interval, held age and resumed truth flight',async({page})=>{
+  const profile='hold-dropout-2000ms';
+  const data=frame('running',8200);data.schema_version=3;data.physics_dt_s=.005;data.observation_profile=profile;
+  data.sample.observation={profile,source_sequence:7996,source_time_s:39.98,age_s:1.02,position_m:[.25,0,1.5],velocity_m_s:[0,0,0]};
+  await page.route('**/api/live',route=>route.fulfill({json:data}));await page.goto('/monitor.html');
+  const observations=page.getByRole('region',{name:'Controller observations'});
+  await expect(observations).toContainText('18.000–20.000 s and 40.000–42.000 s');
+  await expect(observations).toContainText('Scheduled capture outage active');
+  await expect(observations).toContainText('1020 ms');
+  await expect(page.getByRole('status')).toHaveText('Live · provisional');
+  await page.getByRole('button',{name:'Enable 3D'}).click();await expect(page.locator('canvas')).toHaveCount(1);
+  data.sample.sequence=8400;data.sample.time_s=42;
+  data.sample.observation={...data.sample.observation,source_sequence:8400,source_time_s:42,age_s:0};
+  await expect(observations).toContainText('Outside scheduled capture outages');
+  await expect(observations).toContainText('42.000 s');
+  data.state='failed';await expect(page.getByRole('status')).toContainText('Failed');
+  await expect(observations).toContainText('Peak received observation age1020 ms');
+});

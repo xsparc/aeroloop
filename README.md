@@ -102,3 +102,8 @@ The [capture timing study](docs/observation-timing.md) tests 50 Hz feedback and
 250 ms sensor outages while physics/control remain at 200 Hz. All twelve fresh
 PhysX missions pass; the [measured results](docs/evidence/isaac-timing-validation.md)
 retain capture ages, paired differences, post-outage dwell checks and wall lag.
+
+The [outage duration study](docs/outage-recovery.md) measures sustained recovery
+under 250/500/1000/2000 ms missing-capture windows. Its [fifteen verified flights](docs/evidence/isaac-outage-validation.md)
+preserve failures: all 500 ms cases pass, while 1/2-second outages expose landing
+and recovery limits. The live 3D monitor displays each profile's actual windows.

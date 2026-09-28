@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "5b5802d0d5c8b89254724bd0cb379f6b6728c499",
+  "scanned_at": "2026-09-28",
+  "coverage": [
+    "Sensor capture periods",
+    "Retained AL-017 recovery coverage",
+    "Failure-preserving duration study"
+  ],
+  "findings": [
+    {
+      "finding": "Independent sensor periods retain a fixed capture cadence while a declared outage-duration matrix probes the recovery gap left by AL-017.",
+      "source_event_date": null,
+      "citations": [
+        "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.sensors.html#sensor-base"
+      ],
+      "confidence": "high",
+      "relevance": "Flight-controller observation timing",
+      "direction_alignment": "Improve realistic physics testing while retaining independent truth",
+      "opportunity_or_risk": "AL-017 never exceeded the recovery band. Longer outages can expose failed missions or transient returns; neither may be hidden by first-dwell scoring.",
+      "engineering_cost": "Three strict profiles, shared capture verification, sustained-recovery report and updated live windows",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-018 measures fixed longer outages with an equal-cadence reference",
+      "verification_needed": "Fifteen fresh clean-revision flights, unchanged reference and 250 ms traces, complete suffix recovery tests and live 3D inspection"
+    }
+  ],
+  "overall_recommendation": "Freeze a bounded duration matrix and preserve each measured outcome before considering controller mitigation.",
+  "evidence_gaps": [
+    "Durations are synthetic stress parameters, not hardware calibration",
+    "Three seeds and discrete durations cannot establish a safe outage limit",
+    "Ideal attitude and contact supervision; unresolved yaw refinement remain"
+  ]
+}

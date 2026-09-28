@@ -97,7 +97,7 @@ class FlightClock:
         self.late_steps += self.lag > .005
 
     def snapshot(self, seed, dt, sample=None, state="running", observation_profile=None):
-        from .timing_observation import PROFILES as TIMING_PROFILES
+        from .timing_observation import ALL_PROFILES as TIMING_PROFILES
         return {"schema_version": 3 if observation_profile in TIMING_PROFILES else 2 if observation_profile else 1, **({"observation_profile": observation_profile} if observation_profile else {}), "state": state, "seed": seed, "physics_dt_s": dt,
                 "paced": self.paced, "elapsed_s": self.elapsed, "lag_s": self.lag,
                 "max_lag_s": self.max_lag, "late_steps": self.late_steps,

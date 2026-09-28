@@ -2,15 +2,18 @@
 from dataclasses import replace
 
 PROFILES = ("timing-ideal", "sample-hold", "dropout", "hold-dropout")
+OUTAGE_DURATIONS = {"hold-dropout-500ms": .5, "hold-dropout-1000ms": 1., "hold-dropout-2000ms": 2.}
+ALL_PROFILES = PROFILES + tuple(OUTAGE_DURATIONS)
 DT = .005
 WINDOWS = ((18., 18.25), (40., 40.25))
 
 
 def configuration(profile):
-    if profile not in PROFILES:
+    if profile not in ALL_PROFILES:
         raise ValueError("unsupported observation timing profile")
-    return {"profile": profile, "capture_period_steps": 4 if profile in ("sample-hold", "hold-dropout") else 1,
-            "dropout_windows_s": [list(w) for w in WINDOWS] if "dropout" in profile else [],
+    duration = OUTAGE_DURATIONS.get(profile, .25)
+    return {"profile": profile, "capture_period_steps": 1 if profile in ("timing-ideal", "dropout") else 4,
+            "dropout_windows_s": [[start, start+duration] for start, _ in WINDOWS] if "dropout" in profile else [],
             "control_dt_s": DT, "channels": "position-velocity", "hold": "last-successful-capture",
             "capture_phase_steps": 0, "noise": "none", "transport_delay_steps": 0,
             "ideal_channels": "attitude-rates-acceleration-supervisor-contact"}

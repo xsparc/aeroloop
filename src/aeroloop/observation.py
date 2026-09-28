@@ -3,7 +3,7 @@ from collections import deque
 from dataclasses import replace
 import random
 
-from .timing_observation import PROFILES as TIMING_PROFILES, TimingObservations
+from .timing_observation import ALL_PROFILES as TIMING_PROFILES, TimingObservations
 
 PROFILES = ("ideal", "noise", "delay", "noise-delay")
 ALL_PROFILES = PROFILES + TIMING_PROFILES
