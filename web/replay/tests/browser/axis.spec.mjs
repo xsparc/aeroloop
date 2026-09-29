@@ -26,5 +26,8 @@ test('axis selections cancel stale requests and remain usable on narrow screens'
   await page.getByRole('combobox',{name:'Cohort',exact:true}).selectOption('prior-validation');
   await expect(page.getByRole('button',{name:'Play',exact:true})).toBeEnabled();await expect(page.locator('output')).toHaveText('0.000 s');
   await expect(page.getByRole('region',{name:'Fresh horizontal flight',exact:true})).toBeVisible();
-  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  for(const width of [320,390]) {
+    await page.setViewportSize({width,height:844});
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  }
 });

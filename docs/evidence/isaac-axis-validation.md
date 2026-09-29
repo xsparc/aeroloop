@@ -56,6 +56,8 @@ CTest checks, 25 frontend tests, three legacy viewer tests, and 33 browser cases
 (30 passed, three conditional legacy-fixture skips). Build and lock checks
 passed. Browser tests cover fresh-channel/cohort selection, masked captures,
 corrupted evidence, incomplete flights, canceled loads, narrow screens and 3D.
+Ten shared demo browser regressions also passed after bounding long selector
+labels, including overflow checks at 320 px and 390 px.
 Actual measured playback rendered two 3D canvases with no page errors; channel,
 cohort, seed, timeline, chapters and play/pause were exercised. Live development
 monitoring showed an active outage and resumed captures with one 3D canvas and
