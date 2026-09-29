@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "141e3a998592042d2f8d68fd85ca4d842e726f21",
+  "scanned_at": "2026-09-29",
+  "coverage": ["Capture freshness during descent", "Retained landing failures", "Frozen unseen-seed evaluation"],
+  "findings": [{
+    "finding": "Data timeout and position-estimate validity need explicit handling; holding a position command still depends on estimate quality.",
+    "source_event_date": null,
+    "citations": ["https://docs.px4.io/main/en/config/safety#position-estimation-failsafes"],
+    "confidence": "medium",
+    "relevance": "The predictor-only two-second outage cases fail landing mission gates",
+    "direction_alignment": "Improve physics-based controller testing and provide an inspectable working demo",
+    "opportunity_or_risk": "Pausing descent may reduce touchdown motion but can increase scheduled tracking error and delay landing; predicted altitude can be wrong",
+    "engineering_cost": "Opt-in command guard, strict reconstruction, 24 fresh measured flights and separate regression/unseen demo cohorts",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-020 measures capture-aware landing commands with unchanged predictor and scoring",
+    "verification_needed": "Freeze parameters, preserve inactive traces, verify full-rate physics evidence, test unseen seeds without tuning, retain all failed gates"
+  }],
+  "overall_recommendation": "Evaluate a bounded descent guard in simulation with unchanged targets, limits and deadlines; keep it opt-in.",
+  "evidence_gaps": ["PX4 documentation does not validate this experimental guard", "Small synthetic seed sets do not prove robust stability", "Ideal attitude and supervisor remain; independent yaw refinement is unresolved"]
+}

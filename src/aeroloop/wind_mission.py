@@ -44,8 +44,8 @@ class TrackingController:
     def __init__(self):
         self.integral = (0., 0., 0.)
 
-    def step(self, t, state, target, armed, dt=.005, allocation_saturated=False):
-        velocity, feedforward = reference_derivatives(t) if armed else ((0.,)*3, (0.,)*3)
+    def step(self, t, state, target, armed, dt=.005, allocation_saturated=False, reference=None):
+        velocity, feedforward = (reference if reference is not None else reference_derivatives(t)) if armed else ((0.,)*3, (0.,)*3)
         if not armed:
             self.integral = (0., 0., 0.)
             thrust, rate = 0., (0., 0., 0.)

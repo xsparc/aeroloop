@@ -6,7 +6,7 @@ source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation
 dhf_is_authoritative = false
 
 [review]
-last_reviewed = "2026-09-28"
+last_reviewed = "2026-09-29"
 review_due = "2026-10-27"
 
 [[objectives]]
@@ -352,10 +352,10 @@ statement = "Observe the native controller in live 3D PhysX missions and verify 
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/008-live-physics-flight-tests.md"]
-implementation_refs = ["src/aeroloop/isaac_flight.py", "src/aeroloop/live.py", "src/aeroloop/flight_study.py", "tools/monitor.py", "web/replay/src/live.tsx"]
-verification_refs = ["tests/test_live.py", "tests/test_wind_mission.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs"]
-validation_refs = ["docs/evidence/isaac-live-flight-validation.md", "docs/evidence/isaac-flight-study-001.json"]
+design_refs = ["docs/architecture/decisions/008-live-physics-flight-tests.md", "docs/architecture/decisions/017-landing-capture-guard.md"]
+implementation_refs = ["src/aeroloop/isaac_flight.py", "src/aeroloop/live.py", "src/aeroloop/flight_study.py", "tools/monitor.py", "web/replay/src/live.tsx", "src/aeroloop/landing_guard.py"]
+verification_refs = ["tests/test_live.py", "tests/test_wind_mission.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs", "tests/test_landing_guard.py"]
+validation_refs = ["docs/evidence/isaac-live-flight-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/isaac-landing-guard-validation.md"]
 risk_refs = ["docs/architecture/decisions/008-live-physics-flight-tests.md", "SECURITY.md"]
 
 [[work_items]]
@@ -384,10 +384,10 @@ statement = "Inspect full-rate mission gates and seed/frequency and observation-
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md", "docs/architecture/decisions/013-observation-replay.md", "docs/observation-evaluation.md"]
-implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts", "web/replay/src/observation-contract.ts"]
-verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs"]
-validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/observation-replay-validation.md"]
+design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md", "docs/architecture/decisions/013-observation-replay.md", "docs/observation-evaluation.md", "docs/architecture/decisions/017-landing-capture-guard.md"]
+implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts", "web/replay/src/observation-contract.ts", "src/aeroloop/landing_study.py"]
+verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs", "tests/test_landing_study.py"]
+validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-landing-guard-validation.md"]
 risk_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "SECURITY.md"]
 
 [[work_items]]
@@ -468,10 +468,10 @@ statement = "Measure position/velocity noise, delay, capture cadence and outage 
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/012-observation-robustness.md", "docs/observation-robustness.md", "docs/architecture/decisions/014-observation-timing.md", "docs/observation-timing.md", "docs/architecture/decisions/015-outage-recovery.md", "docs/outage-recovery.md", "docs/architecture/decisions/016-predictive-outage-demo.md", "docs/predictive-feedback.md"]
-implementation_refs = ["src/aeroloop/observation.py", "src/aeroloop/observation_study.py", "src/aeroloop/isaac_flight.py", "src/aeroloop/evidence.py", "src/aeroloop/live.py", "web/replay/src/live-contract.ts", "web/replay/src/live.tsx", "src/aeroloop/timing_observation.py", "src/aeroloop/timing_study.py", "tools/timing_report.py", "tools/timing_plot.py", "src/aeroloop/outage_study.py", "tools/outage_report.py", "tools/outage_plot.py", "src/aeroloop/predictor.py", "src/aeroloop/prediction_study.py", "web/replay/src/outage.tsx", "web/replay/src/outage-contract.ts", "tools/prediction_demo.py"]
-verification_refs = ["tests/test_observation.py", "tests/test_live.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs", "tests/test_timing_observation.py", "tests/test_outage_study.py", "tests/test_predictor.py", "web/replay/tests/outage.test.mjs", "web/replay/tests/browser/outage.spec.mjs"]
-validation_refs = ["docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-timing-validation.md", "docs/evidence/isaac-timing-001.json", "docs/evidence/isaac-outage-validation.md", "docs/evidence/isaac-outage-001.json", "docs/evidence/isaac-predictor-validation.md", "docs/evidence/isaac-predictor-001.json"]
+design_refs = ["docs/architecture/decisions/012-observation-robustness.md", "docs/observation-robustness.md", "docs/architecture/decisions/014-observation-timing.md", "docs/observation-timing.md", "docs/architecture/decisions/015-outage-recovery.md", "docs/outage-recovery.md", "docs/architecture/decisions/016-predictive-outage-demo.md", "docs/predictive-feedback.md", "docs/architecture/decisions/017-landing-capture-guard.md"]
+implementation_refs = ["src/aeroloop/observation.py", "src/aeroloop/observation_study.py", "src/aeroloop/isaac_flight.py", "src/aeroloop/evidence.py", "src/aeroloop/live.py", "web/replay/src/live-contract.ts", "web/replay/src/live.tsx", "src/aeroloop/timing_observation.py", "src/aeroloop/timing_study.py", "tools/timing_report.py", "tools/timing_plot.py", "src/aeroloop/outage_study.py", "tools/outage_report.py", "tools/outage_plot.py", "src/aeroloop/predictor.py", "src/aeroloop/prediction_study.py", "web/replay/src/outage.tsx", "web/replay/src/outage-contract.ts", "tools/prediction_demo.py", "src/aeroloop/landing_guard.py"]
+verification_refs = ["tests/test_observation.py", "tests/test_live.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs", "tests/test_timing_observation.py", "tests/test_outage_study.py", "tests/test_predictor.py", "web/replay/tests/outage.test.mjs", "web/replay/tests/browser/outage.spec.mjs", "tests/test_landing_guard.py"]
+validation_refs = ["docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-timing-validation.md", "docs/evidence/isaac-timing-001.json", "docs/evidence/isaac-outage-validation.md", "docs/evidence/isaac-outage-001.json", "docs/evidence/isaac-predictor-validation.md", "docs/evidence/isaac-predictor-001.json", "docs/evidence/isaac-landing-guard-validation.md"]
 risk_refs = ["docs/architecture/decisions/012-observation-robustness.md", "SECURITY.md"]
 
 [[work_items]]
@@ -566,3 +566,23 @@ observed_on = "2026-09-29"
 reviewed_on = "2026-09-29"
 review_due = "2026-10-29"
 decision_ref = "docs/architecture/decisions/016-predictive-outage-demo.md"
+
+[[work_items]]
+id = "AL-020"
+title = "Capture-aware landing commands and unseen-seed demonstration"
+status = "in-progress"
+requirement_ids = ["REQ-OBSERVATION-ROBUSTNESS", "REQ-DRONE-CONTROL", "REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY", "REQ-LIVE-FLIGHT-TESTS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-29-post-pr20-working-demo"
+acceptance_refs = ["docs/architecture/decisions/017-landing-capture-guard.md"]
+evidence_refs = ["docs/research/2026-09-29-landing-guard.json", "docs/evidence/isaac-landing-guard-validation.md"]
+
+[[research_decisions]]
+id = "RD-LANDING-GUARD"
+finding = "Capture freshness and stable captured horizontal motion can govern an experimental descent command while original mission scoring exposes delay and tracking tradeoffs."
+disposition = "adopted"
+source_urls = ["https://docs.px4.io/main/en/config/safety#position-estimation-failsafes"]
+observed_on = "2026-09-29"
+reviewed_on = "2026-09-29"
+review_due = "2026-10-29"
+decision_ref = "docs/architecture/decisions/017-landing-capture-guard.md"

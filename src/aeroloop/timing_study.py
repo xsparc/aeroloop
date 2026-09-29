@@ -47,13 +47,13 @@ def recovery_windows(reference, candidate):
     return results
 
 
-def read_study(directories, profiles=PROFILES, paced_profiles=("hold-dropout",), version=7):
+def read_study(directories, profiles=PROFILES, paced_profiles=("hold-dropout",), version=7, seeds=(0,1,2)):
     require(len(directories) == len(profiles), "one directory required per timing profile")
     runs, clocks = {}, {}
     for directory in directories:
         result = load_json(Path(directory)/"result.json")
         verified = validate_flight_result(directory, result)
-        require(len(verified) == 3, "three seeds required per timing profile")
+        require(len(verified) == len(seeds), "wrong seed count per timing profile")
         worker_profiles = set()
         for run, row in zip(verified, result["results"]):
             m, c = run["manifest.json"], run["config.json"]
@@ -67,7 +67,7 @@ def read_study(directories, profiles=PROFILES, paced_profiles=("hold-dropout",),
             require(clocks[key]["monitor_enabled"] and (profile not in paced_profiles or clocks[key]["paced"]),
                     "timing study requires monitoring and combined-profile pacing")
         require(len(worker_profiles) == 1, "mixed worker timing profiles")
-    require(set(runs) == {(p, seed) for p in profiles for seed in range(3)}, "incomplete timing study matrix")
+    require(set(runs) == {(p, seed) for p in profiles for seed in seeds}, "incomplete timing study matrix")
     return runs, clocks
 
 

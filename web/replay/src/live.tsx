@@ -101,6 +101,7 @@ export function LiveMonitor() {
         {frame?.observation_profile && <section aria-label="Controller observations">
           <h3>Controller observations</h3>
           {s?.feedback&&<p>Predictive feedback: <strong>{s.feedback.mode}</strong> · estimated position error {number(Math.hypot(...s.position_m.map((v,i)=>v-s.feedback!.position_m[i])),3)} m. Raw capture age is shown below.</p>}
+          {s?.landing_guard&&<p>Landing guard: <strong>{s.landing_guard.mode}</strong> · commanded altitude {number(s.landing_guard.target_m[2],3)} m · scheduled altitude {number(s.target_m[2],3)} m. Tracking error uses the original schedule.</p>}
           <p>Profile: <strong>{frame.observation_profile}</strong> · position and velocity only</p>
           {timingProfile&&<p>Capture cadence: <strong>{200/capturePeriod(frame.observation_profile)} Hz</strong> · holds the last successful capture.</p>}
           {timingProfile&&frame.observation_profile.includes("dropout")&&<p>{s&&outageActive(s.time_s,frame.observation_profile)?"Scheduled capture outage active":"Outside scheduled capture outages"}. Outages: {outageWindows(frame.observation_profile).map(([start,end])=>`${start.toFixed(3)}–${end.toFixed(3)} s`).join(" and ")}.</p>}
