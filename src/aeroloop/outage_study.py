@@ -44,16 +44,16 @@ def read_study(directories):
     return read_timing_study(directories, profiles=PROFILES, paced_profiles=PROFILES)
 
 
-def summarize(runs, clocks, version=7):
-    require(set(runs) == set(clocks) == {(p,s) for p in PROFILES for s in range(3)}, "incomplete outage study matrix")
-    first = runs[(PROFILES[0], 0)]
+def summarize(runs, clocks, version=7, profiles=PROFILES, seeds=(0,1,2)):
+    require(set(runs) == set(clocks) == {(p,s) for p in profiles for s in seeds}, "incomplete outage study matrix")
+    first = runs[(profiles[0], seeds[0])]
     provenance = {k: first["manifest.json"][k] for k in ("source_commit", "source_tree_sha256", "controller_binary_sha256", "lock_sha256")}
     entries, comparisons, durations = [], [], []
     common = lambda c: {k:v for k,v in c.items() if k != "observation_model"}
-    for profile in PROFILES:
+    for profile in profiles:
         windows = configuration(profile)["dropout_windows_s"]
-        for seed in range(3):
-            run, reference = runs[(profile,seed)], runs[(PROFILES[0],seed)]
+        for seed in seeds:
+            run, reference = runs[(profile,seed)], runs[(profiles[0],seed)]
             m, c = run["manifest.json"], run["config.json"]
             require(m["schema_version"] == version and not m["source_dirty"] and m["seed"] == seed
                     and c["observation_model"] == configuration(profile), "outage study identity differs")
@@ -66,7 +66,7 @@ def summarize(runs, clocks, version=7):
                             "captures": capture_metrics(run["samples.json"], windows), "timing": clocks[(profile,seed)]})
             if windows:
                 recovery = recovery_windows(reference["samples.json"], run["samples.json"], windows)
-                comparisons.append({"profile": profile, "seed": seed, "reference_profile": PROFILES[0],
+                comparisons.append({"profile": profile, "seed": seed, "reference_profile": profiles[0],
                                     **compare(reference, run), "recovery_windows": recovery,
                                     "recovery_passed": all(w["passed"] for w in recovery)})
         rows = [r for r in entries if r["profile"] == profile]
@@ -81,8 +81,8 @@ def summarize(runs, clocks, version=7):
                                       and all(r["passed"] and r["recovery_passed"] for r in pairs)})
     return {"schema_version": 1, "kind": "isaac_outage_duration_study", "backend": "isaacsim_physx",
             "source_dirty": False, **provenance, "versions": first["config.json"]["simulator_versions"],
-            "physics_dt_s": DT, "control_dt_s": DT, "seeds": [0,1,2], "reference_profile": PROFILES[0],
-            "profiles": [configuration(p) for p in PROFILES],
+            "physics_dt_s": DT, "control_dt_s": DT, "seeds": list(seeds), "reference_profile": profiles[0],
+            "profiles": [configuration(p) for p in profiles],
             "recovery_criteria": {**RECOVERY, "method": "final-uninterrupted-in-band-suffix"},
             "trials": len(entries), "passed": sum(r["status"] == "passed" for r in entries),
             "complete": all(r["sample_count"] == 10001 for r in entries),

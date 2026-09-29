@@ -29,6 +29,8 @@ def flight(output: Path, launcher_args):
     monitor, paced = launcher_args.monitor, launcher_args.realtime
     profile = launcher_args.observation_profile
     predictive = getattr(launcher_args, "predictive_feedback", False)
+    guarded = getattr(launcher_args, "landing_guard", False)
+    from .landing_guard import LandingGuard, configuration as guard_configuration
     from .predictor import Predictor, configuration as predictor_configuration
     from .physics_audit import provenance
     source = provenance()
@@ -71,6 +73,7 @@ def flight(output: Path, launcher_args):
                 tracking = wind_mission.TrackingController() if scenario == wind_mission.SCENARIO else None
                 previous_scale = 1.
                 predictor = Predictor() if predictive else None
+                guard = LandingGuard() if guarded else None
                 observations = make_observations(profile, seed) if profile else None
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
@@ -124,7 +127,9 @@ def flight(output: Path, launcher_args):
                             normal_force = interval_normal
                             phase, target, armed, bottom = route.update(t, state, normal_force)
                             if tracking:
-                                thrust_request, rate_request, tracking_sample = tracking.step(t, feedback, target, armed, dt, previous_scale < 1.-1e-12)
+                                guard_sample = guard.step(t,phase,target,observation_sample) if guard else None
+                                reference = (guard_sample["target_velocity_m_s"],guard_sample["target_acceleration_m_s2"]) if guard else None
+                                thrust_request, rate_request, tracking_sample = tracking.step(t, feedback, guard_sample["target_m"] if guard else target, armed, dt, previous_scale < 1.-1e-12, reference)
                             else:
                                 thrust_request, rate_request = mission.setpoint(state, target, armed)
                         else:
@@ -142,6 +147,8 @@ def flight(output: Path, launcher_args):
                             "effort_normalized": effort, "thrust_n": thrust, "external_force_n": external,
                             "thrust_setpoint_n": thrust_request, "rotor_command_n": commands,
                             "rotor_thrust_n": motors, "moment_nm": moment, "allocation_scale": scale})
+                        if guard:
+                            samples[-1]["landing_guard"] = guard_sample
                         if predictor:
                             samples[-1]["feedback"] = prediction_sample
                         if observations:
@@ -203,6 +210,8 @@ def flight(output: Path, launcher_args):
                     "rate_gains": {"p": [.6]*3, "i": [.1]*3, "d": [.005]*3, "ff": [0.]*3, "integral_limit": [.3]*3},
                     "actuator": asdict(rotors), "simulator_versions": package_versions,
                     "physics_options": {"gyroscopic_forces": True}}
+                if guard:
+                    config["landing_guard_model"] = guard_configuration()
                 if predictor:
                     config["feedback_model"] = predictor_configuration()
                 if observations:

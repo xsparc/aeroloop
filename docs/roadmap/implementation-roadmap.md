@@ -29,6 +29,7 @@ Public deployment and merges are separate decisions.
 | AL-017 | Fixed feedback cadence and capture outages with measured recovery and live 3D | Verified: 12/12 PhysX missions, 9/9 pairs, 12/12 post-outage dwell gates and unchanged ideal baseline |
 | AL-018 | Longer capture outages with sustained recovery, preserved failures and live 3D | Verified study: 15 complete flights; 11 mission, 6/12 pair and 15/24 recovery passes; longer-outage failures retained |
 | AL-019 | Bounded predictive feedback with recorded paired outage demo | Verified study: 15 fresh flights; 12 mission, 6/12 pair and 16/24 recovery passes; exact no-outage continuity; long-outage failures retained |
+| AL-020 | Capture-aware landing commands and unseen-seed demo | Verified experiment: 24 fresh flights; exact inactive traces; 18 paired demo cases; two-second failures retained, guard stays opt-in |
 
 ## Next gate
 
@@ -98,8 +99,13 @@ and 250/500 ms regressions and all original stress failures. Prediction stays
 opt-in until the fixed regression matrix and independent validation justify any
 change in defaults. The [measured result](../evidence/isaac-predictor-validation.md)
 improves one-second mission completion but still fails long-outage robustness.
-Next, bound model uncertainty and descent/contact behavior with a frozen unseen
-seed protocol. Retain both observation references and the
+AL-020 evaluates capture-aware descent under [decision 017](../architecture/decisions/017-landing-capture-guard.md) with a frozen unseen
+seed protocol and a [paired working demo](../landing-guard.md). Its [measured results](../evidence/isaac-landing-guard-validation.md)
+show no increase in mission passes: the guard trades touchdown motion against
+delay and can worsen contact during a long outage. Unseen seed 101 also exposes
+a no-outage baseline failure. Keep the guard experimental; next separate altitude
+feedback loss from horizontal capture outages and measure prediction error before
+changing descent policy. Retain both observation references and the
 original accuracy gates. Any proposed runtime mitigation must pass the original accuracy and
 full-flight studies first.
 

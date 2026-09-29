@@ -102,3 +102,11 @@ five capture-outage profiles and three seeds. It uses a separate pinned export,
 shared timeline, optional paired 3D, full-rate outcome tables and explicit raw
 capture/predictor state. See the [export and launch workflow](../../docs/predictive-feedback.md).
 Recorded physics data are required; test fixtures are not demonstration evidence.
+
+
+The [landing capture demo](../../docs/landing-guard.md) uses `landing.html` and
+an ignored `public/landing-config.json` pin. The dedicated version-two index
+binds 18 comparisons across fixed regression and unseen-seed cohorts. Version-nine
+recordings supply guard commands separately from original scoring targets;
+version-five live telemetry displays the same distinction. Older outage bundles
+and replay schemas remain supported. Physics failures stay visible in every view.
