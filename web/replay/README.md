@@ -95,3 +95,10 @@ the [turbulent mission workflow](../../docs/wind-mission.md).
 The [flight evaluation explorer](../../docs/flight-evaluation.md) adds a complete seed/frequency matrix,
 individual acceptance gates, guided mission chapters and synchronized paired 3D.
 It reuses verified PhysX recordings and preserves the open numerical findings.
+
+
+The standalone `outage.html` demo compares held and predictive feedback across
+five capture-outage profiles and three seeds. It uses a separate pinned export,
+shared timeline, optional paired 3D, full-rate outcome tables and explicit raw
+capture/predictor state. See the [export and launch workflow](../../docs/predictive-feedback.md).
+Recorded physics data are required; test fixtures are not demonstration evidence.

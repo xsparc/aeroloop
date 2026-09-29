@@ -65,3 +65,14 @@ test('capture timing validates both outage edges and rejects legacy-version alia
     }
   }
 });
+
+
+test('predictive live packets preserve raw capture age and reject feedback aliases',()=>{
+  const packet=liveFixture(3800);packet.schema_version=4;packet.physics_dt_s=.005;packet.observation_profile='hold-dropout-2000ms';
+  packet.sample.observation={profile:packet.observation_profile,source_sequence:3596,source_time_s:17.98,age_s:1.02,position_m:[0,0,1],velocity_m_s:[0,0,0]};
+  packet.sample.feedback={mode:'predicting',position_m:[1,0,1],velocity_m_s:[1,0,0],disturbance_acceleration_m_s2:[0,0,0]};
+  validateLive(packet);
+  for(const mutate of [p=>p.schema_version=3,p=>p.sample.feedback.mode='capture',p=>p.sample.feedback.position_m=[NaN,0,0],p=>p.sample.feedback.private_path='private']) {
+    const bad=structuredClone(packet);mutate(bad);assert.throws(()=>validateLive(bad));
+  }
+});

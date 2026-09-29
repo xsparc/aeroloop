@@ -29,11 +29,15 @@ def main():
     parser.add_argument("--force-mode", choices=("per-iteration", "per-step"), default="per-iteration")
     parser.add_argument("--solver-iterations", type=int, choices=(1, 4), default=4)
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
+    parser.add_argument("--predictive-feedback", action="store_true")
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     args = parser.parse_args()
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
+    from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.predictive_feedback and args.observation_profile not in OUTAGE_PROFILES:
+        parser.error("Predictive feedback requires a 50 Hz outage-study profile.")
     if args.output.exists():
         parser.error("Output already exists; choose a new session directory.")
     if args.mode != "yaw" and args.solver_iterations != 4:
@@ -61,6 +65,8 @@ def main():
         options = ["--scenario", args.scenario, "--seeds", *(str(seed) for seed in args.seeds), "--physics-dt", str(args.physics_dt)]
         if args.observation_profile:
             options += ["--observation-profile", args.observation_profile]
+        if args.predictive_feedback:
+            options += ["--predictive-feedback"]
         options += (["--monitor"] if args.monitor else []) + (["--realtime"] if args.realtime else [])
     try:
         result = run_worker(args.python, args.mode, args.output, options, args.timeout)
@@ -75,6 +81,7 @@ def main():
         from aeroloop.contracts import load_json
         if any((config := load_json(args.output / row["run_id"] / "config.json"))["physics_options"].get("physics_dt_s", .005) != args.physics_dt
                or config.get("observation_model", {}).get("profile") != args.observation_profile
+               or ("feedback_model" in config) != args.predictive_feedback
                for row in result["results"]):
             if args.monitor:
                 from aeroloop.live import finish_monitor

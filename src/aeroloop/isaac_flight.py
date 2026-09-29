@@ -1,5 +1,5 @@
 """Native flight control with four lagged rotors in actual Isaac Sim PhysX."""
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 import random
 import time
@@ -28,6 +28,8 @@ def flight(output: Path, launcher_args):
     substeps = round(dt / physics_dt)
     monitor, paced = launcher_args.monitor, launcher_args.realtime
     profile = launcher_args.observation_profile
+    predictive = getattr(launcher_args, "predictive_feedback", False)
+    from .predictor import Predictor, configuration as predictor_configuration
     from .physics_audit import provenance
     source = provenance()
     if monitor:
@@ -68,6 +70,7 @@ def flight(output: Path, launcher_args):
                 route = mission.Mission() if contact_mission else None
                 tracking = wind_mission.TrackingController() if scenario == wind_mission.SCENARIO else None
                 previous_scale = 1.
+                predictor = Predictor() if predictive else None
                 observations = make_observations(profile, seed) if profile else None
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
@@ -102,6 +105,9 @@ def flight(output: Path, launcher_args):
                             normalize((q[3], *q[:3])), rate,
                             tuple((v-old)/dt for v, old in zip(rate, previous_rate)) if step else (0., 0., 0.))
                         feedback, observation_sample = observations.capture(state) if observations else (state, None)
+                        if predictor:
+                            prediction_sample = predictor.step(observation_sample, (samples[-1]["thrust_n"], samples[-1]["quaternion_wxyz"]) if samples else None)
+                            feedback = replace(feedback, position=prediction_sample["position_m"], velocity=prediction_sample["velocity_m_s"])
                         target = (0., 1., 1.5) if scenario == "position-step" and 10 <= t < 25 else (0., 0., 1.5)
                         external = (.5, 0., 0.) if scenario == "lateral-force-pulse" and 15 <= t < 15.5 else (0., 0., 0.)
                         external_moment = (0., 0., 0.)
@@ -136,6 +142,8 @@ def flight(output: Path, launcher_args):
                             "effort_normalized": effort, "thrust_n": thrust, "external_force_n": external,
                             "thrust_setpoint_n": thrust_request, "rotor_command_n": commands,
                             "rotor_thrust_n": motors, "moment_nm": moment, "allocation_scale": scale})
+                        if predictor:
+                            samples[-1]["feedback"] = prediction_sample
                         if observations:
                             samples[-1]["observation"] = observation_sample
                         if route:
@@ -195,6 +203,8 @@ def flight(output: Path, launcher_args):
                     "rate_gains": {"p": [.6]*3, "i": [.1]*3, "d": [.005]*3, "ff": [0.]*3, "integral_limit": [.3]*3},
                     "actuator": asdict(rotors), "simulator_versions": package_versions,
                     "physics_options": {"gyroscopic_forces": True}}
+                if predictor:
+                    config["feedback_model"] = predictor_configuration()
                 if observations:
                     config["observation_model"] = observations.config
                 if route:

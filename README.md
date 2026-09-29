@@ -107,3 +107,10 @@ The [outage duration study](docs/outage-recovery.md) measures sustained recovery
 under 250/500/1000/2000 ms missing-capture windows. Its [fifteen verified flights](docs/evidence/isaac-outage-validation.md)
 preserve failures: all 500 ms cases pass, while 1/2-second outages expose landing
 and recovery limits. The live 3D monitor displays each profile's actual windows.
+
+The [predictive feedback demo](docs/predictive-feedback.md) compares held captures
+with an opt-in motion predictor in synchronized recorded 3D. It offers five
+outage profiles, three seeds, guided chapters, full-rate gates and a verified
+study download. [Measured results](docs/evidence/isaac-predictor-validation.md)
+preserve exact no-outage behavior and improve one-second mission completion;
+long-outage failures remain visible and prediction stays opt-in.

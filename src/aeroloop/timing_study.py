@@ -47,7 +47,7 @@ def recovery_windows(reference, candidate):
     return results
 
 
-def read_study(directories, profiles=PROFILES, paced_profiles=("hold-dropout",)):
+def read_study(directories, profiles=PROFILES, paced_profiles=("hold-dropout",), version=7):
     require(len(directories) == len(profiles), "one directory required per timing profile")
     runs, clocks = {}, {}
     for directory in directories:
@@ -57,7 +57,7 @@ def read_study(directories, profiles=PROFILES, paced_profiles=("hold-dropout",))
         worker_profiles = set()
         for run, row in zip(verified, result["results"]):
             m, c = run["manifest.json"], run["config.json"]
-            require(m["schema_version"] == 7 and not m["source_dirty"], "clean timing recording required")
+            require(m["schema_version"] == version and not m["source_dirty"], "clean timing recording required")
             profile = c["observation_model"]["profile"]
             worker_profiles.add(profile)
             key = (profile, m["seed"])

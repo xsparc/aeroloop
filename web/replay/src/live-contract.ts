@@ -1,8 +1,10 @@
 import {validateObservation, PROFILES, TIMING_PROFILES, type Observation} from "./observation-contract.js";
+import {validateFeedback, type Feedback} from "./feedback-contract.js";
 import { MISSION_PHASES, type Sample, type Vec3 } from "./contracts.js";
 
 export type LiveSample = Sample & {
   observation?: Observation;
+  feedback?: Feedback;
   sequence: number; velocity_m_s: Vec3; rates_rad_s: Vec3;
   rate_setpoint_rad_s: Vec3; effort_normalized: Vec3; allocation_scale: number;
 };
@@ -20,8 +22,9 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   require(value && typeof value === "object" && !Array.isArray(value));
   const f = value as Record<string, unknown>;
   if (f.state === "waiting") { require(Object.keys(f).length === 1); return {state: "waiting"}; }
-  const observed = f.schema_version === 2 || f.schema_version === 3;
-  const profiles:readonly string[] = f.schema_version === 3 ? TIMING_PROFILES : PROFILES;
+  const observed = f.schema_version === 2 || f.schema_version === 3 || f.schema_version === 4;
+  const predictive = f.schema_version === 4;
+  const profiles:readonly string[] = f.schema_version === 3 || predictive ? TIMING_PROFILES : PROFILES;
   if (observed) require(typeof f.observation_profile === "string" && profiles.includes(f.observation_profile) && f.physics_dt_s === .005);
   require(Object.keys(f).sort().join() === ["schema_version", "state", "seed", "physics_dt_s", "paced", "elapsed_s", "lag_s", "max_lag_s", "late_steps", "age_s", "stale", "sample", ...(observed ? ["observation_profile"] : [])].sort().join());
   require((f.schema_version === 1 || observed) && ["starting", "running", "verifying", "completed", "failed"].includes(String(f.state)));
@@ -34,10 +37,11 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   else {
     require(typeof f.sample === "object" && !Array.isArray(f.sample));
     const s = f.sample as Record<string, unknown>;
-    require(Object.keys(s).sort().join() === ["time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "rotor_thrust_n", "allocation_scale", "wind_velocity_m_s", "external_force_n", "mission_phase", "contact_normal_force_n", "support_clearance_m", ...(observed ? ["observation"] : [])].sort().join());
+    require(Object.keys(s).sort().join() === ["time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "rotor_thrust_n", "allocation_scale", "wind_velocity_m_s", "external_force_n", "mission_phase", "contact_normal_force_n", "support_clearance_m", ...(observed ? ["observation"] : []), ...(predictive ? ["feedback"] : [])].sort().join());
     require(Number.isInteger(s.sequence) && Number(s.sequence) >= 0 && Number(s.sequence) <= 10000);
     require(finite(s.time_s) && Math.abs(s.time_s - Number(s.sequence)*.005) < 1e-8);
     if (observed) validateObservation(s.observation, Number(s.time_s), f.observation_profile);
+    if (predictive) validateFeedback(s.feedback, s.observation as Observation);
     require(MISSION_PHASES.includes(String(s.mission_phase)));
     for (const key of ["position_m", "velocity_m_s", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "wind_velocity_m_s", "external_force_n", "contact_normal_force_n"]) require(vector(s[key], 3));
     require(vector(s.rotor_thrust_n, 4) && vector(s.quaternion_wxyz, 4));

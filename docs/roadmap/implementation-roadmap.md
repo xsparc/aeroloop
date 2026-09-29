@@ -28,6 +28,7 @@ Public deployment and merges are separate decisions.
 | AL-016 | Recorded observation-profile evaluation with paired 3D and explicit truth/feedback timing | Verified: twelve retained flights revalidated, 288 gates, nine pairs, all artifact hashes and measured 3D inspection |
 | AL-017 | Fixed feedback cadence and capture outages with measured recovery and live 3D | Verified: 12/12 PhysX missions, 9/9 pairs, 12/12 post-outage dwell gates and unchanged ideal baseline |
 | AL-018 | Longer capture outages with sustained recovery, preserved failures and live 3D | Verified study: 15 complete flights; 11 mission, 6/12 pair and 15/24 recovery passes; longer-outage failures retained |
+| AL-019 | Bounded predictive feedback with recorded paired outage demo | Verified study: 15 fresh flights; 12 mission, 6/12 pair and 16/24 recovery passes; exact no-outage continuity; long-outage failures retained |
 
 ## Next gate
 
@@ -90,11 +91,15 @@ All AL-017 post-outage dwell checks start inside the 50 mm band. AL-018 extends
 that evidence under [decision 015](../architecture/decisions/015-outage-recovery.md)
 with fixed longer outages and an equal-cadence reference. Its [measured duration
 study](../evidence/isaac-outage-validation.md) exercises three outside-band returns
-at 500 ms, while 1/2-second cases expose landing and recovery failures. Next,
-investigate a bounded stale-feedback controller mitigation through descent and
-landing against these retained failures. Preserve the no-outage and 250/500 ms
-regressions, and freeze evaluation before further measurements. Recorded replay
-for the new timing family is a separate extension. Retain both observation references and the
+at 500 ms, while 1/2-second cases expose landing and recovery failures. AL-019 now measures bounded predictive feedback through descent and landing
+under [decision 016](../architecture/decisions/016-predictive-outage-demo.md),
+with a [repeatable paired demo](../predictive-feedback.md). Preserve the no-outage
+and 250/500 ms regressions and all original stress failures. Prediction stays
+opt-in until the fixed regression matrix and independent validation justify any
+change in defaults. The [measured result](../evidence/isaac-predictor-validation.md)
+improves one-second mission completion but still fails long-outage robustness.
+Next, bound model uncertainty and descent/contact behavior with a frozen unseen
+seed protocol. Retain both observation references and the
 original accuracy gates. Any proposed runtime mitigation must pass the original accuracy and
 full-flight studies first.
 
