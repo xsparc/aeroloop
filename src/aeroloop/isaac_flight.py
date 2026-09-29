@@ -30,6 +30,8 @@ def flight(output: Path, launcher_args):
     profile = launcher_args.observation_profile
     predictive = getattr(launcher_args, "predictive_feedback", False)
     guarded = getattr(launcher_args, "landing_guard", False)
+    fresh_axis = getattr(launcher_args, "fresh_axis", None)
+    from .axis_feedback import AxisCaptures, combine, configuration as axis_configuration
     from .landing_guard import LandingGuard, configuration as guard_configuration
     from .predictor import Predictor, configuration as predictor_configuration
     from .physics_audit import provenance
@@ -74,6 +76,7 @@ def flight(output: Path, launcher_args):
                 previous_scale = 1.
                 predictor = Predictor() if predictive else None
                 guard = LandingGuard() if guarded else None
+                axes = AxisCaptures(fresh_axis) if fresh_axis else None
                 observations = make_observations(profile, seed) if profile else None
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
@@ -111,6 +114,10 @@ def flight(output: Path, launcher_args):
                         if predictor:
                             prediction_sample = predictor.step(observation_sample, (samples[-1]["thrust_n"], samples[-1]["quaternion_wxyz"]) if samples else None)
                             feedback = replace(feedback, position=prediction_sample["position_m"], velocity=prediction_sample["velocity_m_s"])
+                        if axes:
+                            axis_sample = axes.capture(state)
+                            applied_feedback = combine(prediction_sample, axis_sample)
+                            feedback = replace(feedback, position=applied_feedback["position_m"], velocity=applied_feedback["velocity_m_s"])
                         target = (0., 1., 1.5) if scenario == "position-step" and 10 <= t < 25 else (0., 0., 1.5)
                         external = (.5, 0., 0.) if scenario == "lateral-force-pulse" and 15 <= t < 15.5 else (0., 0., 0.)
                         external_moment = (0., 0., 0.)
@@ -147,6 +154,8 @@ def flight(output: Path, launcher_args):
                             "effort_normalized": effort, "thrust_n": thrust, "external_force_n": external,
                             "thrust_setpoint_n": thrust_request, "rotor_command_n": commands,
                             "rotor_thrust_n": motors, "moment_nm": moment, "allocation_scale": scale})
+                        if axes:
+                            samples[-1].update(axis_observation=axis_sample, axis_feedback=applied_feedback)
                         if guard:
                             samples[-1]["landing_guard"] = guard_sample
                         if predictor:
@@ -210,6 +219,8 @@ def flight(output: Path, launcher_args):
                     "rate_gains": {"p": [.6]*3, "i": [.1]*3, "d": [.005]*3, "ff": [0.]*3, "integral_limit": [.3]*3},
                     "actuator": asdict(rotors), "simulator_versions": package_versions,
                     "physics_options": {"gyroscopic_forces": True}}
+                if axes:
+                    config["axis_feedback_model"] = axis_configuration(fresh_axis)
                 if guard:
                     config["landing_guard_model"] = guard_configuration()
                 if predictor:

@@ -123,3 +123,8 @@ Keep the current model, dependency pins, seed sets and acceptance thresholds.
 Reopen implementation for an observed defect or an approved extension, and update
 the evidence for every changed claim. Do not expand scope to fill the time while
 the hosted gate is blocked.
+
+AL-021 is in progress: isolate vertical versus horizontal feedback availability
+using fixed 50 Hz synthetic captures, unchanged physics/scoring and a paired
+3D demo. See [ADR 018](../architecture/decisions/018-axis-availability.md).
+All final seeds were previously tested. AL-010 remains open.

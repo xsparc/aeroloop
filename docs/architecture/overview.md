@@ -141,3 +141,8 @@ separate from 20 Hz display samples. See [decision 016](decisions/016-predictive
 and the [working demo workflow](../predictive-feedback.md).
 
 The opt-in [landing capture guard](decisions/017-landing-capture-guard.md) changes descent commands using capture age and captured horizontal stability. Version-nine evidence preserves original scheduled targets for scoring and reconstructs separate command targets and derivatives. The predictor, physics, contact supervisor and all acceptance limits remain unchanged; the [paired demo](../landing-guard.md) separates regression and previously unseen seed cohorts.
+
+AL-021 adds an opt-in masked 50 Hz synthetic axis channel at the controller
+input. Main capture/predictor state is unchanged; version-ten evidence and
+version-six live packets record the composite input separately and reconstruct
+it before accepting results. See [ADR 018](decisions/018-axis-availability.md).

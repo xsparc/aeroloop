@@ -1,3 +1,4 @@
+import {validateAxis, type AxisObservation, type AxisFeedback} from "./axis-contract.js";
 import {validateObservation, PROFILES, TIMING_PROFILES, type Observation} from "./observation-contract.js";
 import {validateFeedback, type Feedback} from "./feedback-contract.js";
 import {validateGuard, type LandingGuard} from "./landing-contract.js";
@@ -7,6 +8,7 @@ export type LiveSample = Sample & {
   observation?: Observation;
   feedback?: Feedback;
   landing_guard?: LandingGuard;
+  axis_observation?: AxisObservation; axis_feedback?: AxisFeedback;
   sequence: number; velocity_m_s: Vec3; rates_rad_s: Vec3;
   rate_setpoint_rad_s: Vec3; effort_normalized: Vec3; allocation_scale: number;
 };
@@ -24,9 +26,11 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   require(value && typeof value === "object" && !Array.isArray(value));
   const f = value as Record<string, unknown>;
   if (f.state === "waiting") { require(Object.keys(f).length === 1); return {state: "waiting"}; }
+  const axis = f.schema_version === 6;
   const guarded = f.schema_version === 5;
-  const observed = f.schema_version === 2 || f.schema_version === 3 || f.schema_version === 4 || guarded;
-  const predictive = f.schema_version === 4 || guarded;
+  const observed = f.schema_version === 2 || f.schema_version === 3 || f.schema_version === 4 || guarded || axis;
+  const predictive = f.schema_version === 4 || guarded || axis;
+  if(axis) require(["sample-hold","hold-dropout-2000ms"].includes(String(f.observation_profile)));
   const profiles:readonly string[] = f.schema_version === 3 || predictive ? TIMING_PROFILES : PROFILES;
   if (observed) require(typeof f.observation_profile === "string" && profiles.includes(f.observation_profile) && f.physics_dt_s === .005);
   require(Object.keys(f).sort().join() === ["schema_version", "state", "seed", "physics_dt_s", "paced", "elapsed_s", "lag_s", "max_lag_s", "late_steps", "age_s", "stale", "sample", ...(observed ? ["observation_profile"] : [])].sort().join());
@@ -40,11 +44,12 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   else {
     require(typeof f.sample === "object" && !Array.isArray(f.sample));
     const s = f.sample as Record<string, unknown>;
-    require(Object.keys(s).sort().join() === ["time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "rotor_thrust_n", "allocation_scale", "wind_velocity_m_s", "external_force_n", "mission_phase", "contact_normal_force_n", "support_clearance_m", ...(observed ? ["observation"] : []), ...(predictive ? ["feedback"] : []), ...(guarded ? ["landing_guard"] : [])].sort().join());
+    require(Object.keys(s).sort().join() === ["time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "rotor_thrust_n", "allocation_scale", "wind_velocity_m_s", "external_force_n", "mission_phase", "contact_normal_force_n", "support_clearance_m", ...(observed ? ["observation"] : []), ...(predictive ? ["feedback"] : []), ...(guarded ? ["landing_guard"] : []), ...(axis ? ["axis_observation","axis_feedback"] : [])].sort().join());
     require(Number.isInteger(s.sequence) && Number(s.sequence) >= 0 && Number(s.sequence) <= 10000);
     require(finite(s.time_s) && Math.abs(s.time_s - Number(s.sequence)*.005) < 1e-8);
     if (observed) validateObservation(s.observation, Number(s.time_s), f.observation_profile);
     if (predictive) validateFeedback(s.feedback, s.observation as Observation);
+    if (axis) validateAxis(s.axis_observation,s.axis_feedback,s.feedback as Feedback,Number(s.time_s));
     if (guarded) validateGuard(s.landing_guard,Number(s.time_s));
     require(MISSION_PHASES.includes(String(s.mission_phase)));
     for (const key of ["position_m", "velocity_m_s", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "wind_velocity_m_s", "external_force_n", "contact_normal_force_n"]) require(vector(s[key], 3));

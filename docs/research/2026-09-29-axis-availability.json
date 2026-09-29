@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "3d0ede1616d8c62cd38d111546010bec66f06d12",
+  "scanned_at": "2026-09-29",
+  "coverage": [
+    "Axis-specific capture availability",
+    "Altitude prediction during descent",
+    "Previously tested seed cohorts"
+  ],
+  "findings": [
+    {
+      "finding": "Height feedback and horizontal feedback can have different availability; capture cadence must stay distinct from physics cadence.",
+      "source_event_date": null,
+      "citations": [
+        "https://docs.px4.io/main/en/advanced_config/tuning_the_ecl_ekf",
+        "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.sensors.html#sensor-base"
+      ],
+      "confidence": "medium",
+      "relevance": "AL-020 held altitude commands did not prevent early contact in long outages",
+      "direction_alignment": "Improve physics-based controller testing and provide an inspectable working demo",
+      "opportunity_or_risk": "A synthetic fresh channel can isolate availability effects but does not model a real sensor or fusion estimator",
+      "engineering_cost": "Masked 50 Hz captures, strict reconstruction, 24 fresh flights, paired 3D demonstration",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-021 separates horizontal and altitude feedback availability before descent changes",
+      "verification_needed": "Freeze both axis choices and existing gates; preserve exact inactive traces and all failures"
+    }
+  ],
+  "overall_recommendation": "Run the bounded availability ablation with unchanged controller, predictor and physics.",
+  "evidence_gaps": [
+    "Ideal synthetic captures do not validate a real sensor or fused estimate",
+    "All six final seeds were previously tested",
+    "Ideal attitude/contact supervision and independent yaw refinement remain unresolved"
+  ]
+}

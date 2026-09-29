@@ -122,3 +122,7 @@ transition chapters across 18 measured paired flights. Its [24 fresh physics
 trials](docs/evidence/isaac-landing-guard-validation.md) preserve every failure:
 the opt-in descent guard does not improve mission pass counts, and two-second
 outages remain outside the tested robustness limits.
+
+The [axis availability demo](docs/axis-availability.md) compares fresh altitude
+and horizontal feedback during two-second outages using an explicit synthetic
+50 Hz channel and unchanged controller/physics gates.
