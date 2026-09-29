@@ -590,12 +590,12 @@ decision_ref = "docs/architecture/decisions/017-landing-capture-guard.md"
 [[work_items]]
 id = "AL-021"
 title = "Axis-specific feedback availability and paired flight demonstration"
-status = "in-progress"
+status = "verified"
 requirement_ids = ["REQ-OBSERVATION-ROBUSTNESS", "REQ-DRONE-CONTROL", "REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY", "REQ-LIVE-FLIGHT-TESTS"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-09-29-post-pr21-working-demo"
 acceptance_refs = ["docs/architecture/decisions/018-axis-availability.md"]
-evidence_refs = ["docs/research/2026-09-29-axis-availability.json", "docs/evidence/isaac-axis-validation.md"]
+evidence_refs = ["docs/research/2026-09-29-axis-availability.json", "docs/evidence/isaac-axis-validation.md", "docs/evidence/isaac-axis-001.json"]
 
 [[research_decisions]]
 id = "RD-AXIS-AVAILABILITY"

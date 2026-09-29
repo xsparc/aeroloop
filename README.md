@@ -125,4 +125,8 @@ outages remain outside the tested robustness limits.
 
 The [axis availability demo](docs/axis-availability.md) compares fresh altitude
 and horizontal feedback during two-second outages using an explicit synthetic
-50 Hz channel and unchanged controller/physics gates.
+50 Hz channel and unchanged controller/physics gates. In
+[24 new PhysX flights](docs/evidence/isaac-axis-validation.md), fresh horizontal
+feedback passed all six two-second-outage missions; fresh altitude and the
+retained baseline passed none. Only one of six paired comparisons passed, so
+this remains an opt-in availability experiment, not a robustness qualification.
