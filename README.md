@@ -114,3 +114,11 @@ outage profiles, three seeds, guided chapters, full-rate gates and a verified
 study download. [Measured results](docs/evidence/isaac-predictor-validation.md)
 preserve exact no-outage behavior and improve one-second mission completion;
 long-outage failures remain visible and prediction stays opt-in.
+
+
+The [landing guard demo](docs/landing-guard.md) adds separate regression and
+previously unseen seed cohorts, commanded versus scheduled altitude, and guard
+transition chapters across 18 measured paired flights. Its [24 fresh physics
+trials](docs/evidence/isaac-landing-guard-validation.md) preserve every failure:
+the opt-in descent guard does not improve mission pass counts, and two-second
+outages remain outside the tested robustness limits.

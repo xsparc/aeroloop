@@ -63,3 +63,5 @@ Keep raw logs, host metadata, artifacts and recordings outside Git. Only sanitiz
 summary evidence belongs in the public repository. The independent yaw-refinement
 finding remains open; these regression cases do not establish hardware safety or
 performance on unseen disturbances.
+
+The later [landing-guard experiment](landing-guard.md) adds an opt-in descent command and a separate frozen unseen-seed cohort. It retains the predictor and every original scoring limit; it does not increase mission pass counts.
