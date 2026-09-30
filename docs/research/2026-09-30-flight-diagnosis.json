@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "5bf7af8ee25558c72ca4cd1eb400a15fa2b3369d",
+  "scanned_at": "2026-09-30",
+  "coverage": ["Landing state separation", "Full-rate recorded flight inspection", "Retained evidence provenance"],
+  "findings": [{
+    "finding": "Landing analysis benefits from distinguishing contact, landed state and disarming, and inspecting synchronized time-series alongside the recorded trajectory.",
+    "source_event_date": null,
+    "citations": ["https://docs.px4.io/main/en/advanced_config/land_detector", "https://docs.px4.io/main/en/log/flight_log_analysis"],
+    "confidence": "high",
+    "relevance": "AL-022's landing-window errors include predictor drift after the thrust request becomes zero",
+    "direction_alignment": "Improve physics-based controller evaluation through ten coherent diagnosis and demonstration tools",
+    "opportunity_or_risk": "Phase separation prevents conflating motor-off drift with active control error, but does not establish causality or change acceptance",
+    "engineering_cost": "One bounded analysis exporter and a strict browser workspace over 24 retained recordings",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-023 provides a ten-feature flight diagnosis workspace before another controller correction",
+    "verification_needed": "Reconstruct retained recordings, independently audit phase arithmetic, preserve failures, inspect every real case and validate CSV and 3D"
+  }],
+  "overall_recommendation": "Expose contact and motor-off state alongside every physics sample before changing landing control.",
+  "evidence_gaps": ["No new flights or unseen cohort", "State separation is descriptive and not causal", "Synthetic sensors, ideal attitude/contact supervision and AL-010 yaw refinement remain limitations"]
+}

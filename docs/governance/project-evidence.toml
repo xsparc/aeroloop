@@ -6,7 +6,7 @@ source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation
 dhf_is_authoritative = false
 
 [review]
-last_reviewed = "2026-09-30"
+last_reviewed = "2026-10-01"
 review_due = "2026-10-27"
 
 [[objectives]]
@@ -384,10 +384,10 @@ statement = "Inspect full-rate mission gates and seed/frequency and observation-
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md", "docs/architecture/decisions/013-observation-replay.md", "docs/observation-evaluation.md", "docs/architecture/decisions/017-landing-capture-guard.md"]
-implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts", "web/replay/src/observation-contract.ts", "src/aeroloop/landing_study.py"]
-verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs", "tests/test_landing_study.py"]
-validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-landing-guard-validation.md", "docs/evidence/isaac-axis-validation.md"]
+design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md", "docs/architecture/decisions/013-observation-replay.md", "docs/observation-evaluation.md", "docs/architecture/decisions/017-landing-capture-guard.md", "docs/architecture/decisions/020-flight-diagnosis.md"]
+implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts", "web/replay/src/observation-contract.ts", "src/aeroloop/landing_study.py", "src/aeroloop/diagnosis.py", "tools/diagnosis_demo.py", "web/replay/src/diagnosis.tsx", "web/replay/src/diagnosis-contract.ts"]
+verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs", "tests/test_landing_study.py", "tests/test_diagnosis.py", "web/replay/tests/diagnosis.test.mjs", "web/replay/tests/browser/diagnosis.spec.mjs"]
+validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-landing-guard-validation.md", "docs/evidence/isaac-axis-validation.md", "docs/evidence/flight-diagnosis-validation.md", "docs/evidence/flight-diagnosis-001.json"]
 risk_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "SECURITY.md"]
 
 [[work_items]]
@@ -627,3 +627,23 @@ observed_on = "2026-09-30"
 reviewed_on = "2026-09-30"
 review_due = "2026-10-30"
 decision_ref = "docs/architecture/decisions/019-horizontal-channel-quality.md"
+
+[[work_items]]
+id = "AL-023"
+title = "Ten-feature full-rate flight diagnosis workspace"
+status = "verified"
+requirement_ids = ["REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY", "REQ-OBSERVATION-ROBUSTNESS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-30-post-pr23-ten-features-draft-pr"
+acceptance_refs = ["docs/architecture/decisions/020-flight-diagnosis.md"]
+evidence_refs = ["docs/research/2026-09-30-flight-diagnosis.json", "docs/evidence/flight-diagnosis-validation.md", "docs/evidence/flight-diagnosis-001.json"]
+
+[[research_decisions]]
+id = "RD-FLIGHT-DIAGNOSIS"
+finding = "Separating contact and motors-off state alongside full-rate feedback traces improves interpretation of retained landing failures without changing acceptance."
+disposition = "adopted"
+source_urls = ["https://docs.px4.io/main/en/advanced_config/land_detector", "https://docs.px4.io/main/en/log/flight_log_analysis"]
+observed_on = "2026-09-30"
+reviewed_on = "2026-10-01"
+review_due = "2026-10-30"
+decision_ref = "docs/architecture/decisions/020-flight-diagnosis.md"

@@ -1,0 +1,22 @@
+"""Re-verify the quality matrix and export a full-rate flight diagnosis workspace."""
+import argparse
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"src"))
+from aeroloop.channel_quality import QUALITIES
+from aeroloop.diagnosis import export_demo
+from aeroloop.quality_study import study
+from aeroloop.simulation import encoded
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    for name in ("retained", *QUALITIES): parser.add_argument("--"+name, type=Path, nargs=2, required=True)
+    parser.add_argument("--output",type=Path,required=True)
+    parser.add_argument("--report",type=Path,required=True)
+    args=parser.parse_args()
+    if args.output.exists() or args.report.exists(): parser.error("Choose new output paths.")
+    report, documents = study(args.retained,{q:getattr(args,q.replace('-','_')) for q in QUALITIES})
+    digest, analysis = export_demo(report,documents,args.output)
+    with args.report.open('xb') as stream: stream.write(encoded(analysis))
+    print(f"Verified {analysis['retained_flights']} retained flights; {analysis['sample_count']} original samples; no new flights")
+    print(f"Index SHA256: {digest}")

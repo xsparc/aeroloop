@@ -140,3 +140,10 @@ physics gates. The paired demo exposes delivered age and applied feedback error.
 23 of 24 missions; combined noise and delay caused one final support-position
 failure. All qualities retain paired and recovery failures, so the channel stays
 experimental. The demo preserves those results and explains post-disarm drift.
+
+The [flight diagnosis workspace](docs/flight-diagnosis.md) adds ten tools over
+those 24 retained flights: case filtering, same-quality paired 3D, full-rate
+plots, event jumps, phase error summaries, feedback overlays, gate headroom,
+recovery inspection, provenance and numeric CSV. Every plot uses the original
+200 Hz samples, with contact and motors-off drift distinguished from airborne
+descent. This is recorded analysis; the original failures and limits remain.

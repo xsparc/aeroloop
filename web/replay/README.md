@@ -1,5 +1,10 @@
 # AeroLoop replay component
 
+For the ten-feature recorded flight diagnosis workspace, see the
+[operator guide](../../docs/flight-diagnosis.md). Build the demo and open
+`/diagnosis.html` after exporting the retained quality matrix. It provides
+same-quality paired 3D, original 200 Hz plots and numeric window CSV.
+
 A read-only React 19 / Three.js 0.185 viewer for validated AeroLoop CPU and
 Isaac quadrotor flight-control recordings, with explicit backend labels.
 React, React DOM and Three.js remain peer dependencies; the package does not bundle
