@@ -139,3 +139,10 @@ the remaining pair/recovery failures before enabling any feedback change by
 default. Predeclare additional seed cohorts before inspecting their traces.
 The idealized channel is not a real sensor or fused estimator. Keep AL-010 yaw
 refinement open and keep every acceptance threshold unchanged.
+
+
+AL-022 is in progress under [ADR 019](../architecture/decisions/019-horizontal-channel-quality.md):
+24 fixed noise/delay sensitivity flights on three regression seeds, exact retained
+ideal reproduction, full-rate acceptance and an inspectable paired 3D demo.
+Parameters and limits are frozen before measurement. This is a synthetic channel
+study; controller gains, default behavior and the open AL-010 finding are unchanged.

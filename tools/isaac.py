@@ -31,6 +31,7 @@ def main():
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
     parser.add_argument("--predictive-feedback", action="store_true")
     parser.add_argument("--fresh-axis", choices=("vertical", "horizontal"))
+    parser.add_argument("--channel-quality", choices=("ideal", "noise", "delay", "noise-delay"))
     parser.add_argument("--landing-guard", action="store_true")
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
@@ -38,6 +39,8 @@ def main():
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.channel_quality and args.fresh_axis != "horizontal":
+        parser.error("Channel quality requires --fresh-axis horizontal.")
     if args.fresh_axis and (not args.predictive_feedback or args.landing_guard or args.observation_profile not in ("sample-hold", "hold-dropout-2000ms")):
         parser.error("Fresh-axis ablation requires predictive feedback, no landing guard, and no outage or two-second outages.")
     if args.landing_guard and not args.predictive_feedback:
@@ -75,6 +78,8 @@ def main():
             options += ["--predictive-feedback"]
         if args.fresh_axis:
             options += ["--fresh-axis", args.fresh_axis]
+        if args.channel_quality:
+            options += ["--channel-quality", args.channel_quality]
         if args.landing_guard:
             options += ["--landing-guard"]
         options += (["--monitor"] if args.monitor else []) + (["--realtime"] if args.realtime else [])
@@ -93,6 +98,7 @@ def main():
                or config.get("observation_model", {}).get("profile") != args.observation_profile
                or ("feedback_model" in config) != args.predictive_feedback
                or config.get("axis_feedback_model", {}).get("available_axes") != args.fresh_axis
+               or config.get("axis_feedback_model", {}).get("quality") != args.channel_quality
                or ("landing_guard_model" in config) != args.landing_guard
                for row in result["results"]):
             if args.monitor:

@@ -130,3 +130,11 @@ and horizontal feedback during two-second outages using an explicit synthetic
 feedback passed all six two-second-outage missions; fresh altitude and the
 retained baseline passed none. Only one of six paired comparisons passed, so
 this remains an opt-in availability experiment, not a robustness qualification.
+
+
+The [horizontal feedback quality study](docs/horizontal-quality.md) adds fixed
+noise and 40 ms transport delay to the extra 50 Hz horizontal channel. It compares
+ideal, noise-only, delay-only and combined captures with unchanged control and
+physics gates. The paired demo exposes delivered age and applied feedback error;
+[validation status](docs/evidence/isaac-quality-validation.md) distinguishes measured
+results from the frozen protocol.

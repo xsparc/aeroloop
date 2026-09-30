@@ -1,4 +1,4 @@
-import {validateAxis, type AxisObservation, type AxisFeedback} from "./axis-contract.js";
+import {validateQuality, validateAxis, type AxisObservation, type AxisFeedback} from "./axis-contract.js";
 import {validateObservation, PROFILES, TIMING_PROFILES, type Observation} from "./observation-contract.js";
 import {validateFeedback, type Feedback} from "./feedback-contract.js";
 import {validateGuard, type LandingGuard} from "./landing-contract.js";
@@ -26,7 +26,8 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   require(value && typeof value === "object" && !Array.isArray(value));
   const f = value as Record<string, unknown>;
   if (f.state === "waiting") { require(Object.keys(f).length === 1); return {state: "waiting"}; }
-  const axis = f.schema_version === 6;
+  const quality = f.schema_version === 7;
+  const axis = f.schema_version === 6 || quality;
   const guarded = f.schema_version === 5;
   const observed = f.schema_version === 2 || f.schema_version === 3 || f.schema_version === 4 || guarded || axis;
   const predictive = f.schema_version === 4 || guarded || axis;
@@ -49,7 +50,8 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
     require(finite(s.time_s) && Math.abs(s.time_s - Number(s.sequence)*.005) < 1e-8);
     if (observed) validateObservation(s.observation, Number(s.time_s), f.observation_profile);
     if (predictive) validateFeedback(s.feedback, s.observation as Observation);
-    if (axis) validateAxis(s.axis_observation,s.axis_feedback,s.feedback as Feedback,Number(s.time_s));
+    if (quality) validateQuality(s.axis_observation,s.axis_feedback,s.feedback as Feedback,Number(s.time_s));
+    else if (axis) validateAxis(s.axis_observation,s.axis_feedback,s.feedback as Feedback,Number(s.time_s));
     if (guarded) validateGuard(s.landing_guard,Number(s.time_s));
     require(MISSION_PHASES.includes(String(s.mission_phase)));
     for (const key of ["position_m", "velocity_m_s", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "wind_velocity_m_s", "external_force_n", "contact_normal_force_n"]) require(vector(s[key], 3));

@@ -146,3 +146,12 @@ AL-021 adds an opt-in masked 50 Hz synthetic axis channel at the controller
 input. Main capture/predictor state is unchanged; version-ten evidence and
 version-six live packets record the composite input separately and reconstruct
 it before accepting results. See [ADR 018](decisions/018-axis-availability.md).
+
+
+AL-022 adds the opt-in [horizontal quality model](decisions/019-horizontal-channel-quality.md).
+It acquires masked position/velocity at 50 Hz, applies seeded noise at capture,
+and delivers buffered captures with a fixed transport delay. Evidence v11
+reconstructs that pipeline and controller inputs; live v7 displays delivered age
+separately from main captures. The schema-4 paired demo retains full-rate mission,
+same-quality outage-pair and sustained-recovery gates. All older contracts remain
+available. See the [operator guide](../horizontal-quality.md).

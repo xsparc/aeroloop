@@ -6,7 +6,7 @@ source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation
 dhf_is_authoritative = false
 
 [review]
-last_reviewed = "2026-09-29"
+last_reviewed = "2026-09-30"
 review_due = "2026-10-27"
 
 [[objectives]]
@@ -606,3 +606,24 @@ observed_on = "2026-09-29"
 reviewed_on = "2026-09-29"
 review_due = "2026-10-29"
 decision_ref = "docs/architecture/decisions/018-axis-availability.md"
+
+
+[[work_items]]
+id = "AL-022"
+title = "Horizontal feedback quality sensitivity and paired demonstration"
+status = "in-progress"
+requirement_ids = ["REQ-OBSERVATION-ROBUSTNESS", "REQ-DRONE-CONTROL", "REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY", "REQ-LIVE-FLIGHT-TESTS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-09-30-post-pr22-working-demo"
+acceptance_refs = ["docs/architecture/decisions/019-horizontal-channel-quality.md"]
+evidence_refs = ["docs/research/2026-09-30-horizontal-quality.json", "docs/evidence/isaac-quality-validation.md"]
+
+[[research_decisions]]
+id = "RD-HORIZONTAL-QUALITY"
+finding = "Separating acquisition noise and transport latency tests the ideal horizontal availability result without changing the controller or acceptance gates."
+disposition = "adopted"
+source_urls = ["https://docs.px4.io/main/en/advanced_config/tuning_the_ecl_ekf", "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.utils.html#module-isaaclab.utils.noise"]
+observed_on = "2026-09-30"
+reviewed_on = "2026-09-30"
+review_due = "2026-10-30"
+decision_ref = "docs/architecture/decisions/019-horizontal-channel-quality.md"

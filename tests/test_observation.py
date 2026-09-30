@@ -16,7 +16,7 @@ from aeroloop.rotors import RotorModel
 from aeroloop.simulation import encoded, metrics, record, sha256
 
 
-def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False, fresh_axis=None):
+def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False, fresh_axis=None, channel_quality=None):
     # Synthetic failed protocol fixture; deliberately no physical integration.
     state, route, tracking = mission.initial_state(seed), mission.Mission(), wind_mission.TrackingController()
     wind, rotors, observations = wind_mission.wind_model(), RotorModel(), make_observations(profile,seed)
@@ -25,7 +25,8 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
     from aeroloop.landing_guard import LandingGuard, configuration as guard_configuration
     guard = LandingGuard() if guarded else None
     from aeroloop.axis_feedback import AxisCaptures, combine, configuration as axis_configuration
-    axes = AxisCaptures(fresh_axis) if fresh_axis else None
+    from aeroloop.channel_quality import QualityCaptures, configuration as quality_configuration
+    axes = QualityCaptures(channel_quality, seed) if channel_quality else AxisCaptures(fresh_axis) if fresh_axis else None
     samples, motors, scale = [], (0.,)*4, 1.
     for i, velocity in enumerate(wind.velocities(seed,.005,count)):
         t=round(i*.005,9)
@@ -62,7 +63,7 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
         trajectory_control=wind_mission.control_configuration(),observation_model=configuration(profile))
     if predictor:config["feedback_model"]=predictor_configuration()
     if guard:config["landing_guard_model"]=guard_configuration()
-    if axes:config["axis_feedback_model"]=axis_configuration(fresh_axis)
+    if axes:config["axis_feedback_model"]=quality_configuration(channel_quality) if channel_quality else axis_configuration(fresh_axis)
     return dict(experiment="isaac-quadrotor",config=config,samples=samples,events=wind_mission.events(route.events,samples[-1]["time_s"]),
         metrics=metrics(samples,wind_mission.SCENARIO),status="failed",failure_reason="wind_mission_threshold",controller_binary_sha256="a"*64)
 
