@@ -1,0 +1,1354 @@
+{
+  "kind": "isaac_flight_diagnosis",
+  "new_flights": 0,
+  "results": [
+    {
+      "id": "q0-p0-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.006260672580793534,
+            "horizontal_peak_time_s": 41.035,
+            "horizontal_rmse_m": 0.0025159866655691454,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.002540022134780884,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.000790108328176982
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "ideal",
+      "seed": 0,
+      "status": "passed",
+      "support_headroom_m": 0.3131225537750182
+    },
+    {
+      "id": "q0-p0-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.0036193463943094703,
+            "horizontal_peak_time_s": 40.775,
+            "horizontal_rmse_m": 0.0013789384340774054,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.003139108419418335,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0011259646186116176
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "ideal",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.28542032144632284
+    },
+    {
+      "id": "q0-p0-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.004117407288141258,
+            "horizontal_peak_time_s": 41.995,
+            "horizontal_rmse_m": 0.0016046079896795576,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.0021667182445526123,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0009340644234798048
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "ideal",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.19035559378542535
+    },
+    {
+      "id": "q0-p1-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.006265551740043371,
+            "horizontal_peak_time_s": 41.035,
+            "horizontal_rmse_m": 0.002519305802883211,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.02456589264072187,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.009095837843676608
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "ideal",
+      "seed": 0,
+      "status": "passed",
+      "support_headroom_m": 0.006593280456723805
+    },
+    {
+      "id": "q0-p1-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.003621547800318834,
+            "horizontal_peak_time_s": 40.775,
+            "horizontal_rmse_m": 0.0014494452369221312,
+            "phase": "airborne-descent",
+            "samples": 246,
+            "vertical_peak_m": 0.06937533360488468,
+            "vertical_peak_time_s": 41.23,
+            "vertical_rmse_m": 0.028182990148868426
+          },
+          {
+            "horizontal_peak_m": 0.0018537755197381685,
+            "horizontal_peak_time_s": 41.275,
+            "horizontal_rmse_m": 0.0011047367352499187,
+            "phase": "contact",
+            "samples": 11,
+            "vertical_peak_m": 0.07418069974809013,
+            "vertical_peak_time_s": 41.28,
+            "vertical_rmse_m": 0.07178338289046722
+          },
+          {
+            "horizontal_peak_m": 0.0019417569875248989,
+            "horizontal_peak_time_s": 41.295,
+            "horizontal_rmse_m": 0.0003675334454161545,
+            "phase": "motors-off",
+            "samples": 143,
+            "vertical_peak_m": 2.2082473054792113,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.9534899143183146
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "ideal",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.2982145995210693
+    },
+    {
+      "id": "q0-p1-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.0034443273795135283,
+            "horizontal_peak_time_s": 40.015,
+            "horizontal_rmse_m": 0.0016449442931323324,
+            "phase": "airborne-descent",
+            "samples": 306,
+            "vertical_peak_m": 0.10601198976837806,
+            "vertical_peak_time_s": 41.525,
+            "vertical_rmse_m": 0.04058484492707655
+          },
+          {
+            "horizontal_peak_m": 0.0016760234472580592,
+            "horizontal_peak_time_s": 41.535,
+            "horizontal_rmse_m": 0.000958998295121747,
+            "phase": "contact",
+            "samples": 10,
+            "vertical_peak_m": 0.1129405422154505,
+            "vertical_peak_time_s": 41.575,
+            "vertical_rmse_m": 0.10993341797129848
+          },
+          {
+            "horizontal_peak_m": 0.0007609374927898789,
+            "horizontal_peak_time_s": 41.595,
+            "horizontal_rmse_m": 0.0001328121906304361,
+            "phase": "motors-off",
+            "samples": 84,
+            "vertical_peak_m": 0.602555118173977,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.24368966408275763
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "ideal",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.1450558917154684
+    },
+    {
+      "id": "q1-p0-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.03624347517988128,
+            "horizontal_peak_time_s": 41.135,
+            "horizontal_rmse_m": 0.01346771266572096,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.002540767192840576,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0007898909176674265
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "noise",
+      "seed": 0,
+      "status": "passed",
+      "support_headroom_m": 0.3120497415928546
+    },
+    {
+      "id": "q1-p0-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.031218272620401777,
+            "horizontal_peak_time_s": 41.795,
+            "horizontal_rmse_m": 0.014339679146905085,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.003140658140182495,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0011258910112951915
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "noise",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.2878377642826095
+    },
+    {
+      "id": "q1-p0-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.02974578839453255,
+            "horizontal_peak_time_s": 40.415,
+            "horizontal_rmse_m": 0.013898537881282669,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.0021579861640930176,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0009334824360446143
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "noise",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.19244822617807533
+    },
+    {
+      "id": "q1-p1-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.03624853209060348,
+            "horizontal_peak_time_s": 41.135,
+            "horizontal_rmse_m": 0.013468414159783388,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.024858293457548447,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.00908240053058894
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "noise",
+      "seed": 0,
+      "status": "passed",
+      "support_headroom_m": 0.009203251005927282
+    },
+    {
+      "id": "q1-p1-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.03033997800925015,
+            "horizontal_peak_time_s": 41.155,
+            "horizontal_rmse_m": 0.013970232715060607,
+            "phase": "airborne-descent",
+            "samples": 245,
+            "vertical_peak_m": 0.06935033385441547,
+            "vertical_peak_time_s": 41.23,
+            "vertical_rmse_m": 0.027892768301632932
+          },
+          {
+            "horizontal_peak_m": 0.02365988169174949,
+            "horizontal_peak_time_s": 41.24,
+            "horizontal_rmse_m": 0.01915008162171975,
+            "phase": "contact",
+            "samples": 12,
+            "vertical_peak_m": 0.07415392698452825,
+            "vertical_peak_time_s": 41.28,
+            "vertical_rmse_m": 0.07147864372157153
+          },
+          {
+            "horizontal_peak_m": 0.03101966727229294,
+            "horizontal_peak_time_s": 41.78,
+            "horizontal_rmse_m": 0.014419465169529471,
+            "phase": "motors-off",
+            "samples": 143,
+            "vertical_peak_m": 2.20872815353557,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.953763971593238
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "noise",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.3013688610693519
+    },
+    {
+      "id": "q1-p1-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.029747076065952043,
+            "horizontal_peak_time_s": 40.415,
+            "horizontal_rmse_m": 0.013843142685918308,
+            "phase": "airborne-descent",
+            "samples": 306,
+            "vertical_peak_m": 0.10608604663900026,
+            "vertical_peak_time_s": 41.525,
+            "vertical_rmse_m": 0.040625427186110966
+          },
+          {
+            "horizontal_peak_m": 0.01371415929927745,
+            "horizontal_peak_time_s": 41.555,
+            "horizontal_rmse_m": 0.0110161381278097,
+            "phase": "contact",
+            "samples": 10,
+            "vertical_peak_m": 0.11290084599078085,
+            "vertical_peak_time_s": 41.575,
+            "vertical_rmse_m": 0.10992330689266172
+          },
+          {
+            "horizontal_peak_m": 0.021913610902119327,
+            "horizontal_peak_time_s": 41.895,
+            "horizontal_rmse_m": 0.014090338591756749,
+            "phase": "motors-off",
+            "samples": 84,
+            "vertical_peak_m": 0.6023204924943267,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.24357000504984155
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "noise",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.14747769206986328
+    },
+    {
+      "id": "q2-p0-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.02483665981669799,
+            "horizontal_peak_time_s": 41.075,
+            "horizontal_rmse_m": 0.01349442874776693,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.0025398433208465576,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0007906664444815724
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "delay",
+      "seed": 0,
+      "status": "passed",
+      "support_headroom_m": 0.32739457745123907
+    },
+    {
+      "id": "q2-p0-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.014099370275721548,
+            "horizontal_peak_time_s": 40.815,
+            "horizontal_rmse_m": 0.007277385026917831,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.0031281113624572754,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.001124579020762648
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "delay",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.2820408538827931
+    },
+    {
+      "id": "q2-p0-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.013653580951828347,
+            "horizontal_peak_time_s": 41.995,
+            "horizontal_rmse_m": 0.008856415779593316,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.0021514892578125,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0009384924141070715
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "delay",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.19540209233927025
+    },
+    {
+      "id": "q2-p1-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.024853211654005034,
+            "horizontal_peak_time_s": 41.075,
+            "horizontal_rmse_m": 0.013511146139676423,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.025134146640714505,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.009106599219029647
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "delay",
+      "seed": 0,
+      "status": "passed",
+      "support_headroom_m": 0.0005483845767716433
+    },
+    {
+      "id": "q2-p1-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.01410294505109181,
+            "horizontal_peak_time_s": 40.815,
+            "horizontal_rmse_m": 0.00785880976155673,
+            "phase": "airborne-descent",
+            "samples": 243,
+            "vertical_peak_m": 0.06676831572106556,
+            "vertical_peak_time_s": 41.21,
+            "vertical_rmse_m": 0.027197779585686924
+          },
+          {
+            "horizontal_peak_m": 0.007911100686557851,
+            "horizontal_peak_time_s": 41.215,
+            "horizontal_rmse_m": 0.006381893539072886,
+            "phase": "contact",
+            "samples": 10,
+            "vertical_peak_m": 0.07159532179907485,
+            "vertical_peak_time_s": 41.26,
+            "vertical_rmse_m": 0.06947542139182868
+          },
+          {
+            "horizontal_peak_m": 0.007035691911395174,
+            "horizontal_peak_time_s": 41.295,
+            "horizontal_rmse_m": 0.0021372229800652523,
+            "phase": "motors-off",
+            "samples": 147,
+            "vertical_peak_m": 2.3442284773323636,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 1.0137150750661312
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "delay",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.28839938088682415
+    },
+    {
+      "id": "q2-p1-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.013004964693688949,
+            "horizontal_peak_time_s": 40.015,
+            "horizontal_rmse_m": 0.009410015375246735,
+            "phase": "airborne-descent",
+            "samples": 306,
+            "vertical_peak_m": 0.10516594162460383,
+            "vertical_peak_time_s": 41.525,
+            "vertical_rmse_m": 0.04019117363771292
+          },
+          {
+            "horizontal_peak_m": 0.007010657013738537,
+            "horizontal_peak_time_s": 41.535,
+            "horizontal_rmse_m": 0.00537116002939441,
+            "phase": "contact",
+            "samples": 10,
+            "vertical_peak_m": 0.11204110836004805,
+            "vertical_peak_time_s": 41.575,
+            "vertical_rmse_m": 0.10902473829142659
+          },
+          {
+            "horizontal_peak_m": 0.004154456599197766,
+            "horizontal_peak_time_s": 41.595,
+            "horizontal_rmse_m": 0.0010626270450677722,
+            "phase": "motors-off",
+            "samples": 84,
+            "vertical_peak_m": 0.603300986492217,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.24402600454943305
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "delay",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.1543897747910432
+    },
+    {
+      "id": "q3-p0-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.053874812199907765,
+            "horizontal_peak_time_s": 41.175,
+            "horizontal_rmse_m": 0.01908076234645801,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.00254175066947937,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0007906407133848074
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "noise-delay",
+      "seed": 0,
+      "status": "passed",
+      "support_headroom_m": 0.32527302667915375
+    },
+    {
+      "id": "q3-p0-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.0355559883022895,
+            "horizontal_peak_time_s": 41.195,
+            "horizontal_rmse_m": 0.015168373879208458,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.0031290948390960693,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0011245950077003657
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "noise-delay",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.2846100255957949
+    },
+    {
+      "id": "q3-p0-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.033804981910070746,
+            "horizontal_peak_time_s": 40.455,
+            "horizontal_rmse_m": 0.016813453447938623,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.002147167921066284,
+            "vertical_peak_time_s": 40.015,
+            "vertical_rmse_m": 0.0009377493382186231
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "sample-hold",
+      "quality": "noise-delay",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.19830729062006447
+    },
+    {
+      "id": "q3-p1-s0",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.053893214525755406,
+            "horizontal_peak_time_s": 41.175,
+            "horizontal_rmse_m": 0.019092951419314795,
+            "phase": "airborne-descent",
+            "samples": 400,
+            "vertical_peak_m": 0.02544855716204536,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.009101541826802464
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "contact",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "motors-off",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "noise-delay",
+      "seed": 0,
+      "status": "failed",
+      "support_headroom_m": -0.0011915527035251117
+    },
+    {
+      "id": "q3-p1-s1",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.035550608187318214,
+            "horizontal_peak_time_s": 41.195,
+            "horizontal_rmse_m": 0.014715353043240963,
+            "phase": "airborne-descent",
+            "samples": 243,
+            "vertical_peak_m": 0.0667376163168523,
+            "vertical_peak_time_s": 41.21,
+            "vertical_rmse_m": 0.027180743180636745
+          },
+          {
+            "horizontal_peak_m": 0.012986632120697426,
+            "horizontal_peak_time_s": 41.255,
+            "horizontal_rmse_m": 0.01083977035110046,
+            "phase": "contact",
+            "samples": 10,
+            "vertical_peak_m": 0.07156807696956957,
+            "vertical_peak_time_s": 41.26,
+            "vertical_rmse_m": 0.06946269614847159
+          },
+          {
+            "horizontal_peak_m": 0.031019664770591343,
+            "horizontal_peak_time_s": 41.825,
+            "horizontal_rmse_m": 0.015069514552469285,
+            "phase": "motors-off",
+            "samples": 147,
+            "vertical_peak_m": 2.344374376828688,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 1.0138059351817288
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "noise-delay",
+      "seed": 1,
+      "status": "passed",
+      "support_headroom_m": 0.2891150939479731
+    },
+    {
+      "id": "q3-p1-s2",
+      "phase_errors": {
+        "complete": true,
+        "end_s": 42.0,
+        "groups": [
+          {
+            "horizontal_peak_m": null,
+            "horizontal_peak_time_s": null,
+            "horizontal_rmse_m": null,
+            "phase": "other",
+            "samples": 0,
+            "vertical_peak_m": null,
+            "vertical_peak_time_s": null,
+            "vertical_rmse_m": null
+          },
+          {
+            "horizontal_peak_m": 0.033811767158985984,
+            "horizontal_peak_time_s": 40.455,
+            "horizontal_rmse_m": 0.017116812403327554,
+            "phase": "airborne-descent",
+            "samples": 306,
+            "vertical_peak_m": 0.10528513509311807,
+            "vertical_peak_time_s": 41.525,
+            "vertical_rmse_m": 0.040252121058509595
+          },
+          {
+            "horizontal_peak_m": 0.013516560207992039,
+            "horizontal_peak_time_s": 41.535,
+            "horizontal_rmse_m": 0.008589379648196404,
+            "phase": "contact",
+            "samples": 10,
+            "vertical_peak_m": 0.11210557785884087,
+            "vertical_peak_time_s": 41.575,
+            "vertical_rmse_m": 0.10912659449857365
+          },
+          {
+            "horizontal_peak_m": 0.021913603604794156,
+            "horizontal_peak_time_s": 41.935,
+            "horizontal_rmse_m": 0.01397814348614768,
+            "phase": "motors-off",
+            "samples": 84,
+            "vertical_peak_m": 0.6031350967388716,
+            "vertical_peak_time_s": 41.995,
+            "vertical_rmse_m": 0.2439460891789737
+          }
+        ],
+        "sample_count": 400,
+        "start_s": 40.0
+      },
+      "profile": "hold-dropout-2000ms",
+      "quality": "noise-delay",
+      "seed": 2,
+      "status": "passed",
+      "support_headroom_m": 0.1570656718682371
+    }
+  ],
+  "retained_flights": 24,
+  "sample_count": 240024,
+  "schema_version": 1,
+  "source_commit": "c943f0b17733b8aa22fecc7a93705645c302147a"
+}

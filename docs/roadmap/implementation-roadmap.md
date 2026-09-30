@@ -30,6 +30,9 @@ Public deployment and merges are separate decisions.
 | AL-018 | Longer capture outages with sustained recovery, preserved failures and live 3D | Verified study: 15 complete flights; 11 mission, 6/12 pair and 15/24 recovery passes; longer-outage failures retained |
 | AL-019 | Bounded predictive feedback with recorded paired outage demo | Verified study: 15 fresh flights; 12 mission, 6/12 pair and 16/24 recovery passes; exact no-outage continuity; long-outage failures retained |
 | AL-020 | Capture-aware landing commands and unseen-seed demo | Verified experiment: 24 fresh flights; exact inactive traces; 18 paired demo cases; two-second failures retained, guard stays opt-in |
+| AL-021 | Axis-specific feedback availability | Verified: 24 fresh flights; horizontal channel improves mission completion while pair/recovery failures remain |
+| AL-022 | Horizontal noise and delay sensitivity | Verified: 24 fresh flights; 23/24 missions and exact ideal continuity; all qualities retain pair/recovery failures |
+| AL-023 | Ten-feature flight diagnosis workspace | Verified locally: 24 retained flights, 240,024 full-rate samples, phase-separated landing analysis and working paired 3D; no new flights |
 
 ## Next gate
 
@@ -152,3 +155,19 @@ and predeclare an additional seed cohort before viewing its traces. Do not enabl
 the channel by default, loosen limits, or treat a post-disarm predictor error as an
 active control failure. Synthetic sensor settings, ideal attitude/contact
 supervision and the unresolved AL-010 yaw-refinement finding remain explicit.
+
+AL-023 delivers the requested [ten-feature diagnosis workspace](../flight-diagnosis.md)
+under [ADR 020](../architecture/decisions/020-flight-diagnosis.md). The
+[validation record](../evidence/flight-diagnosis-validation.md) preserves all
+24 AL-022 flights, failed gates and historical source identity. Each original
+physics sample is available in plots and CSV; no new flight or robustness claim
+is made. Ideal seed 1 has 0.0694 m peak altitude feedback error during airborne
+descent in [40,42), versus 2.2082 m after motors-off. Contact is intermittent,
+so per-sample state and pre-first-touchdown windows answer different questions.
+
+Next: use the same-quality no-outage comparison to identify which active-descent
+target, state estimate or contact-supervision behavior explains early touchdown.
+Predeclare the proposed correction and additional seed cohort before any new
+measurement. Retain the combined seed-0 support failure and all pair/recovery
+failures as regression cases; do not tune against motors-off drift alone or
+relax limits. AL-010 remains open.
