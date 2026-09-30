@@ -32,7 +32,7 @@ export function LiveMonitor() {
         if (stopped) return;
         if (next.state === "waiting") { setFrame(null); setConnection("Waiting for worker"); }
         else {
-          const nextKey = `${next.seed}/${next.physics_dt_s}/${next.observation_profile ?? "legacy"}`;
+          const nextKey = `${next.seed}/${next.physics_dt_s}/${next.observation_profile ?? "legacy"}/${next.sample?.axis_observation?.available_axes??"all"}`;
           if (key !== nextKey) { key = nextKey; samples = []; setHistory([]); setSceneSamples([]); }
           if (next.sample) {
             const empty = samples.length === 0;
@@ -100,7 +100,8 @@ export function LiveMonitor() {
         </dl>
         {frame?.observation_profile && <section aria-label="Controller observations">
           <h3>Controller observations</h3>
-          {s?.feedback&&<p>Predictive feedback: <strong>{s.feedback.mode}</strong> · estimated position error {number(Math.hypot(...s.position_m.map((v,i)=>v-s.feedback!.position_m[i])),3)} m. Raw capture age is shown below.</p>}
+          {s?.feedback&&<p>{s.axis_feedback?"Main predictor estimate":"Predictive feedback"}: <strong>{s.feedback.mode}</strong> · estimated position error {number(Math.hypot(...s.position_m.map((v,i)=>v-s.feedback!.position_m[i])),3)} m. Raw capture age is shown below.</p>}
+          {s?.axis_feedback&&<p>Applied feedback: <strong>{s.axis_feedback.mode}</strong> · fresh channel age {number(s.axis_observation!.age_s*1000,0)} ms · horizontal error {number(Math.hypot(...s.position_m.slice(0,2).map((v,i)=>v-s.axis_feedback!.position_m[i])),3)} m · altitude error {number(Math.abs(s.position_m[2]-s.axis_feedback.position_m[2]),3)} m. Noiseless synthetic 50 Hz channel; unavailable axes use the main predictor.</p>}
           {s?.landing_guard&&<p>Landing guard: <strong>{s.landing_guard.mode}</strong> · commanded altitude {number(s.landing_guard.target_m[2],3)} m · scheduled altitude {number(s.target_m[2],3)} m. Tracking error uses the original schedule.</p>}
           <p>Profile: <strong>{frame.observation_profile}</strong> · position and velocity only</p>
           {timingProfile&&<p>Capture cadence: <strong>{200/capturePeriod(frame.observation_profile)} Hz</strong> · holds the last successful capture.</p>}

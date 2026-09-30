@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--solver-iterations", type=int, choices=(1, 4), default=4)
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
     parser.add_argument("--predictive-feedback", action="store_true")
+    parser.add_argument("--fresh-axis", choices=("vertical", "horizontal"))
     parser.add_argument("--landing-guard", action="store_true")
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
@@ -37,6 +38,8 @@ def main():
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.fresh_axis and (not args.predictive_feedback or args.landing_guard or args.observation_profile not in ("sample-hold", "hold-dropout-2000ms")):
+        parser.error("Fresh-axis ablation requires predictive feedback, no landing guard, and no outage or two-second outages.")
     if args.landing_guard and not args.predictive_feedback:
         parser.error("Landing guard requires predictive feedback.")
     if args.predictive_feedback and args.observation_profile not in OUTAGE_PROFILES:
@@ -70,6 +73,8 @@ def main():
             options += ["--observation-profile", args.observation_profile]
         if args.predictive_feedback:
             options += ["--predictive-feedback"]
+        if args.fresh_axis:
+            options += ["--fresh-axis", args.fresh_axis]
         if args.landing_guard:
             options += ["--landing-guard"]
         options += (["--monitor"] if args.monitor else []) + (["--realtime"] if args.realtime else [])
@@ -87,6 +92,7 @@ def main():
         if any((config := load_json(args.output / row["run_id"] / "config.json"))["physics_options"].get("physics_dt_s", .005) != args.physics_dt
                or config.get("observation_model", {}).get("profile") != args.observation_profile
                or ("feedback_model" in config) != args.predictive_feedback
+               or config.get("axis_feedback_model", {}).get("available_axes") != args.fresh_axis
                or ("landing_guard_model" in config) != args.landing_guard
                for row in result["results"]):
             if args.monitor:

@@ -123,3 +123,19 @@ Keep the current model, dependency pins, seed sets and acceptance thresholds.
 Reopen implementation for an observed defect or an approved extension, and update
 the evidence for every changed claim. Do not expand scope to fill the time while
 the hosted gate is blocked.
+
+AL-021 is verified: [24 fresh PhysX flights](../evidence/isaac-axis-validation.md)
+separate horizontal and altitude feedback availability under
+[ADR 018](../architecture/decisions/018-axis-availability.md). Fresh horizontal
+feedback passed 6/6 two-second missions; fresh altitude and retained all-channel
+outages passed 0/6. Only 1/6 horizontal no-outage pairs and 7/12 recovery windows
+passed. All twelve fresh no-outage traces exactly retained their references;
+all six final seeds were previously tested. The paired 3D demo preserves failed
+gates, and wall-clock lag reached 0.648 s without skipped physics samples.
+
+Next priority: test fixed noise and transport delay on the additional horizontal
+channel, retain altitude prediction-error and recovery measurements, and address
+the remaining pair/recovery failures before enabling any feedback change by
+default. Predeclare additional seed cohorts before inspecting their traces.
+The idealized channel is not a real sensor or fused estimator. Keep AL-010 yaw
+refinement open and keep every acceptance threshold unchanged.

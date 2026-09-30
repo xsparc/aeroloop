@@ -16,7 +16,7 @@ from aeroloop.rotors import RotorModel
 from aeroloop.simulation import encoded, metrics, record, sha256
 
 
-def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False):
+def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False, fresh_axis=None):
     # Synthetic failed protocol fixture; deliberately no physical integration.
     state, route, tracking = mission.initial_state(seed), mission.Mission(), wind_mission.TrackingController()
     wind, rotors, observations = wind_mission.wind_model(), RotorModel(), make_observations(profile,seed)
@@ -24,6 +24,8 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
     predictor = Predictor() if predictive else None
     from aeroloop.landing_guard import LandingGuard, configuration as guard_configuration
     guard = LandingGuard() if guarded else None
+    from aeroloop.axis_feedback import AxisCaptures, combine, configuration as axis_configuration
+    axes = AxisCaptures(fresh_axis) if fresh_axis else None
     samples, motors, scale = [], (0.,)*4, 1.
     for i, velocity in enumerate(wind.velocities(seed,.005,count)):
         t=round(i*.005,9)
@@ -31,6 +33,10 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
         if predictor:
             predicted = predictor.step(observed, (samples[-1]["thrust_n"],samples[-1]["quaternion_wxyz"]) if samples else None)
             feedback = replace(feedback,position=predicted["position_m"],velocity=predicted["velocity_m_s"])
+        if axes:
+            captured = axes.capture(state)
+            applied_feedback = combine(predicted, captured)
+            feedback = replace(feedback,position=applied_feedback["position_m"],velocity=applied_feedback["velocity_m_s"])
         phase,target,armed,bottom = route.update(t,state,(0.,)*3)
         g = guard.step(t,phase,target,observed) if guard else None
         reference=(g["target_velocity_m_s"],g["target_acceleration_m_s2"]) if guard else None
@@ -47,6 +53,7 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
             support_clearance_m=bottom,observation=observed,**control))
         if predictor:samples[-1]["feedback"]=predicted
         if guard:samples[-1]["landing_guard"]=g
+        if axes:samples[-1].update(axis_observation=captured,axis_feedback=applied_feedback)
     config=dict(model=asdict(Model()),initial_state=asdict(state),dt_s=.005,duration_s=50.,scenario=wind_mission.SCENARIO,
         seed=seed,controller="rate-pid-v1",position_kp=2.5,position_kd=2.8,attitude_kp=5.,
         rate_gains={"p":[.6]*3,"i":[.1]*3,"d":[.005]*3,"ff":[0.]*3,"integral_limit":[.3]*3},
@@ -55,6 +62,7 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
         trajectory_control=wind_mission.control_configuration(),observation_model=configuration(profile))
     if predictor:config["feedback_model"]=predictor_configuration()
     if guard:config["landing_guard_model"]=guard_configuration()
+    if axes:config["axis_feedback_model"]=axis_configuration(fresh_axis)
     return dict(experiment="isaac-quadrotor",config=config,samples=samples,events=wind_mission.events(route.events,samples[-1]["time_s"]),
         metrics=metrics(samples,wind_mission.SCENARIO),status="failed",failure_reason="wind_mission_threshold",controller_binary_sha256="a"*64)
 

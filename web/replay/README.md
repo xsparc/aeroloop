@@ -110,3 +110,7 @@ binds 18 comparisons across fixed regression and unseen-seed cohorts. Version-ni
 recordings supply guard commands separately from original scoring targets;
 version-five live telemetry displays the same distinction. Older outage bundles
 and replay schemas remain supported. Physics failures stay visible in every view.
+
+The [axis availability demo](../../docs/axis-availability.md) uses `axis.html`
+and an ignored `axis-config.json`. It shares bounded paired playback and adds
+fresh-channel selection with actual applied-feedback errors.
