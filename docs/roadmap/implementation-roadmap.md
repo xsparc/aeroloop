@@ -133,16 +133,22 @@ passed. All twelve fresh no-outage traces exactly retained their references;
 all six final seeds were previously tested. The paired 3D demo preserves failed
 gates, and wall-clock lag reached 0.648 s without skipped physics samples.
 
-Next priority: test fixed noise and transport delay on the additional horizontal
-channel, retain altitude prediction-error and recovery measurements, and address
-the remaining pair/recovery failures before enabling any feedback change by
-default. Predeclare additional seed cohorts before inspecting their traces.
-The idealized channel is not a real sensor or fused estimator. Keep AL-010 yaw
-refinement open and keep every acceptance threshold unchanged.
+This result motivated AL-022's fixed noise and transport-delay study below.
+The idealized channel is not a real sensor or fused estimator. All six seeds
+were already tested, and AL-010 yaw refinement remains open.
 
+AL-022 is verified under [ADR 019](../architecture/decisions/019-horizontal-channel-quality.md).
+The [24-flight quality study](../evidence/isaac-quality-validation.md) exactly
+reproduced all six ideal references and passed 23/24 missions. Combined noise and
+40 ms delay failed seed 0's final support-position bound (0.35119 m > 0.350 m).
+All four qualities passed 0/3 no-outage pairs and 3/6 recovery windows. The
+[working paired demo](../horizontal-quality.md) retains those failures and shows
+acquisition/delivery age separately from true motion.
 
-AL-022 is in progress under [ADR 019](../architecture/decisions/019-horizontal-channel-quality.md):
-24 fixed noise/delay sensitivity flights on three regression seeds, exact retained
-ideal reproduction, full-rate acceptance and an inspectable paired 3D demo.
-Parameters and limits are frozen before measurement. This is a synthetic channel
-study; controller gains, default behavior and the open AL-010 finding are unchanged.
+Next priority: diagnose the early-touchdown and persistent landing/recovery
+differences using active-descent prediction error separately from post-contact,
+post-disarm drift. Evaluate any bounded correction against these retained failures
+and predeclare an additional seed cohort before viewing its traces. Do not enable
+the channel by default, loosen limits, or treat a post-disarm predictor error as an
+active control failure. Synthetic sensor settings, ideal attitude/contact
+supervision and the unresolved AL-010 yaw-refinement finding remain explicit.

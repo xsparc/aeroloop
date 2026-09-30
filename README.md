@@ -135,6 +135,8 @@ this remains an opt-in availability experiment, not a robustness qualification.
 The [horizontal feedback quality study](docs/horizontal-quality.md) adds fixed
 noise and 40 ms transport delay to the extra 50 Hz horizontal channel. It compares
 ideal, noise-only, delay-only and combined captures with unchanged control and
-physics gates. The paired demo exposes delivered age and applied feedback error;
-[validation status](docs/evidence/isaac-quality-validation.md) distinguishes measured
-results from the frozen protocol.
+physics gates. The paired demo exposes delivered age and applied feedback error.
+[Twenty-four measured flights](docs/evidence/isaac-quality-validation.md) passed
+23 of 24 missions; combined noise and delay caused one final support-position
+failure. All qualities retain paired and recovery failures, so the channel stays
+experimental. The demo preserves those results and explains post-disarm drift.
