@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "0e13ceaa1685d03ef1d766d994a238985ddc12b3",
+  "scanned_at": "2026-09-30",
+  "coverage": [
+    "Horizontal feedback noise",
+    "Acquisition versus delivery latency",
+    "Regression seed sensitivity"
+  ],
+  "findings": [
+    {
+      "finding": "Noise amplitude and delivery time are separate measurement properties; buffered fusion accounts for sensor delay, while additive noise models support controlled sensitivity tests.",
+      "source_event_date": null,
+      "citations": [
+        "https://docs.px4.io/main/en/advanced_config/tuning_the_ecl_ekf",
+        "https://isaac-sim.github.io/IsaacLab/main/source/api/lab/isaaclab.utils.html#module-isaaclab.utils.noise"
+      ],
+      "confidence": "high",
+      "relevance": "AL-021 ideal horizontal feedback passed missions but failed most pair and recovery gates",
+      "direction_alignment": "Improve realistic physics controller evaluation with an inspectable working demo",
+      "opportunity_or_risk": "Fixed synthetic noise and latency expose sensitivity but cannot establish hardware sensor accuracy or fused estimator performance",
+      "engineering_cost": "Four fixed qualities, strict delivery reconstruction, 24 new flights and nine paired 3D comparisons",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-022 evaluates noise and delay before changing control or fusion",
+      "verification_needed": "Reproduce all retained ideal traces, retain same-quality no-outage pairs and all failures; freeze parameters before final measurements"
+    }
+  ],
+  "overall_recommendation": "Measure separate and combined noise and delay with unchanged control and physics limits.",
+  "evidence_gaps": [
+    "Three previously tested seeds; no independent validation cohort",
+    "No calibrated sensor, bias drift, outlier model, fusion or delay compensation",
+    "Ideal attitude and contact supervision remain; independent yaw refinement unresolved"
+  ]
+}

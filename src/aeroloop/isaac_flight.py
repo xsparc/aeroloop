@@ -31,6 +31,7 @@ def flight(output: Path, launcher_args):
     predictive = getattr(launcher_args, "predictive_feedback", False)
     guarded = getattr(launcher_args, "landing_guard", False)
     fresh_axis = getattr(launcher_args, "fresh_axis", None)
+    channel_quality = getattr(launcher_args, "channel_quality", None)
     from .axis_feedback import AxisCaptures, combine, configuration as axis_configuration
     from .landing_guard import LandingGuard, configuration as guard_configuration
     from .predictor import Predictor, configuration as predictor_configuration
@@ -76,7 +77,8 @@ def flight(output: Path, launcher_args):
                 previous_scale = 1.
                 predictor = Predictor() if predictive else None
                 guard = LandingGuard() if guarded else None
-                axes = AxisCaptures(fresh_axis) if fresh_axis else None
+                from .channel_quality import QualityCaptures, configuration as quality_configuration
+                axes = QualityCaptures(channel_quality, seed) if channel_quality else AxisCaptures(fresh_axis) if fresh_axis else None
                 observations = make_observations(profile, seed) if profile else None
                 rng = random.Random(seed)
                 initial = State(position=(rng.uniform(-.05, .05), rng.uniform(-.05, .05), 1.5+rng.uniform(-.05, .05)))
@@ -220,7 +222,7 @@ def flight(output: Path, launcher_args):
                     "actuator": asdict(rotors), "simulator_versions": package_versions,
                     "physics_options": {"gyroscopic_forces": True}}
                 if axes:
-                    config["axis_feedback_model"] = axis_configuration(fresh_axis)
+                    config["axis_feedback_model"] = quality_configuration(channel_quality) if channel_quality else axis_configuration(fresh_axis)
                 if guard:
                     config["landing_guard_model"] = guard_configuration()
                 if predictor:

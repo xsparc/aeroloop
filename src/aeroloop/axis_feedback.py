@@ -38,7 +38,7 @@ class AxisCaptures:
 
 def combine(prediction, capture):
     axes = capture["available_axes"]
-    return {"mode": axes+"-fresh", **{k: tuple(capture[k][i] if selected(axes, i) else prediction[k][i]
+    return {"mode": axes+"-"+capture.get("quality", "fresh"), **{k: tuple(capture[k][i] if selected(axes, i) else prediction[k][i]
         for i in range(3)) for k in ("position_m", "velocity_m_s")}}
 
 

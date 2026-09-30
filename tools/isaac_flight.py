@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
     parser.add_argument("--predictive-feedback", action="store_true")
     parser.add_argument("--fresh-axis", choices=("vertical", "horizontal"))
+    parser.add_argument("--channel-quality", choices=("ideal", "noise", "delay", "noise-delay"))
     parser.add_argument("--landing-guard", action="store_true")
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
@@ -29,6 +30,8 @@ def main():
     parser.set_defaults(headless=True, visualizer=["none"], device="cuda:0", livestream=0)
     args = parser.parse_args()
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.channel_quality and args.fresh_axis != "horizontal":
+        parser.error("Channel quality requires --fresh-axis horizontal.")
     if args.fresh_axis and (not args.predictive_feedback or args.landing_guard or args.observation_profile not in ("sample-hold", "hold-dropout-2000ms")):
         parser.error("Fresh-axis ablation requires predictive feedback, no landing guard, and no outage or two-second outages.")
     if args.landing_guard and not args.predictive_feedback:
