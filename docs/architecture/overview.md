@@ -164,6 +164,15 @@ motors-off drift without changing any flight contract. Export reconstructs the
 original evidence; the browser validates pinned hashes and derived arithmetic.
 See [ADR 020](decisions/020-flight-diagnosis.md).
 
+AL-025's [landing contact lab](../landing-contact-lab.md) composes the verified
+descent contract with 50-column horizontal diagnostics from 34 seconds onward.
+The exporter reconstructs the retained recordings before deriving controller
+terms, actuator orientation and preceding-interval momentum budgets. Browser
+contracts check cadence, formulas, force continuity, pose agreement and the
+original support-position gate. Contact episodes and offline readiness stop at
+their recorded boundaries; a changed predicate never implies another simulated
+trajectory. See [ADR 022](decisions/022-landing-contact-lab.md).
+
 AL-024 adds opt-in `VerticalDecay` around the existing capture/rotor predictor.
 Only stale vertical disturbance propagation changes; the learned anchor and
 horizontal estimate are preserved. Evidence v12 reconstructs every step and live

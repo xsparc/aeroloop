@@ -1,5 +1,10 @@
 # AeroLoop replay component
 
+For the ten-feature landing contact lab, see the
+[operator guide](../../docs/landing-contact-lab.md). Open `/contact.html` after
+exporting the retained descent matrix. It adds horizontal maps, controller and
+momentum budgets, contact episodes and an offline readiness audit beside paired 3D.
+
 For the ten-feature recorded flight diagnosis workspace, see the
 [operator guide](../../docs/flight-diagnosis.md). Build the demo and open
 `/diagnosis.html` after exporting the retained quality matrix. It provides

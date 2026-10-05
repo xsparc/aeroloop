@@ -140,11 +140,11 @@ statement = "Embed bounded, checksummed CPU replay with explicit frames and acce
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/replay-integration.md", "docs/architecture/overview.md"]
-implementation_refs = ["web/replay/src/index.tsx", "web/replay/src/contracts.ts", "web/replay/src/load.ts", "web/replay/src/scene.tsx"]
-verification_refs = ["web/replay/tests/contracts.test.mjs", "web/replay/tests/browser/replay.spec.mjs"]
-validation_refs = ["docs/evidence/replay-validation.md"]
-risk_refs = ["SECURITY.md", "docs/replay-integration.md"]
+design_refs = ["docs/replay-integration.md", "docs/architecture/overview.md", "docs/architecture/decisions/022-landing-contact-lab.md"]
+implementation_refs = ["web/replay/src/index.tsx", "web/replay/src/contracts.ts", "web/replay/src/load.ts", "web/replay/src/scene.tsx", "src/aeroloop/contact_study.py", "tools/contact_study.py", "web/replay/src/contact.tsx", "web/replay/src/contact-contract.ts"]
+verification_refs = ["web/replay/tests/contracts.test.mjs", "web/replay/tests/browser/replay.spec.mjs", "tests/test_contact_study.py", "web/replay/tests/contact.test.mjs", "web/replay/tests/browser/contact.spec.mjs"]
+validation_refs = ["docs/evidence/replay-validation.md", "docs/evidence/landing-contact-validation.md", "docs/evidence/landing-contact-001.json"]
+risk_refs = ["SECURITY.md", "docs/replay-integration.md", "docs/architecture/decisions/022-landing-contact-lab.md"]
 
 [[work_items]]
 id = "AL-005A"
@@ -384,11 +384,11 @@ statement = "Inspect full-rate mission gates and seed/frequency and observation-
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md", "docs/architecture/decisions/013-observation-replay.md", "docs/observation-evaluation.md", "docs/architecture/decisions/017-landing-capture-guard.md", "docs/architecture/decisions/020-flight-diagnosis.md"]
-implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts", "web/replay/src/observation-contract.ts", "src/aeroloop/landing_study.py", "src/aeroloop/diagnosis.py", "tools/diagnosis_demo.py", "web/replay/src/diagnosis.tsx", "web/replay/src/diagnosis-contract.ts"]
-verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs", "tests/test_landing_study.py", "tests/test_diagnosis.py", "web/replay/tests/diagnosis.test.mjs", "web/replay/tests/browser/diagnosis.spec.mjs"]
-validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-landing-guard-validation.md", "docs/evidence/isaac-axis-validation.md", "docs/evidence/flight-diagnosis-validation.md", "docs/evidence/flight-diagnosis-001.json"]
-risk_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "SECURITY.md"]
+design_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "docs/flight-evaluation.md", "docs/architecture/decisions/013-observation-replay.md", "docs/observation-evaluation.md", "docs/architecture/decisions/017-landing-capture-guard.md", "docs/architecture/decisions/020-flight-diagnosis.md", "docs/architecture/decisions/022-landing-contact-lab.md"]
+implementation_refs = ["src/aeroloop/evaluation.py", "src/aeroloop/wind_mission.py", "web/replay/src/evaluation.tsx", "web/replay/src/evaluation-contract.ts", "web/replay/src/observation-contract.ts", "src/aeroloop/landing_study.py", "src/aeroloop/diagnosis.py", "tools/diagnosis_demo.py", "web/replay/src/diagnosis.tsx", "web/replay/src/diagnosis-contract.ts", "src/aeroloop/contact_study.py", "tools/contact_study.py", "web/replay/src/contact.tsx", "web/replay/src/contact-contract.ts"]
+verification_refs = ["tests/test_evaluation.py", "web/replay/tests/evaluation.test.mjs", "web/replay/tests/browser/evaluation.spec.mjs", "tests/test_landing_study.py", "tests/test_diagnosis.py", "web/replay/tests/diagnosis.test.mjs", "web/replay/tests/browser/diagnosis.spec.mjs", "tests/test_contact_study.py", "web/replay/tests/contact.test.mjs", "web/replay/tests/browser/contact.spec.mjs"]
+validation_refs = ["docs/evidence/flight-evaluation-validation.md", "docs/evidence/isaac-flight-study-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-landing-guard-validation.md", "docs/evidence/isaac-axis-validation.md", "docs/evidence/flight-diagnosis-validation.md", "docs/evidence/flight-diagnosis-001.json", "docs/evidence/landing-contact-validation.md", "docs/evidence/landing-contact-001.json"]
+risk_refs = ["docs/architecture/decisions/009-evaluation-demonstration.md", "SECURITY.md", "docs/architecture/decisions/022-landing-contact-lab.md"]
 
 [[work_items]]
 id = "AL-012"
@@ -468,11 +468,11 @@ statement = "Measure position/velocity noise, delay, capture cadence and outage 
 status = "implemented"
 objective_ids = ["OBJ-MVP"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
-design_refs = ["docs/architecture/decisions/012-observation-robustness.md", "docs/observation-robustness.md", "docs/architecture/decisions/014-observation-timing.md", "docs/observation-timing.md", "docs/architecture/decisions/015-outage-recovery.md", "docs/outage-recovery.md", "docs/architecture/decisions/016-predictive-outage-demo.md", "docs/predictive-feedback.md", "docs/architecture/decisions/017-landing-capture-guard.md", "docs/architecture/decisions/019-horizontal-channel-quality.md", "docs/horizontal-quality.md"]
-implementation_refs = ["src/aeroloop/observation.py", "src/aeroloop/observation_study.py", "src/aeroloop/isaac_flight.py", "src/aeroloop/evidence.py", "src/aeroloop/live.py", "web/replay/src/live-contract.ts", "web/replay/src/live.tsx", "src/aeroloop/timing_observation.py", "src/aeroloop/timing_study.py", "tools/timing_report.py", "tools/timing_plot.py", "src/aeroloop/outage_study.py", "tools/outage_report.py", "tools/outage_plot.py", "src/aeroloop/predictor.py", "src/aeroloop/prediction_study.py", "web/replay/src/outage.tsx", "web/replay/src/outage-contract.ts", "tools/prediction_demo.py", "src/aeroloop/landing_guard.py", "src/aeroloop/axis_feedback.py", "src/aeroloop/axis_study.py", "src/aeroloop/channel_quality.py", "src/aeroloop/quality_study.py", "tools/quality_demo.py"]
-verification_refs = ["tests/test_observation.py", "tests/test_live.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs", "tests/test_timing_observation.py", "tests/test_outage_study.py", "tests/test_predictor.py", "web/replay/tests/outage.test.mjs", "web/replay/tests/browser/outage.spec.mjs", "tests/test_landing_guard.py", "tests/test_axis_feedback.py", "web/replay/tests/axis.test.mjs", "web/replay/tests/browser/axis.spec.mjs", "tests/test_channel_quality.py", "web/replay/tests/quality.test.mjs", "web/replay/tests/browser/quality.spec.mjs"]
-validation_refs = ["docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-timing-validation.md", "docs/evidence/isaac-timing-001.json", "docs/evidence/isaac-outage-validation.md", "docs/evidence/isaac-outage-001.json", "docs/evidence/isaac-predictor-validation.md", "docs/evidence/isaac-predictor-001.json", "docs/evidence/isaac-landing-guard-validation.md", "docs/evidence/isaac-axis-validation.md", "docs/evidence/isaac-quality-validation.md", "docs/evidence/isaac-quality-001.json"]
-risk_refs = ["docs/architecture/decisions/012-observation-robustness.md", "SECURITY.md", "docs/architecture/decisions/019-horizontal-channel-quality.md"]
+design_refs = ["docs/architecture/decisions/012-observation-robustness.md", "docs/observation-robustness.md", "docs/architecture/decisions/014-observation-timing.md", "docs/observation-timing.md", "docs/architecture/decisions/015-outage-recovery.md", "docs/outage-recovery.md", "docs/architecture/decisions/016-predictive-outage-demo.md", "docs/predictive-feedback.md", "docs/architecture/decisions/017-landing-capture-guard.md", "docs/architecture/decisions/019-horizontal-channel-quality.md", "docs/horizontal-quality.md", "docs/architecture/decisions/022-landing-contact-lab.md"]
+implementation_refs = ["src/aeroloop/observation.py", "src/aeroloop/observation_study.py", "src/aeroloop/isaac_flight.py", "src/aeroloop/evidence.py", "src/aeroloop/live.py", "web/replay/src/live-contract.ts", "web/replay/src/live.tsx", "src/aeroloop/timing_observation.py", "src/aeroloop/timing_study.py", "tools/timing_report.py", "tools/timing_plot.py", "src/aeroloop/outage_study.py", "tools/outage_report.py", "tools/outage_plot.py", "src/aeroloop/predictor.py", "src/aeroloop/prediction_study.py", "web/replay/src/outage.tsx", "web/replay/src/outage-contract.ts", "tools/prediction_demo.py", "src/aeroloop/landing_guard.py", "src/aeroloop/axis_feedback.py", "src/aeroloop/axis_study.py", "src/aeroloop/channel_quality.py", "src/aeroloop/quality_study.py", "tools/quality_demo.py", "src/aeroloop/contact_study.py", "tools/contact_study.py", "web/replay/src/contact.tsx", "web/replay/src/contact-contract.ts"]
+verification_refs = ["tests/test_observation.py", "tests/test_live.py", "web/replay/tests/live.test.mjs", "web/replay/tests/browser/live.spec.mjs", "tests/test_timing_observation.py", "tests/test_outage_study.py", "tests/test_predictor.py", "web/replay/tests/outage.test.mjs", "web/replay/tests/browser/outage.spec.mjs", "tests/test_landing_guard.py", "tests/test_axis_feedback.py", "web/replay/tests/axis.test.mjs", "web/replay/tests/browser/axis.spec.mjs", "tests/test_channel_quality.py", "web/replay/tests/quality.test.mjs", "web/replay/tests/browser/quality.spec.mjs", "tests/test_contact_study.py", "web/replay/tests/contact.test.mjs", "web/replay/tests/browser/contact.spec.mjs"]
+validation_refs = ["docs/evidence/isaac-observation-validation.md", "docs/evidence/isaac-observation-001.json", "docs/evidence/observation-replay-validation.md", "docs/evidence/isaac-timing-validation.md", "docs/evidence/isaac-timing-001.json", "docs/evidence/isaac-outage-validation.md", "docs/evidence/isaac-outage-001.json", "docs/evidence/isaac-predictor-validation.md", "docs/evidence/isaac-predictor-001.json", "docs/evidence/isaac-landing-guard-validation.md", "docs/evidence/isaac-axis-validation.md", "docs/evidence/isaac-quality-validation.md", "docs/evidence/isaac-quality-001.json", "docs/evidence/landing-contact-validation.md", "docs/evidence/landing-contact-001.json"]
+risk_refs = ["docs/architecture/decisions/012-observation-robustness.md", "SECURITY.md", "docs/architecture/decisions/019-horizontal-channel-quality.md", "docs/architecture/decisions/022-landing-contact-lab.md"]
 
 [[work_items]]
 id = "AL-015"
@@ -667,3 +667,24 @@ observed_on = "2026-10-06"
 reviewed_on = "2026-10-06"
 review_due = "2026-11-05"
 decision_ref = "docs/architecture/decisions/021-vertical-disturbance-decay.md"
+
+
+[[work_items]]
+id = "AL-025"
+title = "Ten-feature landing contact analysis and review demo"
+status = "verified"
+requirement_ids = ["REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY", "REQ-OBSERVATION-ROBUSTNESS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-10-06-post-pr25-ten-features-draft-pr"
+acceptance_refs = ["docs/architecture/decisions/022-landing-contact-lab.md"]
+evidence_refs = ["docs/research/2026-10-06-landing-contact.json", "docs/evidence/landing-contact-validation.md", "docs/evidence/landing-contact-001.json"]
+
+[[research_decisions]]
+id = "RD-LANDING-CONTACT"
+finding = "Interval-correct momentum accounting and an explicitly offline readiness audit clarify retained landing failures without implying measured friction or a counterfactual flight."
+disposition = "adopted"
+source_urls = ["https://nvidia-omniverse.github.io/PhysX/physx/5.4.0/docs/RigidBodyDynamics.html", "https://docs.px4.io/main/en/advanced_config/land_detector"]
+observed_on = "2026-10-06"
+reviewed_on = "2026-10-06"
+review_due = "2026-11-05"
+decision_ref = "docs/architecture/decisions/022-landing-contact-lab.md"
