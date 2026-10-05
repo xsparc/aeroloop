@@ -34,7 +34,7 @@ Public deployment and merges are separate decisions.
 | AL-022 | Horizontal noise and delay sensitivity | Verified: 24 fresh flights; 23/24 missions and exact ideal continuity; all qualities retain pair/recovery failures |
 | AL-023 | Ten-feature flight diagnosis workspace | Verified locally: 24 retained flights, 240,024 full-rate samples, phase-separated landing analysis and working paired 3D; no new flights |
 
-| AL-024 | Vertical disturbance decay and ten-feature descent comparison | Implementation in progress; frozen physics protocol in ADR 021 |
+| AL-024 | Vertical disturbance decay and ten-feature descent comparison | Verified experiment: 18 fresh flights, six retained baselines, 12 paired demo cases; candidate 8/12 missions, 5/6 outage pairs, 9/12 recovery windows; remains opt-in |
 
 ## Next gate
 
@@ -173,3 +173,24 @@ Predeclare the proposed correction and additional seed cohort before any new
 measurement. Retain the combined seed-0 support failure and all pair/recovery
 failures as regression cases; do not tune against motors-off drift alone or
 relax limits. AL-010 remains open.
+
+AL-024 implements the [ten-feature descent comparison](../descent-comparison.md)
+under [ADR 021](../architecture/decisions/021-vertical-disturbance-decay.md).
+The [frozen experiment](../evidence/isaac-decay-validation.md) preserves exact
+no-outage and pre-outage continuity. It separates full-run acceptance from
+contact-aligned diagnostic windows and retains every failed seed.
+
+The regression candidate improves pair acceptance from 0/3 to 2/3 and recovery
+from 3/6 to 4/6, but seed 1 still fails. The additional no-outage seeds expose
+existing support-position failures: seeds 401 and 503 are already 0.632 m and
+0.384 m from home when the motors are commanded off. This is an observation,
+not proof of a single cause. Vertical disturbance decay cannot correct those
+no-outage failures because it is deliberately inactive there.
+
+Next priority: investigate horizontal position error and momentum at first
+contact and at the landed latch, especially on seeds 401/503. Compare active
+horizontal control, rotor lag, contact orientation and the existing disarm
+criteria before proposing another bounded controller or supervisor change.
+Retain the seed-1 prediction regression, use pre-contact metrics separately
+from post-disarm drift, and predeclare further seeds before measurements.
+Keep the candidate opt-in, all original limits unchanged, and AL-010 open.

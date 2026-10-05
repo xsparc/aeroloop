@@ -74,3 +74,8 @@ They do not replace the full-run mission, same-mode outage-pair or sustained-rec
 criteria. Failures and incomplete coverage remain visible. Additional seeds provide
 a bounded check, not statistical robustness or hardware-flight validation. Synthetic
 sensors, ideal attitude/contact supervision and AL-010 yaw refinement remain limitations.
+
+The [measured study](evidence/isaac-decay-validation.md) retains all 24 final/reference
+flights. Candidate missions passed 8/12, outage pairs 5/6 and recovery
+windows 9/12. The candidate remains opt-in; all-cohort numerical acceptance
+was not achieved.
