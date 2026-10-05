@@ -147,3 +147,7 @@ plots, event jumps, phase error summaries, feedback overlays, gate headroom,
 recovery inspection, provenance and numeric CSV. Every plot uses the original
 200 Hz samples, with contact and motors-off drift distinguished from airborne
 descent. This is recorded analysis; the original failures and limits remain.
+
+The [descent comparison workspace](docs/descent-comparison.md) tests an opt-in
+vertical disturbance predictor with ten related physics and evaluation features.
+The candidate remains experimental; original mission and recovery gates apply.

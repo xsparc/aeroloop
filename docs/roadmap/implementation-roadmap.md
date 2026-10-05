@@ -34,6 +34,8 @@ Public deployment and merges are separate decisions.
 | AL-022 | Horizontal noise and delay sensitivity | Verified: 24 fresh flights; 23/24 missions and exact ideal continuity; all qualities retain pair/recovery failures |
 | AL-023 | Ten-feature flight diagnosis workspace | Verified locally: 24 retained flights, 240,024 full-rate samples, phase-separated landing analysis and working paired 3D; no new flights |
 
+| AL-024 | Vertical disturbance decay and ten-feature descent comparison | Implementation in progress; frozen physics protocol in ADR 021 |
+
 ## Next gate
 
 The maintainer requested further simulation-only drone development with physics

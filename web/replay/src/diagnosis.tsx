@@ -8,7 +8,7 @@ const labels:Record<string,string>={ideal:'Ideal',noise:'Noise',delay:'40 ms del
 const fmt=(n:number|null|undefined,d=3)=>n==null?'Not measured':n.toFixed(d);
 const phaseLabel=(s:string)=>s.replaceAll('-',' ');
 type Series={name:string;column:number;color:string};
-function Plot({title,rows,series,start,end,time,onSeek,band}:{title:string;rows:number[][];series:Series[];start:number;end:number;time:number;onSeek:(t:number)=>void;band?:number}){
+export function Plot({title,rows,series,start,end,time,onSeek,band,windows=[[18,20],[40,42]]}:{title:string;rows:number[][];series:Series[];start:number;end:number;time:number;onSeek:(t:number)=>void;band?:number;windows?:number[][]}){
   const chart=useMemo(()=>{
     const selected=rows.filter(r=>r[0]>=start&&r[0]<=end),values=selected.flatMap(r=>series.map(s=>r[s.column]));
     let min=Math.min(0,...values),max=Math.max(.001,...values,band??0);const pad=(max-min)*.08;min-=pad;max+=pad;
@@ -17,7 +17,7 @@ function Plot({title,rows,series,start,end,time,onSeek,band}:{title:string;rows:
   },[rows,series,start,end,band]);
   return <div className="dg-plot"><div className="dg-plot-title"><h3>{title}</h3><small>{chart.count.toLocaleString()} recorded points</small></div>
     <svg viewBox="0 0 960 180" role="img" aria-label={`${title}; click to move cursor`} onClick={e=>{const r=e.currentTarget.getBoundingClientRect();onSeek(Math.max(start,Math.min(end,start+((e.clientX-r.left)/r.width*960-45)/900*(end-start))));}}>
-      {[18,40].map(s=><rect key={s} x={chart.x(Math.max(start,s))} y="15" width={Math.max(0,chart.x(Math.min(end,s+2))-chart.x(Math.max(start,s)))} height="135" fill="#f59e0b" opacity=".09"/>)}
+      {windows.map(([s,e])=><rect key={s} x={chart.x(Math.max(start,s))} y="15" width={Math.max(0,chart.x(Math.min(end,e))-chart.x(Math.max(start,s)))} height="135" fill="#f59e0b" opacity=".09"/>)}
       {[0,.5,1].map(f=><g key={f}><line x1="45" x2="945" y1={20+f*130} y2={20+f*130} stroke="#273547"/><text x="2" y={23+f*130}>{(chart.max-(chart.max-chart.min)*f).toFixed(2)}</text></g>)}
       {band!==undefined&&<line x1="45" x2="945" y1={chart.y(band)} y2={chart.y(band)} stroke="#fbbf24" strokeDasharray="5 4"/>}
       {chart.paths.map(s=><path key={s.name} d={s.path} fill="none" stroke={s.color} strokeWidth="1.7"/>)}

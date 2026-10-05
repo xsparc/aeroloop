@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "ef5290f41663143fdedd60028fb7c47155035276",
+  "scanned_at": "2026-10-06",
+  "coverage": ["Autoregressive disturbance forgetting", "State prediction with delayed observations", "Retained active-descent errors"],
+  "findings": [{
+    "finding": "A zero-mean first-order autoregressive model with coefficient between zero and one gives a decaying mean prediction. Applying exponential forgetting only to the stale vertical disturbance is a testable engineering hypothesis, not a calibrated gust model or EKF.",
+    "source_event_date": null,
+    "citations": ["https://otexts.com/fpp3/AR.html", "https://docs.px4.io/main/en/advanced_config/tuning_the_ecl_ekf"],
+    "confidence": "medium",
+    "relevance": "The retained ideal seed-1 trace holds a positive vertical acceleration residual while the landing gust changes, producing velocity error before touchdown",
+    "direction_alignment": "Test one bounded correction and make its controller, actuator and contact behavior directly inspectable",
+    "opportunity_or_risk": "Forgetting can reduce a stale bias or erase a useful persistent force estimate; original failures and new seed outcomes must remain visible",
+    "engineering_cost": "Opt-in predictor, versioned evidence reconstruction, eighteen final PhysX flights and ten related demonstration features",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-024 evaluates vertical disturbance decay with regression and predeclared additional seeds",
+    "verification_needed": "Exact normal-capture continuity, clean-source runtime identity, full-rate original gates, independently checked diagnostic arithmetic, actual live and recorded 3D"
+  }],
+  "overall_recommendation": "Measure the predeclared candidate without changing gains, default behavior or acceptance limits.",
+  "evidence_gaps": ["No calibrated stochastic wind model", "No estimator uncertainty propagation or real sensor fusion", "Three additional seeds are a bounded check, not statistical validation", "Ideal attitude/contact supervision and AL-010 yaw refinement remain limitations"]
+}

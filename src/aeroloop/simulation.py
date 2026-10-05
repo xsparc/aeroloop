@@ -143,6 +143,7 @@ def record(result, output_root):
     observations = "observation_model" in result["config"]
     from .timing_observation import ALL_PROFILES as TIMING_PROFILES
     predictive = "feedback_model" in result["config"]
+    decaying = result["config"].get("feedback_model", {}).get("kind") == "vertical-disturbance-decay-v1"
     guarded = "landing_guard_model" in result["config"]
     axes = "axis_feedback_model" in result["config"]
     quality = axes and "quality" in result["config"]["axis_feedback_model"]
@@ -158,9 +159,9 @@ def record(result, output_root):
     # Hash all implementation inputs to retain provenance even for a dirty checkout.
     source_files = sorted([* (ROOT / "src/aeroloop").glob("*.py"), *(ROOT / "firmware/control_core").glob("*.*"), ROOT / "CMakeLists.txt"])
     source_digest = sha256(b"".join(path.relative_to(ROOT).as_posix().encode()+b"\0"+path.read_bytes()+b"\0" for path in source_files))
-    manifest = {"schema_version": 11 if quality else 10 if axes else 9 if guarded else 8 if predictive else 7 if timing_observations else 6 if observations else 5 if mission and wind else 4 if mission else 3 if wind else 2 if rotor_flight else 1, "run_id": run_id, "kind": "recorded_simulation", "fixture": False,
+    manifest = {"schema_version": 12 if decaying else 11 if quality else 10 if axes else 9 if guarded else 8 if predictive else 7 if timing_observations else 6 if observations else 5 if mission and wind else 4 if mission else 3 if wind else 2 if rotor_flight else 1, "run_id": run_id, "kind": "recorded_simulation", "fixture": False,
                 "captured_at": datetime.now(timezone.utc).isoformat(), "experiment": experiment,
-                "model": "quadrotor-x-contact-wind-channel-quality-v1" if quality else "quadrotor-x-contact-wind-axis-feedback-v1" if axes else "quadrotor-x-contact-wind-landing-guard-v1" if guarded else "quadrotor-x-contact-wind-predictor-v1" if predictive else "quadrotor-x-contact-wind-observation-timing-v1" if timing_observations else "quadrotor-x-contact-wind-observation-v1" if observations else "quadrotor-x-contact-wind-v1" if mission and wind else "quadrotor-x-contact-v1" if mission else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if rotor_flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "scenario": result["config"]["scenario"],
+                "model": "quadrotor-x-contact-wind-vertical-decay-v1" if decaying else "quadrotor-x-contact-wind-channel-quality-v1" if quality else "quadrotor-x-contact-wind-axis-feedback-v1" if axes else "quadrotor-x-contact-wind-landing-guard-v1" if guarded else "quadrotor-x-contact-wind-predictor-v1" if predictive else "quadrotor-x-contact-wind-observation-timing-v1" if timing_observations else "quadrotor-x-contact-wind-observation-v1" if observations else "quadrotor-x-contact-wind-v1" if mission and wind else "quadrotor-x-contact-v1" if mission else "quadrotor-x-wind-v1" if wind else "quadrotor-x-v1" if rotor_flight else "ideal-body-wrench-v1", "controller": "rate-pid-v1", "scenario": result["config"]["scenario"],
                 "seed": result["config"]["seed"], "source_commit": source_commit, "source_dirty": dirty,
                 "source_tree_sha256": source_digest, "controller_binary_sha256": result["controller_binary_sha256"],
                 "config_sha256": sha256(encoded(result["config"])), "lock_sha256": sha256((ROOT / "versions.lock.json").read_bytes()),

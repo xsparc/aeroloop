@@ -4,8 +4,10 @@ import {validateFeedback, type Feedback} from "./feedback-contract.js";
 import {validateGuard, type LandingGuard} from "./landing-contract.js";
 import { MISSION_PHASES, type Sample, type Vec3 } from "./contracts.js";
 
+import {validateDecay, type VerticalDecay} from './decay-contract.js';
 export type LiveSample = Sample & {
   observation?: Observation;
+  vertical_decay?: VerticalDecay;
   feedback?: Feedback;
   landing_guard?: LandingGuard;
   axis_observation?: AxisObservation; axis_feedback?: AxisFeedback;
@@ -26,7 +28,8 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   require(value && typeof value === "object" && !Array.isArray(value));
   const f = value as Record<string, unknown>;
   if (f.state === "waiting") { require(Object.keys(f).length === 1); return {state: "waiting"}; }
-  const quality = f.schema_version === 7;
+  const decaying = f.schema_version === 8;
+  const quality = f.schema_version === 7 || decaying;
   const axis = f.schema_version === 6 || quality;
   const guarded = f.schema_version === 5;
   const observed = f.schema_version === 2 || f.schema_version === 3 || f.schema_version === 4 || guarded || axis;
@@ -45,13 +48,14 @@ export function validateLive(value: unknown): LiveFrame | { state: "waiting" } {
   else {
     require(typeof f.sample === "object" && !Array.isArray(f.sample));
     const s = f.sample as Record<string, unknown>;
-    require(Object.keys(s).sort().join() === ["time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "rotor_thrust_n", "allocation_scale", "wind_velocity_m_s", "external_force_n", "mission_phase", "contact_normal_force_n", "support_clearance_m", ...(observed ? ["observation"] : []), ...(predictive ? ["feedback"] : []), ...(guarded ? ["landing_guard"] : []), ...(axis ? ["axis_observation","axis_feedback"] : [])].sort().join());
+    require(Object.keys(s).sort().join() === ["time_s", "sequence", "position_m", "velocity_m_s", "quaternion_wxyz", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "rotor_thrust_n", "allocation_scale", "wind_velocity_m_s", "external_force_n", "mission_phase", "contact_normal_force_n", "support_clearance_m", ...(observed ? ["observation"] : []), ...(predictive ? ["feedback"] : []), ...(guarded ? ["landing_guard"] : []), ...(decaying ? ["vertical_decay"] : []), ...(axis ? ["axis_observation","axis_feedback"] : [])].sort().join());
     require(Number.isInteger(s.sequence) && Number(s.sequence) >= 0 && Number(s.sequence) <= 10000);
     require(finite(s.time_s) && Math.abs(s.time_s - Number(s.sequence)*.005) < 1e-8);
     if (observed) validateObservation(s.observation, Number(s.time_s), f.observation_profile);
     if (predictive) validateFeedback(s.feedback, s.observation as Observation);
     if (quality) validateQuality(s.axis_observation,s.axis_feedback,s.feedback as Feedback,Number(s.time_s));
     else if (axis) validateAxis(s.axis_observation,s.axis_feedback,s.feedback as Feedback,Number(s.time_s));
+    if (decaying) { validateDecay(s.vertical_decay,s.observation as Observation,s.feedback as Feedback); require((s.axis_observation as AxisObservation).quality === "noise-delay"); }
     if (guarded) validateGuard(s.landing_guard,Number(s.time_s));
     require(MISSION_PHASES.includes(String(s.mission_phase)));
     for (const key of ["position_m", "velocity_m_s", "target_m", "rates_rad_s", "rate_setpoint_rad_s", "effort_normalized", "wind_velocity_m_s", "external_force_n", "contact_normal_force_n"]) require(vector(s[key], 3));

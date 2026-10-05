@@ -163,3 +163,11 @@ results. State-separated errors distinguish airborne descent, contact and
 motors-off drift without changing any flight contract. Export reconstructs the
 original evidence; the browser validates pinned hashes and derived arithmetic.
 See [ADR 020](decisions/020-flight-diagnosis.md).
+
+AL-024 adds opt-in `VerticalDecay` around the existing capture/rotor predictor.
+Only stale vertical disturbance propagation changes; the learned anchor and
+horizontal estimate are preserved. Evidence v12 reconstructs every step and live
+v8 validates anchor, scale and effective acceleration. `decay_study` binds two
+cohorts and both modes, and exports bounded full-rate scalar traces plus separate
+3D poses. The descent browser verifies hashes, numeric identities, fixed gates,
+contact dwell and capture ages. See [decision 021](decisions/021-vertical-disturbance-decay.md).

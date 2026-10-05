@@ -21,15 +21,15 @@ PHASES = ("grounded", "takeoff", "hover", "north", "north_hold", "east", "east_h
 def validate_snapshot(value):
     expected = {"schema_version", "state", "seed", "physics_dt_s", "paced", "elapsed_s",
                 "lag_s", "max_lag_s", "late_steps", "updated_monotonic_s", "sample"}
-    observations = isinstance(value, dict) and value.get("schema_version") in (2, 3, 4, 5, 6, 7)
+    observations = isinstance(value, dict) and value.get("schema_version") in (2, 3, 4, 5, 6, 7, 8)
     if observations:
         from .observation import PROFILES, TIMING_PROFILES
         expected.add("observation_profile")
-        if value.get("observation_profile") not in (TIMING_PROFILES if value["schema_version"] in (3, 4, 5, 6, 7) else PROFILES) or value.get("physics_dt_s") != .005:
+        if value.get("observation_profile") not in (TIMING_PROFILES if value["schema_version"] in (3, 4, 5, 6, 7, 8) else PROFILES) or value.get("physics_dt_s") != .005:
             raise ValidationError("invalid live observation profile")
     if not isinstance(value, dict) or set(value) != expected:
         raise ValidationError("invalid monitor fields")
-    if (type(value["schema_version"]) is not int or value["schema_version"] not in (1, 2, 3, 4, 5, 6, 7) or value["state"] not in STATES
+    if (type(value["schema_version"]) is not int or value["schema_version"] not in (1, 2, 3, 4, 5, 6, 7, 8) or value["state"] not in STATES
             or type(value["seed"]) is not int or not 0 <= value["seed"] <= 2**31-1
             or value["physics_dt_s"] not in (.005, .0025, .00125) or type(value["paced"]) is not bool
             or type(value["late_steps"]) is not int or not 0 <= value["late_steps"] <= 10001):
@@ -42,7 +42,7 @@ def validate_snapshot(value):
         if value["state"] not in ("starting", "failed"):
             raise ValidationError("missing live sample")
         return value
-    if not isinstance(s, dict) or set(s) != set(FIELDS) | ({"observation"} if observations else set()) | ({"feedback"} if value["schema_version"] in (4, 5, 6, 7) else set()) | ({"landing_guard"} if value["schema_version"] == 5 else set()) | ({"axis_observation", "axis_feedback"} if value["schema_version"] in (6, 7) else set()):
+    if not isinstance(s, dict) or set(s) != set(FIELDS) | ({"observation"} if observations else set()) | ({"feedback"} if value["schema_version"] in (4, 5, 6, 7, 8) else set()) | ({"vertical_decay"} if value["schema_version"] == 8 else set()) | ({"landing_guard"} if value["schema_version"] == 5 else set()) | ({"axis_observation", "axis_feedback"} if value["schema_version"] in (6, 7, 8) else set()):
         raise ValidationError("invalid live sample fields")
     if (type(s["sequence"]) is not int or not 0 <= s["sequence"] <= 10000
             or not finite(s["time_s"]) or abs(s["time_s"] - s["sequence"]*.005) > 1e-8
@@ -51,21 +51,26 @@ def validate_snapshot(value):
     if observations:
         from .observation import validate_sample
         validate_sample(s["observation"], s["sequence"], value["observation_profile"])
-    if value["schema_version"] in (4, 5, 6, 7):
+    if value["schema_version"] in (4, 5, 6, 7, 8):
         from .predictor import validate_feedback
         validate_feedback(s["feedback"])
         age = s["observation"]["age_s"]
         mode = "capture" if age < .02 else "predicting" if age <= 2.1 else "expired"
         if s["feedback"]["mode"] != mode or (mode != "predicting" and any(s["feedback"][k] != s["observation"][k] for k in ("position_m", "velocity_m_s"))):
             raise ValidationError("live feedback differs from capture age")
-    if value["schema_version"] in (6, 7):
+    if value["schema_version"] in (6, 7, 8):
         from .axis_feedback import validate_capture, validate_feedback, PROFILES
         if value["observation_profile"] not in PROFILES:
             raise ValidationError("invalid axis main profile")
-        if value["schema_version"] == 7:
+        if value["schema_version"] in (7, 8):
             from .channel_quality import validate_capture
         validate_capture(s["axis_observation"], s["sequence"])
         validate_feedback(s["axis_feedback"], s["axis_observation"], s["feedback"])
+    if value["schema_version"] == 8:
+        from .vertical_decay import validate_decay
+        if s["axis_observation"]["quality"] != "noise-delay":
+            raise ValidationError("decay requires combined horizontal quality")
+        validate_decay(s["vertical_decay"], s["observation"], s["feedback"])
     if value["schema_version"] == 5:
         from .landing_guard import validate_guard
         validate_guard(s["landing_guard"])
@@ -116,11 +121,11 @@ class FlightClock:
 
     def snapshot(self, seed, dt, sample=None, state="running", observation_profile=None):
         from .timing_observation import ALL_PROFILES as TIMING_PROFILES
-        return {"schema_version": 7 if sample and "quality" in sample.get("axis_observation", {}) else 6 if sample and "axis_feedback" in sample else 5 if sample and "landing_guard" in sample else 4 if sample and "feedback" in sample else 3 if observation_profile in TIMING_PROFILES else 2 if observation_profile else 1, **({"observation_profile": observation_profile} if observation_profile else {}), "state": state, "seed": seed, "physics_dt_s": dt,
+        return {"schema_version": 8 if sample and "vertical_decay" in sample else 7 if sample and "quality" in sample.get("axis_observation", {}) else 6 if sample and "axis_feedback" in sample else 5 if sample and "landing_guard" in sample else 4 if sample and "feedback" in sample else 3 if observation_profile in TIMING_PROFILES else 2 if observation_profile else 1, **({"observation_profile": observation_profile} if observation_profile else {}), "state": state, "seed": seed, "physics_dt_s": dt,
                 "paced": self.paced, "elapsed_s": self.elapsed, "lag_s": self.lag,
                 "max_lag_s": self.max_lag, "late_steps": self.late_steps,
                 "updated_monotonic_s": self.clock(),
-                "sample": {key: sample[key] for key in (*FIELDS, *(("observation",) if observation_profile else ()), *(("feedback",) if "feedback" in sample else ()), *(("landing_guard",) if "landing_guard" in sample else ()), *(("axis_observation", "axis_feedback") if "axis_feedback" in sample else ()))} if sample else None}
+                "sample": {key: sample[key] for key in (*FIELDS, *(("observation",) if observation_profile else ()), *(("feedback",) if "feedback" in sample else ()), *(("vertical_decay",) if "vertical_decay" in sample else ()), *(("landing_guard",) if "landing_guard" in sample else ()), *(("axis_observation", "axis_feedback") if "axis_feedback" in sample else ()))} if sample else None}
 
 
 def finish_monitor(directory, passed):
