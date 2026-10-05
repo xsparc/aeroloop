@@ -155,3 +155,11 @@ reconstructs that pipeline and controller inputs; live v7 displays delivered age
 separately from main captures. The schema-4 paired demo retains full-rate mission,
 same-quality outage-pair and sustained-recovery gates. All older contracts remain
 available. See the [operator guide](../horizontal-quality.md).
+
+AL-023 adds a separate [flight diagnosis workspace](../flight-diagnosis.md) over
+the retained quality matrix. Its bounded schema-one export carries every 200 Hz
+numeric sample, separate display poses, original gates and same-quality recovery
+results. State-separated errors distinguish airborne descent, contact and
+motors-off drift without changing any flight contract. Export reconstructs the
+original evidence; the browser validates pinned hashes and derived arithmetic.
+See [ADR 020](decisions/020-flight-diagnosis.md).
