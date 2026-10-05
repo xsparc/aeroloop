@@ -148,6 +148,12 @@ recovery inspection, provenance and numeric CSV. Every plot uses the original
 200 Hz samples, with contact and motors-off drift distinguished from airborne
 descent. This is recorded analysis; the original failures and limits remain.
 
+The [landing contact lab](docs/landing-contact-lab.md) adds ten tools for inspecting
+horizontal drift, rotor lag, contact episodes and disarm readiness across the
+retained physics flights. Paired 3D, full-rate momentum budgets and review exports
+keep original failures visible. Offline readiness is descriptive and does not
+simulate another controller or change acceptance.
+
 The [descent comparison workspace](docs/descent-comparison.md) tests an opt-in
 vertical disturbance predictor with ten related physics and evaluation features.
 The candidate remains experimental; original mission and recovery gates apply.

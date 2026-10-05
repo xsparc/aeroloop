@@ -1,0 +1,3295 @@
+{
+  "cases": [
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.03695734983701464,
+          "horizontal_energy_j": 0.03427099092464303,
+          "speed_m_s": 0.26180523648179016,
+          "tilt_deg": 0.6911703673289076,
+          "time_s": 43.545
+        },
+        "final_support_error_m": 0.024726973320846217,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.3452635519206524,
+              -0.09246989339590073
+            ],
+            "distance_change_m": 0.24778399491847095,
+            "end_s": 42.535,
+            "energy_change_j": 0.03389966521504954,
+            "momentum_change_n_s": [
+              -0.2686250857077539,
+              -0.1411484330892563
+            ],
+            "peak_speed_m_s": 0.45544663347079645,
+            "residual_impulse_n_s": [
+              0.0045504638719725396,
+              0.0008395644169314513
+            ],
+            "start_s": 34.0,
+            "state_samples": 1708,
+            "thrust_impulse_n_s": [
+              -4.217044196422482,
+              0.9559193048541537
+            ],
+            "wind_impulse_n_s": [
+              3.943868646842756,
+              -1.0979073023603414
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.2584365550428629,
+              0.09494402259588242
+            ],
+            "distance_change_m": -0.27376767330216334,
+            "end_s": 43.545,
+            "energy_change_j": -0.002706667656046796,
+            "momentum_change_n_s": [
+              0.06094205379486084,
+              0.2273089364171028
+            ],
+            "peak_speed_m_s": 0.2906944443621031,
+            "residual_impulse_n_s": [
+              0.023446574044696904,
+              -0.00923617779018063
+            ],
+            "start_s": 42.535,
+            "state_samples": 203,
+            "thrust_impulse_n_s": [
+              -0.3485630574019236,
+              0.29518923775384004
+            ],
+            "wind_impulse_n_s": [
+              0.3860585371520876,
+              -0.05864412354655657
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.009223418310284615,
+              0.008077471517026424
+            ],
+            "distance_change_m": -0.012230434563756519,
+            "end_s": 50.0,
+            "energy_change_j": -0.03427099039079881,
+            "momentum_change_n_s": [
+              0.2036811421476159,
+              -0.1644955009505793
+            ],
+            "peak_speed_m_s": 0.26180523648179016,
+            "residual_impulse_n_s": [
+              -2.382583786728163,
+              1.2721528798949626
+            ],
+            "start_s": 43.545,
+            "state_samples": 1292,
+            "thrust_impulse_n_s": [
+              -0.0018754607793151482,
+              -1.0247289991701168e-05
+            ],
+            "wind_impulse_n_s": [
+              2.588140389655094,
+              -1.4366381335555503
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "c85474d8f71fcbee87776cd2873c975a5b9c235a1a00957086343bea41bf1cbe",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "f9e1ab85991fd0b09345e0dbcf014bd11f01532f655281d662d647d7a57ec1c3",
+          "source_commit": "c943f0b17733b8aa22fecc7a93705645c302147a",
+          "source_dirty": false,
+          "source_tree_sha256": "9c12e216fb86126423e2dca9745483974bf7e819a590e7a682805f79942a75b7",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.310725023139178,
+          "horizontal_energy_j": 0.036977658580689826,
+          "speed_m_s": 0.27194726908240807,
+          "tilt_deg": 5.667276213393683,
+          "time_s": 42.535
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 43.545,
+          "samples": 1910,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 43.545,
+          "blockers_at_disarm": [
+            "speed",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 5
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.03695734983701464,
+          "horizontal_energy_j": 0.03427099092464303,
+          "speed_m_s": 0.26180523648179016,
+          "tilt_deg": 0.6911703673289076,
+          "time_s": 43.545
+        },
+        "final_support_error_m": 0.024726973320846217,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.3452635519206524,
+              -0.09246989339590073
+            ],
+            "distance_change_m": 0.24778399491847095,
+            "end_s": 42.535,
+            "energy_change_j": 0.03389966521504954,
+            "momentum_change_n_s": [
+              -0.2686250857077539,
+              -0.1411484330892563
+            ],
+            "peak_speed_m_s": 0.45544663347079645,
+            "residual_impulse_n_s": [
+              0.0045504638719725396,
+              0.0008395644169314513
+            ],
+            "start_s": 34.0,
+            "state_samples": 1708,
+            "thrust_impulse_n_s": [
+              -4.217044196422482,
+              0.9559193048541537
+            ],
+            "wind_impulse_n_s": [
+              3.943868646842756,
+              -1.0979073023603414
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.2584365550428629,
+              0.09494402259588242
+            ],
+            "distance_change_m": -0.27376767330216334,
+            "end_s": 43.545,
+            "energy_change_j": -0.002706667656046796,
+            "momentum_change_n_s": [
+              0.06094205379486084,
+              0.2273089364171028
+            ],
+            "peak_speed_m_s": 0.2906944443621031,
+            "residual_impulse_n_s": [
+              0.023446574044696904,
+              -0.00923617779018063
+            ],
+            "start_s": 42.535,
+            "state_samples": 203,
+            "thrust_impulse_n_s": [
+              -0.3485630574019236,
+              0.29518923775384004
+            ],
+            "wind_impulse_n_s": [
+              0.3860585371520876,
+              -0.05864412354655657
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.009223418310284615,
+              0.008077471517026424
+            ],
+            "distance_change_m": -0.012230434563756519,
+            "end_s": 50.0,
+            "energy_change_j": -0.03427099039079881,
+            "momentum_change_n_s": [
+              0.2036811421476159,
+              -0.1644955009505793
+            ],
+            "peak_speed_m_s": 0.26180523648179016,
+            "residual_impulse_n_s": [
+              -2.382583786728163,
+              1.2721528798949626
+            ],
+            "start_s": 43.545,
+            "state_samples": 1292,
+            "thrust_impulse_n_s": [
+              -0.0018754607793151482,
+              -1.0247289991701168e-05
+            ],
+            "wind_impulse_n_s": [
+              2.588140389655094,
+              -1.4366381335555503
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "f09c57c8c8aa4d2189b72e9d42f123bd967a37dbd5c438b010112613801deeb2",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "3ae27c0cf8d2207361f2184c79f04f75f5dafb8fc2dcc1de70a7aac0ca544309",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.310725023139178,
+          "horizontal_energy_j": 0.036977658580689826,
+          "speed_m_s": 0.27194726908240807,
+          "tilt_deg": 5.667276213393683,
+          "time_s": 42.535
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 43.545,
+          "samples": 1910,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 43.545,
+          "blockers_at_disarm": [
+            "speed",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 5
+      },
+      "id": "regression-p0-s0"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.06613349004947622,
+          "horizontal_energy_j": 0.00042356354758840914,
+          "speed_m_s": 0.02910544786078404,
+          "tilt_deg": 0.6787342409450227,
+          "time_s": 43.63
+        },
+        "final_support_error_m": 0.06538997440420508,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.11570440605282784,
+              0.040559614077210426
+            ],
+            "distance_change_m": 0.006384690306778733,
+            "end_s": 43.56,
+            "energy_change_j": -0.01526851102545286,
+            "momentum_change_n_s": [
+              0.11302944645285606,
+              0.1430441401898861
+            ],
+            "peak_speed_m_s": 0.2877332708851444,
+            "residual_impulse_n_s": [
+              0.005957637663292471,
+              -0.005913756987886345
+            ],
+            "start_s": 34.0,
+            "state_samples": 1913,
+            "thrust_impulse_n_s": [
+              -5.639381919327394,
+              1.327383166033037
+            ],
+            "wind_impulse_n_s": [
+              5.746453728116958,
+              -1.1784252688552646
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.0008576139807701111,
+              0.0024082940071821213
+            ],
+            "distance_change_m": 0.0015185151730658236,
+            "end_s": 43.63,
+            "energy_change_j": -0.0009924614986008668,
+            "momentum_change_n_s": [
+              0.04798207152634859,
+              -0.011629240587353706
+            ],
+            "peak_speed_m_s": 0.05321700942723625,
+            "residual_impulse_n_s": [
+              0.004430179413660378,
+              -0.010457034399198758
+            ],
+            "start_s": 43.56,
+            "state_samples": 15,
+            "thrust_impulse_n_s": [
+              -0.0137592030687531,
+              0.0017023514306958151
+            ],
+            "wind_impulse_n_s": [
+              0.05731109518144131,
+              -0.0028745576188507634
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.0008100084960460663,
+              8.882209658622742e-05
+            ],
+            "distance_change_m": -0.0007436117833476558,
+            "end_s": 50.0,
+            "energy_change_j": -0.00042355782666327535,
+            "momentum_change_n_s": [
+              -0.01132005691761151,
+              -0.026805273490026593
+            ],
+            "peak_speed_m_s": 0.05670048715589988,
+            "residual_impulse_n_s": [
+              -2.3280014168054413,
+              -0.0063326177285777056
+            ],
+            "start_s": 43.63,
+            "state_samples": 1275,
+            "thrust_impulse_n_s": [
+              -0.0014774659335683427,
+              -2.8358068901028453e-06
+            ],
+            "wind_impulse_n_s": [
+              2.3181588258213983,
+              -0.020469819954558786
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "c5e5f8709393ff68f5988c7cea4731a4e7cd74194a28bf5b9b40256693b6f1b2",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "5463bdd398843a022708cd238583843960071a6f2d9c0e0b0d7fb7f775444229",
+          "source_commit": "c943f0b17733b8aa22fecc7a93705645c302147a",
+          "source_dirty": false,
+          "source_tree_sha256": "9c12e216fb86126423e2dca9745483974bf7e819a590e7a682805f79942a75b7",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.0646149748764104,
+          "horizontal_energy_j": 0.001416025046189276,
+          "speed_m_s": 0.05321700942723625,
+          "tilt_deg": 1.519866267232168,
+          "time_s": 43.56
+        },
+        "readiness": {
+          "first_qualifying_s": 43.63,
+          "evaluated_through_s": 43.63,
+          "samples": 1927,
+          "max_dwell_s": 0.05000000000000426,
+          "actual_disarm_s": 43.63,
+          "blockers_at_disarm": [],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.06613349004947622,
+          "horizontal_energy_j": 0.00042356354758840914,
+          "speed_m_s": 0.02910544786078404,
+          "tilt_deg": 0.6787342409450227,
+          "time_s": 43.63
+        },
+        "final_support_error_m": 0.06538997440420508,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.11570440605282784,
+              0.040559614077210426
+            ],
+            "distance_change_m": 0.006384690306778733,
+            "end_s": 43.56,
+            "energy_change_j": -0.01526851102545286,
+            "momentum_change_n_s": [
+              0.11302944645285606,
+              0.1430441401898861
+            ],
+            "peak_speed_m_s": 0.2877332708851444,
+            "residual_impulse_n_s": [
+              0.005957637663292471,
+              -0.005913756987886345
+            ],
+            "start_s": 34.0,
+            "state_samples": 1913,
+            "thrust_impulse_n_s": [
+              -5.639381919327394,
+              1.327383166033037
+            ],
+            "wind_impulse_n_s": [
+              5.746453728116958,
+              -1.1784252688552646
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.0008576139807701111,
+              0.0024082940071821213
+            ],
+            "distance_change_m": 0.0015185151730658236,
+            "end_s": 43.63,
+            "energy_change_j": -0.0009924614986008668,
+            "momentum_change_n_s": [
+              0.04798207152634859,
+              -0.011629240587353706
+            ],
+            "peak_speed_m_s": 0.05321700942723625,
+            "residual_impulse_n_s": [
+              0.004430179413660378,
+              -0.010457034399198758
+            ],
+            "start_s": 43.56,
+            "state_samples": 15,
+            "thrust_impulse_n_s": [
+              -0.0137592030687531,
+              0.0017023514306958151
+            ],
+            "wind_impulse_n_s": [
+              0.05731109518144131,
+              -0.0028745576188507634
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.0008100084960460663,
+              8.882209658622742e-05
+            ],
+            "distance_change_m": -0.0007436117833476558,
+            "end_s": 50.0,
+            "energy_change_j": -0.00042355782666327535,
+            "momentum_change_n_s": [
+              -0.01132005691761151,
+              -0.026805273490026593
+            ],
+            "peak_speed_m_s": 0.05670048715589988,
+            "residual_impulse_n_s": [
+              -2.3280014168054413,
+              -0.0063326177285777056
+            ],
+            "start_s": 43.63,
+            "state_samples": 1275,
+            "thrust_impulse_n_s": [
+              -0.0014774659335683427,
+              -2.8358068901028453e-06
+            ],
+            "wind_impulse_n_s": [
+              2.3181588258213983,
+              -0.020469819954558786
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "b85f08eb7a6e24c349b901ee9812b1c0a816bdf5e157240966bf2ed03c3637ce",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "b179080ff5fc2c8eeb00e6373703ec6fdd418eab228e4058aa72bebc5d7b1cad",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.0646149748764104,
+          "horizontal_energy_j": 0.001416025046189276,
+          "speed_m_s": 0.05321700942723625,
+          "tilt_deg": 1.519866267232168,
+          "time_s": 43.56
+        },
+        "readiness": {
+          "first_qualifying_s": 43.63,
+          "evaluated_through_s": 43.63,
+          "samples": 1927,
+          "max_dwell_s": 0.05000000000000426,
+          "actual_disarm_s": 43.63,
+          "blockers_at_disarm": [],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "regression-p0-s1"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.15100080487110673,
+          "horizontal_energy_j": 0.008330390132778483,
+          "speed_m_s": 0.12907664492679133,
+          "tilt_deg": 1.9012676339465766,
+          "time_s": 43.575
+        },
+        "final_support_error_m": 0.1516927093799355,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.006171852350234985,
+              0.10423211008310318
+            ],
+            "distance_change_m": -0.004969034062150018,
+            "end_s": 43.345,
+            "energy_change_j": -0.009220190904775043,
+            "momentum_change_n_s": [
+              0.07422313094139099,
+              -0.129160288721323
+            ],
+            "peak_speed_m_s": 0.4560611854155579,
+            "residual_impulse_n_s": [
+              0.003351595585237803,
+              0.0016084687746331415
+            ],
+            "start_s": 34.0,
+            "state_samples": 1870,
+            "thrust_impulse_n_s": [
+              -5.767152889343731,
+              2.2895238821020407
+            ],
+            "wind_impulse_n_s": [
+              5.838024424699884,
+              -2.4202926395979967
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.01467888057231903,
+              -0.020154079422354698
+            ],
+            "distance_change_m": 0.01058281021389143,
+            "end_s": 43.575,
+            "energy_change_j": 0.004847203494695418,
+            "momentum_change_n_s": [
+              0.02278083935379982,
+              -0.06985790655016899
+            ],
+            "peak_speed_m_s": 0.12907664492679133,
+            "residual_impulse_n_s": [
+              0.0037781563937085067,
+              0.005381471213603949
+            ],
+            "start_s": 43.345,
+            "state_samples": 47,
+            "thrust_impulse_n_s": [
+              -0.10095857700619885,
+              0.060959658420062054
+            ],
+            "wind_impulse_n_s": [
+              0.11996125996629017,
+              -0.136199036183835
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.0013456642627716064,
+              -0.007128072902560234
+            ],
+            "distance_change_m": 0.0006918761503469373,
+            "end_s": 50.0,
+            "energy_change_j": -0.00833038958787248,
+            "momentum_change_n_s": [
+              0.042452150490134954,
+              0.12188877916560159
+            ],
+            "peak_speed_m_s": 0.12907664492679133,
+            "residual_impulse_n_s": [
+              -3.991690235181379,
+              1.1239970485266382
+            ],
+            "start_s": 43.575,
+            "state_samples": 1286,
+            "thrust_impulse_n_s": [
+              -0.005208500116490345,
+              0.0038238637541200067
+            ],
+            "wind_impulse_n_s": [
+              4.0393508857880045,
+              -1.0059321331151567
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "6ba31c4ebfe25a4e8c43df9533a41a641db8b22fc186eed5e6dd34784e013616",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "86573161601a4895faf8bdbb0bb6a645c0ed81a3ffdf2be264349ebae45937e3",
+          "source_commit": "c943f0b17733b8aa22fecc7a93705645c302147a",
+          "source_dirty": false,
+          "source_tree_sha256": "9c12e216fb86126423e2dca9745483974bf7e819a590e7a682805f79942a75b7",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.1404179946572153,
+          "horizontal_energy_j": 0.0034831866380830648,
+          "speed_m_s": 0.08346480261862559,
+          "tilt_deg": 4.082426607252978,
+          "time_s": 43.345
+        },
+        "readiness": {
+          "first_qualifying_s": 43.575,
+          "evaluated_through_s": 43.575,
+          "samples": 1916,
+          "max_dwell_s": 0.05000000000000426,
+          "actual_disarm_s": 43.575,
+          "blockers_at_disarm": [],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 3
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.15100080487110673,
+          "horizontal_energy_j": 0.008330390132778483,
+          "speed_m_s": 0.12907664492679133,
+          "tilt_deg": 1.9012676339465766,
+          "time_s": 43.575
+        },
+        "final_support_error_m": 0.1516927093799355,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.006171852350234985,
+              0.10423211008310318
+            ],
+            "distance_change_m": -0.004969034062150018,
+            "end_s": 43.345,
+            "energy_change_j": -0.009220190904775043,
+            "momentum_change_n_s": [
+              0.07422313094139099,
+              -0.129160288721323
+            ],
+            "peak_speed_m_s": 0.4560611854155579,
+            "residual_impulse_n_s": [
+              0.003351595585237803,
+              0.0016084687746331415
+            ],
+            "start_s": 34.0,
+            "state_samples": 1870,
+            "thrust_impulse_n_s": [
+              -5.767152889343731,
+              2.2895238821020407
+            ],
+            "wind_impulse_n_s": [
+              5.838024424699884,
+              -2.4202926395979967
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.01467888057231903,
+              -0.020154079422354698
+            ],
+            "distance_change_m": 0.01058281021389143,
+            "end_s": 43.575,
+            "energy_change_j": 0.004847203494695418,
+            "momentum_change_n_s": [
+              0.02278083935379982,
+              -0.06985790655016899
+            ],
+            "peak_speed_m_s": 0.12907664492679133,
+            "residual_impulse_n_s": [
+              0.0037781563937085067,
+              0.005381471213603949
+            ],
+            "start_s": 43.345,
+            "state_samples": 47,
+            "thrust_impulse_n_s": [
+              -0.10095857700619885,
+              0.060959658420062054
+            ],
+            "wind_impulse_n_s": [
+              0.11996125996629017,
+              -0.136199036183835
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.0013456642627716064,
+              -0.007128072902560234
+            ],
+            "distance_change_m": 0.0006918761503469373,
+            "end_s": 50.0,
+            "energy_change_j": -0.00833038958787248,
+            "momentum_change_n_s": [
+              0.042452150490134954,
+              0.12188877916560159
+            ],
+            "peak_speed_m_s": 0.12907664492679133,
+            "residual_impulse_n_s": [
+              -3.991690235181379,
+              1.1239970485266382
+            ],
+            "start_s": 43.575,
+            "state_samples": 1286,
+            "thrust_impulse_n_s": [
+              -0.005208500116490345,
+              0.0038238637541200067
+            ],
+            "wind_impulse_n_s": [
+              4.0393508857880045,
+              -1.0059321331151567
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "1ee2cde513ec53aeb4097b419435d2861eb508118cc42e9798c99ff333a0db39",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "c2f55651627ab5aaaebdd790c2c173ebe3c3a580f8c9e89c178a9a162d1e5623",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.1404179946572153,
+          "horizontal_energy_j": 0.0034831866380830648,
+          "speed_m_s": 0.08346480261862559,
+          "tilt_deg": 4.082426607252978,
+          "time_s": 43.345
+        },
+        "readiness": {
+          "first_qualifying_s": 43.575,
+          "evaluated_through_s": 43.575,
+          "samples": 1916,
+          "max_dwell_s": 0.05000000000000426,
+          "actual_disarm_s": 43.575,
+          "blockers_at_disarm": [],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 3
+      },
+      "id": "regression-p0-s2"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.3560043299139753,
+          "horizontal_energy_j": 0.02625089713403153,
+          "speed_m_s": 0.22913270012825115,
+          "tilt_deg": 7.194753655707931,
+          "time_s": 42.305
+        },
+        "final_support_error_m": 0.3511915527035251,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.4148746319115162,
+              -0.059191083535552025
+            ],
+            "distance_change_m": 0.30408936533579306,
+            "end_s": 42.225,
+            "energy_change_j": 0.014259923709119188,
+            "momentum_change_n_s": [
+              -0.1480950489640236,
+              -0.1963382512331009
+            ],
+            "peak_speed_m_s": 0.4557269603125121,
+            "residual_impulse_n_s": [
+              0.008316040358578546,
+              0.005378159576101316
+            ],
+            "start_s": 34.0,
+            "state_samples": 1646,
+            "thrust_impulse_n_s": [
+              -3.8679060216279835,
+              0.7943298470851565
+            ],
+            "wind_impulse_n_s": [
+              3.711494932305381,
+              -0.9960462578943587
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.013782501220703125,
+              -0.00945204496383667
+            ],
+            "distance_change_m": -0.011025217687418543,
+            "end_s": 42.305,
+            "energy_change_j": 0.008912982065822361,
+            "momentum_change_n_s": [
+              -0.052208587527275085,
+              -0.0002406090497970581
+            ],
+            "peak_speed_m_s": 0.22913270012825115,
+            "residual_impulse_n_s": [
+              0.0038503809261067512,
+              0.0013604231516441481
+            ],
+            "start_s": 42.225,
+            "state_samples": 17,
+            "thrust_impulse_n_s": [
+              -0.10971889652578189,
+              0.030569453973539662
+            ],
+            "wind_impulse_n_s": [
+              0.05365992807240005,
+              -0.03217048617498087
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.008407950401306152,
+              -0.011547304689884186
+            ],
+            "distance_change_m": -0.0048128775113772115,
+            "end_s": 50.0,
+            "energy_change_j": -0.02625089659538764,
+            "momentum_change_n_s": [
+              0.19630511059222044,
+              0.11824159110983601
+            ],
+            "peak_speed_m_s": 0.22969515549084793,
+            "residual_impulse_n_s": [
+              -2.852248115850854,
+              1.6592344982651135
+            ],
+            "start_s": 42.305,
+            "state_samples": 1540,
+            "thrust_impulse_n_s": [
+              -0.02900177813209105,
+              0.007315928331121976
+            ],
+            "wind_impulse_n_s": [
+              3.0775550045751654,
+              -1.5483088354863994
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "be1e1ad2dcbb59759d96050a10157c5c58b1f5e97223b285569e0624312817ed",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "b38d4c3b449142748c2ed390a4dd2582aad85d12e8e6afbbb26e034aa529794f",
+          "source_commit": "c943f0b17733b8aa22fecc7a93705645c302147a",
+          "source_dirty": false,
+          "source_tree_sha256": "9c12e216fb86126423e2dca9745483974bf7e819a590e7a682805f79942a75b7",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.36702954760139384,
+          "horizontal_energy_j": 0.01733791506820917,
+          "speed_m_s": 0.1862144734880142,
+          "tilt_deg": 8.834066153121118,
+          "time_s": 42.225
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 42.305,
+          "samples": 1662,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 42.305,
+          "blockers_at_disarm": [
+            "position",
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.042906541129106475,
+          "horizontal_energy_j": 0.022341605347034776,
+          "speed_m_s": 0.2113840360435706,
+          "tilt_deg": 0.592199640779031,
+          "time_s": 43.765
+        },
+        "final_support_error_m": 0.05074087154570584,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.036462096497416496,
+              0.04276550933718681
+            ],
+            "distance_change_m": -0.03539327275441223,
+            "end_s": 43.695,
+            "energy_change_j": 0.022784934461965604,
+            "momentum_change_n_s": [
+              -0.19000371638685465,
+              0.05255561321973801
+            ],
+            "peak_speed_m_s": 0.4557710746251268,
+            "residual_impulse_n_s": [
+              0.007574435769177379,
+              -0.004708358802106035
+            ],
+            "start_s": 34.0,
+            "state_samples": 1940,
+            "thrust_impulse_n_s": [
+              -4.569664574998843,
+              1.213097353728332
+            ],
+            "wind_impulse_n_s": [
+              4.372086422842811,
+              -1.1558333817064879
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.012711653485894203,
+              0.008697541430592537
+            ],
+            "distance_change_m": 0.015360873210779617,
+            "end_s": 43.765,
+            "energy_change_j": -0.003521330842426562,
+            "momentum_change_n_s": [
+              0.01132519543170929,
+              -0.01183423399925232
+            ],
+            "peak_speed_m_s": 0.22743322619820236,
+            "residual_impulse_n_s": [
+              0.004042316762520979,
+              -0.002459066143706991
+            ],
+            "start_s": 43.695,
+            "state_samples": 15,
+            "thrust_impulse_n_s": [
+              -0.005980044237618957,
+              -0.010513626462199744
+            ],
+            "wind_impulse_n_s": [
+              0.013262922906807266,
+              0.0011384586066544155
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.006355501711368561,
+              0.00458727590739727
+            ],
+            "distance_change_m": 0.007834323620549484,
+            "end_s": 50.0,
+            "energy_change_j": -0.02234160481356757,
+            "momentum_change_n_s": [
+              0.1746772854748997,
+              -0.11905666527309222
+            ],
+            "peak_speed_m_s": 0.2113840360435706,
+            "residual_impulse_n_s": [
+              -2.369070825550406,
+              1.3257123628824403
+            ],
+            "start_s": 43.765,
+            "state_samples": 1248,
+            "thrust_impulse_n_s": [
+              -0.00039049500007893993,
+              -0.0012875229846777898
+            ],
+            "wind_impulse_n_s": [
+              2.5441386060253848,
+              -1.4434815051708547
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "75bcc5cd13d01586f0af4d645f2b117b815df1c5c4f071ce4f0b8309222b5fd7",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "4983f5cd5835e281404056b8dd40ab2c9b0cde905b2f9dbb612060d5ab1d94f6",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.02754566791832686,
+          "horizontal_energy_j": 0.02586293618946134,
+          "speed_m_s": 0.22743322619820236,
+          "tilt_deg": 1.3833239575907343,
+          "time_s": 43.695
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 43.765,
+          "samples": 1954,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 43.765,
+          "blockers_at_disarm": [
+            "speed",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "regression-p1-s0"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.050894433732196986,
+          "horizontal_energy_j": 0.007584152780162473,
+          "speed_m_s": 0.12315967505772718,
+          "tilt_deg": 5.1478844243336725,
+          "time_s": 41.265
+        },
+        "final_support_error_m": 0.06088490605202688,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.007936205714941025,
+              0.02082081837579608
+            ],
+            "distance_change_m": -0.012550865968824043,
+            "end_s": 41.215,
+            "energy_change_j": -0.009754037245402913,
+            "momentum_change_n_s": [
+              0.2505609914660454,
+              0.04368511587381363
+            ],
+            "peak_speed_m_s": 0.28773439650960514,
+            "residual_impulse_n_s": [
+              -0.014104248256265769,
+              0.008745797515700239
+            ],
+            "start_s": 34.0,
+            "state_samples": 1444,
+            "thrust_impulse_n_s": [
+              -4.112788303310114,
+              1.0428589373590353
+            ],
+            "wind_impulse_n_s": [
+              4.377453543032425,
+              -1.007919619000922
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.004992995411157608,
+              -0.0031862189061939716
+            ],
+            "distance_change_m": 0.005214186127423991,
+            "end_s": 41.265,
+            "energy_change_j": 0.0006535517455507067,
+            "momentum_change_n_s": [
+              0.002042897045612335,
+              -0.006925754249095917
+            ],
+            "peak_speed_m_s": 0.12315967505772718,
+            "residual_impulse_n_s": [
+              -0.0037021608004695963,
+              0.0024822036748848313
+            ],
+            "start_s": 41.215,
+            "state_samples": 11,
+            "thrust_impulse_n_s": [
+              -0.04990620074685395,
+              0.005264976013397577
+            ],
+            "wind_impulse_n_s": [
+              0.05565125859293588,
+              -0.014672933937378325
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.00970812514424324,
+              -0.0029584961012005806
+            ],
+            "distance_change_m": 0.009990456929626197,
+            "end_s": 50.0,
+            "energy_change_j": -0.007584147129947822,
+            "momentum_change_n_s": [
+              -0.10291096140281297,
+              0.06785047981247772
+            ],
+            "peak_speed_m_s": 0.12622268363002073,
+            "residual_impulse_n_s": [
+              -3.7487838356991547,
+              0.24486177911201892
+            ],
+            "start_s": 41.265,
+            "state_samples": 1748,
+            "thrust_impulse_n_s": [
+              -0.01834244209699965,
+              0.0001946722584782369
+            ],
+            "wind_impulse_n_s": [
+              3.6642153163933413,
+              -0.17720597155801945
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "93a3df6575af20f4e49eb7b94bd2fb4e53963909a4d0a1d914762921b188c340",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "cd14e4ad2e3ee9812d457399c69707403ed09a8314cd447deaa272843ffb19d6",
+          "source_commit": "c943f0b17733b8aa22fecc7a93705645c302147a",
+          "source_dirty": false,
+          "source_tree_sha256": "9c12e216fb86126423e2dca9745483974bf7e819a590e7a682805f79942a75b7",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.045680247604772996,
+          "horizontal_energy_j": 0.006930601034611766,
+          "speed_m_s": 0.11773360637143301,
+          "tilt_deg": 6.410169580441662,
+          "time_s": 41.215
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.265,
+          "samples": 1454,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.265,
+          "blockers_at_disarm": [
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 1
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.08022561695861585,
+          "horizontal_energy_j": 0.011076137816906084,
+          "speed_m_s": 0.14883640560633063,
+          "tilt_deg": 4.450010237255231,
+          "time_s": 41.48
+        },
+        "final_support_error_m": 0.09224924386809993,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.015457402914762497,
+              0.0055449046194553375
+            ],
+            "distance_change_m": 0.012928064212600489,
+            "end_s": 41.415,
+            "energy_change_j": -0.006912180383329886,
+            "momentum_change_n_s": [
+              0.269225150346756,
+              0.031892530620098114
+            ],
+            "peak_speed_m_s": 0.28773430800940336,
+            "residual_impulse_n_s": [
+              -0.006953386339121593,
+              0.004409548935328993
+            ],
+            "start_s": 34.0,
+            "state_samples": 1484,
+            "thrust_impulse_n_s": [
+              -4.315937549616216,
+              1.0874339973970621
+            ],
+            "wind_impulse_n_s": [
+              4.592116086302093,
+              -1.059951015712293
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.00815562903881073,
+              -0.00459512323141098
+            ],
+            "distance_change_m": 0.009065537982957284,
+            "end_s": 41.48,
+            "energy_change_j": 0.0013034690449971187,
+            "momentum_change_n_s": [
+              0.012044936418533325,
+              0.0029162466526031494
+            ],
+            "peak_speed_m_s": 0.14883640560633063,
+            "residual_impulse_n_s": [
+              -0.00402207136364541,
+              0.0022838384345516918
+            ],
+            "start_s": 41.415,
+            "state_samples": 14,
+            "thrust_impulse_n_s": [
+              -0.05418360408217764,
+              0.013395232745562138
+            ],
+            "wind_impulse_n_s": [
+              0.07025061186435638,
+              -0.01276282452751068
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.011138536036014557,
+              -0.004747476428747177
+            ],
+            "distance_change_m": 0.012023619238355862,
+            "end_s": 50.0,
+            "energy_change_j": -0.011076132144861988,
+            "momentum_change_n_s": [
+              -0.13157535626669414,
+              0.06979908153880388
+            ],
+            "peak_speed_m_s": 0.1591516960591464,
+            "residual_impulse_n_s": [
+              -3.5376257140847023,
+              0.18927593750174368
+            ],
+            "start_s": 41.48,
+            "state_samples": 1705,
+            "thrust_impulse_n_s": [
+              -0.01723593236826208,
+              0.002642008032705336
+            ],
+            "wind_impulse_n_s": [
+              3.42328629018627,
+              -0.12211886399564514
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "06196222228fc1eadb93573f5c3179d7634eac10c59f90e04bed284d37fcaad8",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "308469e7a6961ea7959eea5c2ae8d3df45a52b08d1cc91fc2d78f7633c7d65b0",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.07116007897565857,
+          "horizontal_energy_j": 0.009772668771908966,
+          "speed_m_s": 0.13980464063763381,
+          "tilt_deg": 5.427916265317588,
+          "time_s": 41.415
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.48,
+          "samples": 1497,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.48,
+          "blockers_at_disarm": [
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "regression-p1-s1"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.19303021780272037,
+          "horizontal_energy_j": 0.0020074503147582763,
+          "speed_m_s": 0.0633632435211184,
+          "tilt_deg": 3.342368400926678,
+          "time_s": 41.58
+        },
+        "final_support_error_m": 0.19293432813176287,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.32608646154403687,
+              0.07117701321840286
+            ],
+            "distance_change_m": 0.051600006516602626,
+            "end_s": 41.53,
+            "energy_change_j": -0.008278040730138627,
+            "momentum_change_n_s": [
+              0.04543330520391464,
+              -0.0750776887871325
+            ],
+            "peak_speed_m_s": 0.41868318435125734,
+            "residual_impulse_n_s": [
+              0.021819911968982596,
+              -0.0054980535838498115
+            ],
+            "start_s": 34.0,
+            "state_samples": 1507,
+            "thrust_impulse_n_s": [
+              -5.024502115182894,
+              2.030772375532522
+            ],
+            "wind_impulse_n_s": [
+              5.048115508417826,
+              -2.1003520107358047
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.003955066204071045,
+              -1.3658776879310608e-05
+            ],
+            "distance_change_m": -0.003954362528411859,
+            "end_s": 41.58,
+            "energy_change_j": -0.0024179825734637586,
+            "momentum_change_n_s": [
+              0.030810624361038208,
+              -0.005908899707719684
+            ],
+            "peak_speed_m_s": 0.09407904004848301,
+            "residual_impulse_n_s": [
+              0.007651947869102285,
+              -0.0027288183317069445
+            ],
+            "start_s": 41.53,
+            "state_samples": 11,
+            "thrust_impulse_n_s": [
+              -0.032638043363510304,
+              0.008194403626825088
+            ],
+            "wind_impulse_n_s": [
+              0.05579671985544622,
+              -0.011374485002837826
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              -8.313357830047607e-05,
+              -0.0006043077446520329
+            ],
+            "distance_change_m": -9.596484126250804e-05,
+            "end_s": 50.0,
+            "energy_change_j": -0.0020074497599136885,
+            "momentum_change_n_s": [
+              0.06321294367080554,
+              0.0038579009706154466
+            ],
+            "peak_speed_m_s": 0.0633632435211184,
+            "residual_impulse_n_s": [
+              -4.74557466354896,
+              1.4450717823870696
+            ],
+            "start_s": 41.58,
+            "state_samples": 1685,
+            "thrust_impulse_n_s": [
+              -0.011002336938577823,
+              0.0005505623255937836
+            ],
+            "wind_impulse_n_s": [
+              4.819789944158344,
+              -1.4417644437420478
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "418764f3d9cdcc8dcf2dc288c7bce51f5ca0ac2965d00318c92e408e308336c6",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "c7926f9ffa3f4fc1414d8336a4c99e9ab66ea6d8f6e9580e792abc086cc8c49c",
+          "source_commit": "c943f0b17733b8aa22fecc7a93705645c302147a",
+          "source_dirty": false,
+          "source_tree_sha256": "9c12e216fb86126423e2dca9745483974bf7e819a590e7a682805f79942a75b7",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.19698458033113223,
+          "horizontal_energy_j": 0.004425432888222035,
+          "speed_m_s": 0.09407904004848301,
+          "tilt_deg": 4.546408529551168,
+          "time_s": 41.53
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.58,
+          "samples": 1517,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.58,
+          "blockers_at_disarm": [
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 1
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.1594561852516324,
+          "horizontal_energy_j": 0.0027151759851778492,
+          "speed_m_s": 0.07369092189921156,
+          "tilt_deg": 2.406458237577204,
+          "time_s": 43.88
+        },
+        "final_support_error_m": 0.15776751719491441,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.03017561137676239,
+              0.05699213221669197
+            ],
+            "distance_change_m": 0.01424151375078267,
+            "end_s": 43.81,
+            "energy_change_j": -0.008765417591460132,
+            "momentum_change_n_s": [
+              0.13269614148885012,
+              -0.16561893373727798
+            ],
+            "peak_speed_m_s": 0.45151195574854397,
+            "residual_impulse_n_s": [
+              0.0012234006077020355,
+              0.009382448660873758
+            ],
+            "start_s": 34.0,
+            "state_samples": 1963,
+            "thrust_impulse_n_s": [
+              -5.938386354438278,
+              2.4471382108671538
+            ],
+            "wind_impulse_n_s": [
+              6.069859095319426,
+              -2.6221395932653055
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.0006011724472045898,
+              -0.005451607517898083
+            ],
+            "distance_change_m": -0.00017238709201283786,
+            "end_s": 43.88,
+            "energy_change_j": -0.0012227367450326106,
+            "momentum_change_n_s": [
+              0.036102197133004665,
+              0.020874150097370148
+            ],
+            "peak_speed_m_s": 0.08874584756720125,
+            "residual_impulse_n_s": [
+              -0.0006564661333185462,
+              0.00417942221075614
+            ],
+            "start_s": 43.81,
+            "state_samples": 15,
+            "thrust_impulse_n_s": [
+              -0.012251160264388977,
+              0.030337613329266565
+            ],
+            "wind_impulse_n_s": [
+              0.04900982353071219,
+              -0.013642885442652557
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.00209672749042511,
+              -0.0036796806380152702
+            ],
+            "distance_change_m": -0.0016886873127466007,
+            "end_s": 50.0,
+            "energy_change_j": -0.0027151754169158705,
+            "momentum_change_n_s": [
+              -0.029343003232497722,
+              0.06761621660552919
+            ],
+            "peak_speed_m_s": 0.07369092189921156,
+            "residual_impulse_n_s": [
+              -3.9050539529319277,
+              0.9815328730487486
+            ],
+            "start_s": 43.88,
+            "state_samples": 1225,
+            "thrust_impulse_n_s": [
+              -0.0019546272801056154,
+              0.008310860274305854
+            ],
+            "wind_impulse_n_s": [
+              3.8776655769795356,
+              -0.9222275167175252
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "8a45b697bd0bbd0ba0860638bd944ade57a635307ad0c93133c629576d1f870e",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "b827eb90b6a51dcbb80b12e244be8464f21eda3c42817737a9454217c76c3ac8",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.15962857234364525,
+          "horizontal_energy_j": 0.00393791273021046,
+          "speed_m_s": 0.08874584756720125,
+          "tilt_deg": 3.048798446153235,
+          "time_s": 43.81
+        },
+        "readiness": {
+          "first_qualifying_s": 43.88,
+          "evaluated_through_s": 43.88,
+          "samples": 1977,
+          "max_dwell_s": 0.05000000000000426,
+          "actual_disarm_s": 43.88,
+          "blockers_at_disarm": [],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "regression-p1-s2"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.6320492253671821,
+          "horizontal_energy_j": 0.021970109784442582,
+          "speed_m_s": 0.20961922518911563,
+          "tilt_deg": 13.086786927030358,
+          "time_s": 41.68
+        },
+        "final_support_error_m": 0.6612621761199924,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.6155596189200878,
+              -0.12120636459439993
+            ],
+            "distance_change_m": 0.43612654005359114,
+            "end_s": 41.43,
+            "energy_change_j": 0.058478730754576526,
+            "momentum_change_n_s": [
+              0.3373694345355034,
+              -0.12193427071906626
+            ],
+            "peak_speed_m_s": 0.6240472782947121,
+            "residual_impulse_n_s": [
+              -0.007204387501058684,
+              0.002873038337977482
+            ],
+            "start_s": 34.0,
+            "state_samples": 1487,
+            "thrust_impulse_n_s": [
+              -3.6819593955010403,
+              0.3804313375124911
+            ],
+            "wind_impulse_n_s": [
+              4.026533217537603,
+              -0.5052386465695349
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.058001697063446045,
+              -0.030224704183638096
+            ],
+            "distance_change_m": 0.05823989090456261,
+            "end_s": 41.68,
+            "energy_change_j": -0.03668369864148158,
+            "momentum_change_n_s": [
+              -0.13870735466480255,
+              0.017839506268501282
+            ],
+            "peak_speed_m_s": 0.3425019953983455,
+            "residual_impulse_n_s": [
+              -0.009517614819824076,
+              0.005218526800452665
+            ],
+            "start_s": 41.43,
+            "state_samples": 51,
+            "thrust_impulse_n_s": [
+              -0.6327057174115405,
+              0.028329365672002595
+            ],
+            "wind_impulse_n_s": [
+              0.5035159775665621,
+              -0.01570838620395398
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.02888619899749756,
+              -0.009086323902010918
+            ],
+            "distance_change_m": 0.029212890876249897,
+            "end_s": 50.0,
+            "energy_change_j": -0.021970109063682734,
+            "momentum_change_n_s": [
+              -0.18017451400737627,
+              0.10713494529409218
+            ],
+            "peak_speed_m_s": 0.24563446482448975,
+            "residual_impulse_n_s": [
+              -3.3103684349952416,
+              1.2556403015611235
+            ],
+            "start_s": 41.68,
+            "state_samples": 1665,
+            "thrust_impulse_n_s": [
+              -0.059426063660139895,
+              0.004353563818337103
+            ],
+            "wind_impulse_n_s": [
+              3.1896199846480053,
+              -1.1528589200853683
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "576c914d4f4fb6cd7c37c7eaac53140881691fefcca64bff70638c8ededfbbb9",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "660e7f722fa4a22b909646f3f4bb0de6d3959a0af06a8d51a1afac893773d3c8",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.5738093344626195,
+          "horizontal_energy_j": 0.05865380842592416,
+          "speed_m_s": 0.3425019953983455,
+          "tilt_deg": 15.392881899678597,
+          "time_s": 41.43
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.68,
+          "samples": 1537,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.68,
+          "blockers_at_disarm": [
+            "position",
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 4
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.6320492253671821,
+          "horizontal_energy_j": 0.021970109784442582,
+          "speed_m_s": 0.20961922518911563,
+          "tilt_deg": 13.086786927030358,
+          "time_s": 41.68
+        },
+        "final_support_error_m": 0.6612621761199924,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.6155596189200878,
+              -0.12120636459439993
+            ],
+            "distance_change_m": 0.43612654005359114,
+            "end_s": 41.43,
+            "energy_change_j": 0.058478730754576526,
+            "momentum_change_n_s": [
+              0.3373694345355034,
+              -0.12193427071906626
+            ],
+            "peak_speed_m_s": 0.6240472782947121,
+            "residual_impulse_n_s": [
+              -0.007204387501058684,
+              0.002873038337977482
+            ],
+            "start_s": 34.0,
+            "state_samples": 1487,
+            "thrust_impulse_n_s": [
+              -3.6819593955010403,
+              0.3804313375124911
+            ],
+            "wind_impulse_n_s": [
+              4.026533217537603,
+              -0.5052386465695349
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.058001697063446045,
+              -0.030224704183638096
+            ],
+            "distance_change_m": 0.05823989090456261,
+            "end_s": 41.68,
+            "energy_change_j": -0.03668369864148158,
+            "momentum_change_n_s": [
+              -0.13870735466480255,
+              0.017839506268501282
+            ],
+            "peak_speed_m_s": 0.3425019953983455,
+            "residual_impulse_n_s": [
+              -0.009517614819824076,
+              0.005218526800452665
+            ],
+            "start_s": 41.43,
+            "state_samples": 51,
+            "thrust_impulse_n_s": [
+              -0.6327057174115405,
+              0.028329365672002595
+            ],
+            "wind_impulse_n_s": [
+              0.5035159775665621,
+              -0.01570838620395398
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.02888619899749756,
+              -0.009086323902010918
+            ],
+            "distance_change_m": 0.029212890876249897,
+            "end_s": 50.0,
+            "energy_change_j": -0.021970109063682734,
+            "momentum_change_n_s": [
+              -0.18017451400737627,
+              0.10713494529409218
+            ],
+            "peak_speed_m_s": 0.24563446482448975,
+            "residual_impulse_n_s": [
+              -3.3103684349952416,
+              1.2556403015611235
+            ],
+            "start_s": 41.68,
+            "state_samples": 1665,
+            "thrust_impulse_n_s": [
+              -0.059426063660139895,
+              0.004353563818337103
+            ],
+            "wind_impulse_n_s": [
+              3.1896199846480053,
+              -1.1528589200853683
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "a1bfc428b61e62ec2033d7e2fe652960ec473964933dda312eaa6b4d996ef556",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "fd85fdad7ad483d273cea8e3664cae3929c2208076c0bcbe1d991e7a974f390b",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.5738093344626195,
+          "horizontal_energy_j": 0.05865380842592416,
+          "speed_m_s": 0.3425019953983455,
+          "tilt_deg": 15.392881899678597,
+          "time_s": 41.43
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.68,
+          "samples": 1537,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.68,
+          "blockers_at_disarm": [
+            "position",
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 4
+      },
+      "id": "additional-p0-s401"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.38415678984865514,
+          "horizontal_energy_j": 0.04932324064437246,
+          "speed_m_s": 0.31408037393117216,
+          "tilt_deg": 12.544262938909382,
+          "time_s": 41.065
+        },
+        "final_support_error_m": 0.42793780477738497,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.1908467561006546,
+              -0.12058615684509277
+            ],
+            "distance_change_m": 0.19731959508115782,
+            "end_s": 40.975,
+            "energy_change_j": 0.06117350860425369,
+            "momentum_change_n_s": [
+              0.2890228107571602,
+              -0.15680761262774467
+            ],
+            "peak_speed_m_s": 0.48709949653244317,
+            "residual_impulse_n_s": [
+              -0.012929209938895778,
+              0.001625651249210699
+            ],
+            "start_s": 34.0,
+            "state_samples": 1396,
+            "thrust_impulse_n_s": [
+              -4.3916583781810665,
+              0.5933579284127178
+            ],
+            "wind_impulse_n_s": [
+              4.693610398877122,
+              -0.7517911922896732
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.030227839946746826,
+              -0.00521107017993927
+            ],
+            "distance_change_m": 0.030597829713466695,
+            "end_s": 41.065,
+            "energy_change_j": -0.02048151822596342,
+            "momentum_change_n_s": [
+              -0.06302157044410706,
+              -0.013958711177110672
+            ],
+            "peak_speed_m_s": 0.3736435704527401,
+            "residual_impulse_n_s": [
+              -0.004796743659571975,
+              0.0007815809325854863
+            ],
+            "start_s": 40.975,
+            "state_samples": 19,
+            "thrust_impulse_n_s": [
+              -0.2030537352822477,
+              0.03163996337172742
+            ],
+            "wind_impulse_n_s": [
+              0.14482890849771263,
+              -0.04638025548142358
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.04254788160324097,
+              -0.010317675769329071
+            ],
+            "distance_change_m": 0.04378100613948055,
+            "end_s": 50.0,
+            "energy_change_j": -0.04932323689166323,
+            "momentum_change_n_s": [
+              -0.30688517238013446,
+              0.06722002419701312
+            ],
+            "peak_speed_m_s": 0.37057596813701,
+            "residual_impulse_n_s": [
+              -5.127361869755008,
+              1.0974946830977992
+            ],
+            "start_s": 41.065,
+            "state_samples": 1788,
+            "thrust_impulse_n_s": [
+              -0.057215040824049636,
+              0.004697007859822593
+            ],
+            "wind_impulse_n_s": [
+              4.877691738198923,
+              -1.0349716667606086
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "b12a8d8507303b53a767eccb90bf51835fc8cb3253ab08dcbfc8fc81d7cc9305",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "101e4144850224ad6a4cf16d731cfe94824fb199d33a6ca9185a4431b7dabb6b",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.35355896013518845,
+          "horizontal_energy_j": 0.06980475887033588,
+          "speed_m_s": 0.3736435704527401,
+          "tilt_deg": 12.992226957115355,
+          "time_s": 40.975
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.065,
+          "samples": 1414,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.065,
+          "blockers_at_disarm": [
+            "position",
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.38415678984865514,
+          "horizontal_energy_j": 0.04932324064437246,
+          "speed_m_s": 0.31408037393117216,
+          "tilt_deg": 12.544262938909382,
+          "time_s": 41.065
+        },
+        "final_support_error_m": 0.42793780477738497,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.1908467561006546,
+              -0.12058615684509277
+            ],
+            "distance_change_m": 0.19731959508115782,
+            "end_s": 40.975,
+            "energy_change_j": 0.06117350860425369,
+            "momentum_change_n_s": [
+              0.2890228107571602,
+              -0.15680761262774467
+            ],
+            "peak_speed_m_s": 0.48709949653244317,
+            "residual_impulse_n_s": [
+              -0.012929209938895778,
+              0.001625651249210699
+            ],
+            "start_s": 34.0,
+            "state_samples": 1396,
+            "thrust_impulse_n_s": [
+              -4.3916583781810665,
+              0.5933579284127178
+            ],
+            "wind_impulse_n_s": [
+              4.693610398877122,
+              -0.7517911922896732
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.030227839946746826,
+              -0.00521107017993927
+            ],
+            "distance_change_m": 0.030597829713466695,
+            "end_s": 41.065,
+            "energy_change_j": -0.02048151822596342,
+            "momentum_change_n_s": [
+              -0.06302157044410706,
+              -0.013958711177110672
+            ],
+            "peak_speed_m_s": 0.3736435704527401,
+            "residual_impulse_n_s": [
+              -0.004796743659571975,
+              0.0007815809325854863
+            ],
+            "start_s": 40.975,
+            "state_samples": 19,
+            "thrust_impulse_n_s": [
+              -0.2030537352822477,
+              0.03163996337172742
+            ],
+            "wind_impulse_n_s": [
+              0.14482890849771263,
+              -0.04638025548142358
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.04254788160324097,
+              -0.010317675769329071
+            ],
+            "distance_change_m": 0.04378100613948055,
+            "end_s": 50.0,
+            "energy_change_j": -0.04932323689166323,
+            "momentum_change_n_s": [
+              -0.30688517238013446,
+              0.06722002419701312
+            ],
+            "peak_speed_m_s": 0.37057596813701,
+            "residual_impulse_n_s": [
+              -5.127361869755008,
+              1.0974946830977992
+            ],
+            "start_s": 41.065,
+            "state_samples": 1788,
+            "thrust_impulse_n_s": [
+              -0.057215040824049636,
+              0.004697007859822593
+            ],
+            "wind_impulse_n_s": [
+              4.877691738198923,
+              -1.0349716667606086
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "c4d155eeee4ddf7aa8ee797360a88c19e3b5d60341399f0d6a83a982a85e68d2",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "e3863a5a40588510be4d64379412a3a70a1182fe41486e15249f5d2c25d2c73c",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.35355896013518845,
+          "horizontal_energy_j": 0.06980475887033588,
+          "speed_m_s": 0.3736435704527401,
+          "tilt_deg": 12.992226957115355,
+          "time_s": 40.975
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.065,
+          "samples": 1414,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.065,
+          "blockers_at_disarm": [
+            "position",
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "additional-p0-s503"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.12931448152764338,
+          "horizontal_energy_j": 0.012975519969601286,
+          "speed_m_s": 0.16109326472327318,
+          "tilt_deg": 2.7250172580313676,
+          "time_s": 43.955
+        },
+        "final_support_error_m": 0.12358163274943042,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.3436940610408783,
+              -0.13060957193374634
+            ],
+            "distance_change_m": -0.10792520692607879,
+            "end_s": 43.865,
+            "energy_change_j": -0.007343576220725297,
+            "momentum_change_n_s": [
+              0.23924905061721802,
+              -0.009580854326486588
+            ],
+            "peak_speed_m_s": 0.43757805510885617,
+            "residual_impulse_n_s": [
+              -0.005413612672832249,
+              0.004127720886440579
+            ],
+            "start_s": 34.0,
+            "state_samples": 1974,
+            "thrust_impulse_n_s": [
+              -5.099764732056015,
+              1.8857631435138917
+            ],
+            "wind_impulse_n_s": [
+              5.344427395346066,
+              -1.8994717187268189
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.010539054870605469,
+              -0.005175493657588959
+            ],
+            "distance_change_m": -0.004821734057467497,
+            "end_s": 43.955,
+            "energy_change_j": 0.007176549116214188,
+            "momentum_change_n_s": [
+              0.06606534123420715,
+              0.01252463087439537
+            ],
+            "peak_speed_m_s": 0.16109326472327318,
+            "residual_impulse_n_s": [
+              -0.004500664139402453,
+              0.0020634916778912516
+            ],
+            "start_s": 43.865,
+            "state_samples": 19,
+            "thrust_impulse_n_s": [
+              -0.02096009050126487,
+              0.04230956361036752
+            ],
+            "wind_impulse_n_s": [
+              0.09152609587487448,
+              -0.0318484244138634
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.011863775551319122,
+              -0.003910951316356659
+            ],
+            "distance_change_m": -0.005732875286383721,
+            "end_s": 50.0,
+            "energy_change_j": -0.012975519796076166,
+            "momentum_change_n_s": [
+              -0.15262652931414777,
+              0.0515712931046437
+            ],
+            "peak_speed_m_s": 0.1876289933979232,
+            "residual_impulse_n_s": [
+              -3.637621759987477,
+              0.994599288165215
+            ],
+            "start_s": 43.955,
+            "state_samples": 1210,
+            "thrust_impulse_n_s": [
+              -0.004139626581470384,
+              0.00897656102924119
+            ],
+            "wind_impulse_n_s": [
+              3.4891348572548,
+              -0.9520045560898125
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "2aef14d80779ae749d9616cdd049d8cd59676ee5990489f8bb18e33df222e418",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "a6605e36d8907f2d38f5bd661134385280e74313b8fc2f26a18079866123ab34",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.13413621558511088,
+          "horizontal_energy_j": 0.005798970853387098,
+          "speed_m_s": 0.10769374033236191,
+          "tilt_deg": 3.414940330060085,
+          "time_s": 43.865
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 43.955,
+          "samples": 1992,
+          "max_dwell_s": 0.030000000000001137,
+          "actual_disarm_s": 43.955,
+          "blockers_at_disarm": [
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.12931448152764338,
+          "horizontal_energy_j": 0.012975519969601286,
+          "speed_m_s": 0.16109326472327318,
+          "tilt_deg": 2.7250172580313676,
+          "time_s": 43.955
+        },
+        "final_support_error_m": 0.12358163274943042,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.3436940610408783,
+              -0.13060957193374634
+            ],
+            "distance_change_m": -0.10792520692607879,
+            "end_s": 43.865,
+            "energy_change_j": -0.007343576220725297,
+            "momentum_change_n_s": [
+              0.23924905061721802,
+              -0.009580854326486588
+            ],
+            "peak_speed_m_s": 0.43757805510885617,
+            "residual_impulse_n_s": [
+              -0.005413612672832249,
+              0.004127720886440579
+            ],
+            "start_s": 34.0,
+            "state_samples": 1974,
+            "thrust_impulse_n_s": [
+              -5.099764732056015,
+              1.8857631435138917
+            ],
+            "wind_impulse_n_s": [
+              5.344427395346066,
+              -1.8994717187268189
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.010539054870605469,
+              -0.005175493657588959
+            ],
+            "distance_change_m": -0.004821734057467497,
+            "end_s": 43.955,
+            "energy_change_j": 0.007176549116214188,
+            "momentum_change_n_s": [
+              0.06606534123420715,
+              0.01252463087439537
+            ],
+            "peak_speed_m_s": 0.16109326472327318,
+            "residual_impulse_n_s": [
+              -0.004500664139402453,
+              0.0020634916778912516
+            ],
+            "start_s": 43.865,
+            "state_samples": 19,
+            "thrust_impulse_n_s": [
+              -0.02096009050126487,
+              0.04230956361036752
+            ],
+            "wind_impulse_n_s": [
+              0.09152609587487448,
+              -0.0318484244138634
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.011863775551319122,
+              -0.003910951316356659
+            ],
+            "distance_change_m": -0.005732875286383721,
+            "end_s": 50.0,
+            "energy_change_j": -0.012975519796076166,
+            "momentum_change_n_s": [
+              -0.15262652931414777,
+              0.0515712931046437
+            ],
+            "peak_speed_m_s": 0.1876289933979232,
+            "residual_impulse_n_s": [
+              -3.637621759987477,
+              0.994599288165215
+            ],
+            "start_s": 43.955,
+            "state_samples": 1210,
+            "thrust_impulse_n_s": [
+              -0.004139626581470384,
+              0.00897656102924119
+            ],
+            "wind_impulse_n_s": [
+              3.4891348572548,
+              -0.9520045560898125
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "7f174ac8846e54f7adaca293c9706ced10f17a955da2b54ad1bd606a026aad45",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "9c913ee95a8c52878d7b3b77ad9dc579bfec2aae25c00649f9abd7ea751209a8",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.13413621558511088,
+          "horizontal_energy_j": 0.005798970853387098,
+          "speed_m_s": 0.10769374033236191,
+          "tilt_deg": 3.414940330060085,
+          "time_s": 43.865
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 43.955,
+          "samples": 1992,
+          "max_dwell_s": 0.030000000000001137,
+          "actual_disarm_s": 43.955,
+          "blockers_at_disarm": [
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "additional-p0-s607"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.598750133103655,
+          "horizontal_energy_j": 0.03473846899235966,
+          "speed_m_s": 0.26358478329508955,
+          "tilt_deg": 14.865581387583816,
+          "time_s": 41.51
+        },
+        "final_support_error_m": 0.6331405947839577,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.627677645534277,
+              -0.12460432155057788
+            ],
+            "distance_change_m": 0.4481909376087062,
+            "end_s": 41.46,
+            "energy_change_j": 0.04737739735334753,
+            "momentum_change_n_s": [
+              0.3021951001137495,
+              -0.1178445250261575
+            ],
+            "peak_speed_m_s": 0.6258181193927521,
+            "residual_impulse_n_s": [
+              -0.013765786431148636,
+              0.005888722859844064
+            ],
+            "start_s": 34.0,
+            "state_samples": 1493,
+            "thrust_impulse_n_s": [
+              -3.761345855742277,
+              0.384407992265474
+            ],
+            "wind_impulse_n_s": [
+              4.077306742287175,
+              -0.5081412401514755
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.0129164457321167,
+              -0.006007274962030351
+            ],
+            "distance_change_m": 0.012879951675612511,
+            "end_s": 41.51,
+            "energy_change_j": -0.012814001757660703,
+            "momentum_change_n_s": [
+              -0.04851265251636505,
+              0.0018885806202888489
+            ],
+            "peak_speed_m_s": 0.3083908907539922,
+            "residual_impulse_n_s": [
+              -0.004636623134615887,
+              0.002198441809726084
+            ],
+            "start_s": 41.46,
+            "state_samples": 11,
+            "thrust_impulse_n_s": [
+              -0.13502255704866697,
+              0.004116965327434655
+            ],
+            "wind_impulse_n_s": [
+              0.09114652766691782,
+              -0.004426826516871891
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.034301936626434326,
+              -0.011150330421514809
+            ],
+            "distance_change_m": 0.034390342440950294,
+            "end_s": 50.0,
+            "energy_change_j": -0.03473846825026784,
+            "momentum_change_n_s": [
+              -0.2351942178211175,
+              0.1189946077647619
+            ],
+            "peak_speed_m_s": 0.3137677688825013,
+            "residual_impulse_n_s": [
+              -3.7355311385541525,
+              1.2849766073249145
+            ],
+            "start_s": 41.51,
+            "state_samples": 1699,
+            "thrust_impulse_n_s": [
+              -0.06472580343628295,
+              0.0004057506568173702
+            ],
+            "wind_impulse_n_s": [
+              3.565062724169318,
+              -1.16638775021697
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "ec16af9ddcb2d9d21d468de317e58c8dca2242732b819b7c380037452b173367",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "7fb37af4855215fe68c07b53ce2e5e879cf8436e0287f4c483c1485f117c84b9",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.5858701814280425,
+          "horizontal_energy_j": 0.047552470750020365,
+          "speed_m_s": 0.3083908907539922,
+          "tilt_deg": 15.865569795366866,
+          "time_s": 41.46
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.51,
+          "samples": 1503,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.51,
+          "blockers_at_disarm": [
+            "position",
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 1
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.6147994154027854,
+          "horizontal_energy_j": 0.025645855286891145,
+          "speed_m_s": 0.22647673296341567,
+          "tilt_deg": 14.429921789645457,
+          "time_s": 41.58
+        },
+        "final_support_error_m": 0.6456238610668843,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.6426271051168442,
+              -0.1315077012986876
+            ],
+            "distance_change_m": 0.46310635577010245,
+            "end_s": 41.515,
+            "energy_change_j": 0.03374922932679763,
+            "momentum_change_n_s": [
+              0.25156466476619244,
+              -0.1132480395026505
+            ],
+            "peak_speed_m_s": 0.625844175240134,
+            "residual_impulse_n_s": [
+              -0.01197635244370749,
+              0.006124289037767854
+            ],
+            "start_s": 34.0,
+            "state_samples": 1504,
+            "thrust_impulse_n_s": [
+              -3.9144160130347996,
+              0.3937199677733827
+            ],
+            "wind_impulse_n_s": [
+              4.177957030244699,
+              -0.513092296313801
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.01396411657333374,
+              -0.0073081086738966405
+            ],
+            "distance_change_m": 0.014011561868556788,
+            "end_s": 41.58,
+            "energy_change_j": -0.008278440872044324,
+            "momentum_change_n_s": [
+              -0.03528203070163727,
+              0.005974933505058289
+            ],
+            "peak_speed_m_s": 0.26047762344944514,
+            "residual_impulse_n_s": [
+              -0.00446364258446695,
+              0.002479545889433598
+            ],
+            "start_s": 41.515,
+            "state_samples": 14,
+            "thrust_impulse_n_s": [
+              -0.17233583291813523,
+              0.00983155170154258
+            ],
+            "wind_impulse_n_s": [
+              0.1415174448009649,
+              -0.00633616408591789
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.03064894676208496,
+              -0.009319077245891094
+            ],
+            "distance_change_m": 0.0308243266917424,
+            "end_s": 50.0,
+            "energy_change_j": -0.02564585458034124,
+            "momentum_change_n_s": [
+              -0.19779557962465333,
+              0.11031175244352198
+            ],
+            "peak_speed_m_s": 0.28186603884865097,
+            "residual_impulse_n_s": [
+              -3.5413778982672177,
+              1.2666066379336391
+            ],
+            "start_s": 41.58,
+            "state_samples": 1685,
+            "thrust_impulse_n_s": [
+              -0.06293458273834864,
+              0.0016176344450999755
+            ],
+            "wind_impulse_n_s": [
+              3.406516901380913,
+              -1.1579125199352172
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "5a37d66e4bad884f976661c3a101618fea5c2b79d5c265855e871be8d7ee7f83",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "20e57808fba2997e660c1f2fcafca7ae2389c11fe5029374cfe25b7c55b7a5e4",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.6007878535342286,
+          "horizontal_energy_j": 0.03392429615893547,
+          "speed_m_s": 0.26047762344944514,
+          "tilt_deg": 15.809786325691935,
+          "time_s": 41.515
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 41.58,
+          "samples": 1517,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 41.58,
+          "blockers_at_disarm": [
+            "position",
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "additional-p1-s401"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.34283830778079205,
+          "horizontal_energy_j": 0.07622811131963048,
+          "speed_m_s": 0.3904564286053707,
+          "tilt_deg": 11.376357117616582,
+          "time_s": 40.95
+        },
+        "final_support_error_m": 0.3887711743186692,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.15994155406951904,
+              -0.1161867268383503
+            ],
+            "distance_change_m": 0.16627016425354485,
+            "end_s": 40.9,
+            "energy_change_j": 0.08305843637501997,
+            "momentum_change_n_s": [
+              0.34273451566696167,
+              -0.1666955053806305
+            ],
+            "peak_speed_m_s": 0.4874974328084248,
+            "residual_impulse_n_s": [
+              -0.019455536394419427,
+              0.002687244042014438
+            ],
+            "start_s": 34.0,
+            "state_samples": 1381,
+            "thrust_impulse_n_s": [
+              -4.226817927905468,
+              0.5587494111420717
+            ],
+            "wind_impulse_n_s": [
+              4.589007979966849,
+              -0.7281321605647166
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.02021351456642151,
+              -0.0030153393745422363
+            ],
+            "distance_change_m": 0.020329650846810154,
+            "end_s": 40.95,
+            "energy_change_j": -0.015460740541636042,
+            "momentum_change_n_s": [
+              -0.03765904903411865,
+              0.0035769641399383545
+            ],
+            "peak_speed_m_s": 0.4282262296059561,
+            "residual_impulse_n_s": [
+              -0.005948362651870425,
+              0.0007350168672196317
+            ],
+            "start_s": 40.9,
+            "state_samples": 11,
+            "thrust_impulse_n_s": [
+              -0.10217412580351311,
+              0.017691310099998536
+            ],
+            "wind_impulse_n_s": [
+              0.07046343942126487,
+              -0.014849362827279814
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.045327603816986084,
+              -0.008052974939346313
+            ],
+            "distance_change_m": 0.04593286124398982,
+            "end_s": 50.0,
+            "energy_change_j": -0.07622810751207874,
+            "momentum_change_n_s": [
+              -0.3859633954416495,
+              0.05958313969313167
+            ],
+            "peak_speed_m_s": 0.3904564286053707,
+            "residual_impulse_n_s": [
+              -5.413971597811893,
+              1.151357798973292
+            ],
+            "start_s": 40.95,
+            "state_samples": 1811,
+            "thrust_impulse_n_s": [
+              -0.05083969656134495,
+              0.0039519603360285436
+            ],
+            "wind_impulse_n_s": [
+              5.078847898931588,
+              -1.0957266196161888
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "86d18727618ab44aefd9f07e6152c447146354c81bf0b5ad9419be1ca57f4c76",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "d627fffa1f588053360b32e31bb5bc3e5fa3312c4c32aaa0935d255672e30a65",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.3225086569339819,
+          "horizontal_energy_j": 0.09168885186126652,
+          "speed_m_s": 0.4282262296059561,
+          "tilt_deg": 11.920497072732312,
+          "time_s": 40.9
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 40.95,
+          "samples": 1391,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 40.95,
+          "blockers_at_disarm": [
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 1
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.3279680209784131,
+          "horizontal_energy_j": 0.08534333363220828,
+          "speed_m_s": 0.4131424297556674,
+          "tilt_deg": 10.635055873037036,
+          "time_s": 40.915
+        },
+        "final_support_error_m": 0.3738567145025875,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.14408475160598755,
+              -0.1137540191411972
+            ],
+            "distance_change_m": 0.1503248365336529,
+            "end_s": 40.865,
+            "energy_change_j": 0.09654596473314545,
+            "momentum_change_n_s": [
+              0.3722311109304428,
+              -0.17504911869764328
+            ],
+            "peak_speed_m_s": 0.4874417751088348,
+            "residual_impulse_n_s": [
+              -0.009389375098610132,
+              0.0014152307355090243
+            ],
+            "start_s": 34.0,
+            "state_samples": 1374,
+            "thrust_impulse_n_s": [
+              -4.156530262948937,
+              0.5432568719667755
+            ],
+            "wind_impulse_n_s": [
+              4.538150748977991,
+              -0.7197212213999279
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.02125471830368042,
+              -0.0033141672611236572
+            ],
+            "distance_change_m": 0.021401675779761764,
+            "end_s": 40.915,
+            "energy_change_j": -0.019833517318825183,
+            "momentum_change_n_s": [
+              -0.04500815272331238,
+              0.0066916123032569885
+            ],
+            "peak_speed_m_s": 0.45864332754556336,
+            "residual_impulse_n_s": [
+              -0.020340413055174672,
+              0.002606527835624873
+            ],
+            "start_s": 40.865,
+            "state_samples": 11,
+            "thrust_impulse_n_s": [
+              -0.09573454625163447,
+              0.01657258143927434
+            ],
+            "wind_impulse_n_s": [
+              0.07106680658349676,
+              -0.012487496971642222
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.04533761739730835,
+              -0.00788646936416626
+            ],
+            "distance_change_m": 0.04588868636580934,
+            "end_s": 50.0,
+            "energy_change_j": -0.085343329813709,
+            "momentum_change_n_s": [
+              -0.40810692495142575,
+              0.06481438651826466
+            ],
+            "peak_speed_m_s": 0.4131424297556674,
+            "residual_impulse_n_s": [
+              -5.498367691191073,
+              1.1702461103047137
+            ],
+            "start_s": 40.915,
+            "state_samples": 1818,
+            "thrust_impulse_n_s": [
+              -0.046447600548700646,
+              0.0028954024239321273
+            ],
+            "wind_impulse_n_s": [
+              5.136708366788349,
+              -1.1083271262103813
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "5cec2a70de291b3c6d506b9d1d424598b5547e6a3c43a63c090ba105d4edb1b8",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "7698eefb182d49359bd7f160c4b4e81383ea7ae4cd0997a3ad85fc3b472689b2",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "failed",
+        "touchdown": {
+          "home_distance_m": 0.30656634519865134,
+          "horizontal_energy_j": 0.10517685095103346,
+          "speed_m_s": 0.45864332754556336,
+          "tilt_deg": 11.325184784404062,
+          "time_s": 40.865
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 40.915,
+          "samples": 1384,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 40.915,
+          "blockers_at_disarm": [
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 1
+      },
+      "id": "additional-p1-s503"
+    },
+    {
+      "baseline": {
+        "disarm": {
+          "home_distance_m": 0.10791263775992642,
+          "horizontal_energy_j": 0.03922077307280309,
+          "speed_m_s": 0.2800741797195989,
+          "tilt_deg": 3.091368078613643,
+          "time_s": 44.14
+        },
+        "final_support_error_m": 0.10132478586343675,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.3066835179924965,
+              -0.1413172110915184
+            ],
+            "distance_change_m": -0.1266533519720908,
+            "end_s": 44.08,
+            "energy_change_j": 0.017959554754372054,
+            "momentum_change_n_s": [
+              0.40047089755535126,
+              0.026028722524642944
+            ],
+            "peak_speed_m_s": 0.4369393832473642,
+            "residual_impulse_n_s": [
+              -0.009339748628460223,
+              0.0009638084610151632
+            ],
+            "start_s": 34.0,
+            "state_samples": 2017,
+            "thrust_impulse_n_s": [
+              -5.174219822860733,
+              1.9993442430512818
+            ],
+            "wind_impulse_n_s": [
+              5.584030469044544,
+              -1.974279328987654
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.015910308808088303,
+              -0.0015717148780822754
+            ],
+            "distance_change_m": -0.0074932387802647965,
+            "end_s": 44.14,
+            "energy_change_j": 0.00811863387396261,
+            "momentum_change_n_s": [
+              0.03104601800441742,
+              0.002032838761806488
+            ],
+            "peak_speed_m_s": 0.2800741797195989,
+            "residual_impulse_n_s": [
+              -0.005892246160617654,
+              0.00045488595266065585
+            ],
+            "start_s": 44.08,
+            "state_samples": 13,
+            "thrust_impulse_n_s": [
+              -0.024467510128195626,
+              0.02593031486090594
+            ],
+            "wind_impulse_n_s": [
+              0.0614057742932307,
+              -0.024352362051760106
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.021712683141231537,
+              -0.0025638192892074585
+            ],
+            "distance_change_m": -0.006587883704086042,
+            "end_s": 50.0,
+            "energy_change_j": -0.039220772895649306,
+            "momentum_change_n_s": [
+              -0.2788293081757729,
+              0.026453858452441636
+            ],
+            "peak_speed_m_s": 0.29141103653238754,
+            "residual_impulse_n_s": [
+              -3.53086602722527,
+              0.9001579657205406
+            ],
+            "start_s": 44.14,
+            "state_samples": 1173,
+            "thrust_impulse_n_s": [
+              -0.008752538501529482,
+              0.0070893046550933765
+            ],
+            "wind_impulse_n_s": [
+              3.2607892575510267,
+              -0.8807934119231924
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "c8d4160d27fc473339bbf261d08a647719d207e7e18c8c6697a16a81c97841dd",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "7bec159ab392600015ea437ce25274671be2275797aad240491d481e34d8d928",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.11540587654019122,
+          "horizontal_energy_j": 0.03110213919884048,
+          "speed_m_s": 0.24940785552520386,
+          "tilt_deg": 3.838952409207916,
+          "time_s": 44.08
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 44.14,
+          "samples": 2029,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 44.14,
+          "blockers_at_disarm": [
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "candidate": {
+        "disarm": {
+          "home_distance_m": 0.11042626931688852,
+          "horizontal_energy_j": 0.037242738660461266,
+          "speed_m_s": 0.27292027649282957,
+          "tilt_deg": 3.0238429852880753,
+          "time_s": 44.12
+        },
+        "final_support_error_m": 0.1031165826870843,
+        "phases": {
+          "approach": {
+            "complete": true,
+            "displacement_xy_m": [
+              -0.3117310404777527,
+              -0.14067329466342926
+            ],
+            "distance_change_m": -0.12404693781427897,
+            "end_s": 44.06,
+            "energy_change_j": 0.014585996825969845,
+            "momentum_change_n_s": [
+              0.3861103504896164,
+              0.02329109236598015
+            ],
+            "peak_speed_m_s": 0.43694726212993185,
+            "residual_impulse_n_s": [
+              -0.008718373155891036,
+              0.0010179091936730234
+            ],
+            "start_s": 34.0,
+            "state_samples": 2013,
+            "thrust_impulse_n_s": [
+              -5.165666337277772,
+              1.989141532243898
+            ],
+            "wind_impulse_n_s": [
+              5.560495060923278,
+              -1.9668683490715908
+            ]
+          },
+          "contact_to_disarm": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.015239834785461426,
+              -0.0016917437314987183
+            ],
+            "distance_change_m": -0.00759143862940119,
+            "end_s": 44.12,
+            "energy_change_j": 0.009514052888942047,
+            "momentum_change_n_s": [
+              0.03814791142940521,
+              0.004041086882352829
+            ],
+            "peak_speed_m_s": 0.27292027649282957,
+            "residual_impulse_n_s": [
+              -0.005414296445498512,
+              0.00047582137200621535
+            ],
+            "start_s": 44.06,
+            "state_samples": 13,
+            "thrust_impulse_n_s": [
+              -0.022905808824012733,
+              0.02641255017633804
+            ],
+            "wind_impulse_n_s": [
+              0.06646801669891646,
+              -0.022847284665991428
+            ]
+          },
+          "disarmed": {
+            "complete": true,
+            "displacement_xy_m": [
+              0.021085258573293686,
+              -0.0026709213852882385
+            ],
+            "distance_change_m": -0.007309704622249752,
+            "end_s": 50.0,
+            "energy_change_j": -0.03724273848303733,
+            "momentum_change_n_s": [
+              -0.27157038232689956,
+              0.027184422746358905
+            ],
+            "peak_speed_m_s": 0.28622448858010835,
+            "residual_impulse_n_s": [
+              -3.5447879559339026,
+              0.90989230695949
+            ],
+            "start_s": 44.12,
+            "state_samples": 1177,
+            "thrust_impulse_n_s": [
+              -0.008022907927436531,
+              0.0074518593246505355
+            ],
+            "wind_impulse_n_s": [
+              3.2812404815344394,
+              -0.8901597435377816
+            ]
+          }
+        },
+        "provenance": {
+          "config_sha256": "ac3b00f5eea0f2e963dcebdc0eba2147e02edb14894a817446ed4b42177e0dbb",
+          "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+          "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+          "samples_sha256": "d0be49d47eba50b0938707645878d4a736803db8bf88448ea5e8757250ccb64c",
+          "source_commit": "b75bcc85474626e60beee3f6a83b6f0e27874b40",
+          "source_dirty": false,
+          "source_tree_sha256": "ee1f83b3e9e3809e5654a29c452d05ad7666537679e29402de3cef9e1d2db32e",
+          "versions": {
+            "isaaclab": "17.0.2",
+            "isaacsim": "6.1.0.0",
+            "torch": "2.11.0+cu128"
+          }
+        },
+        "status": "passed",
+        "touchdown": {
+          "home_distance_m": 0.11801770794628971,
+          "horizontal_energy_j": 0.02772868577151922,
+          "speed_m_s": 0.2354938885471095,
+          "tilt_deg": 3.7701927340209416,
+          "time_s": 44.06
+        },
+        "readiness": {
+          "first_qualifying_s": null,
+          "evaluated_through_s": 44.12,
+          "samples": 2025,
+          "max_dwell_s": 0,
+          "actual_disarm_s": 44.12,
+          "blockers_at_disarm": [
+            "speed",
+            "tilt",
+            "dwell"
+          ],
+          "interpretation": "Observed predicate only, through actual disarm. No alternate trajectory or acceptance claim."
+        },
+        "contact_episodes": 2
+      },
+      "id": "additional-p1-s607"
+    }
+  ],
+  "demo_index_sha256": "1c732be69652cad58349670729278cbb7b2426eaac0591c88dea7c016e82fe28",
+  "interpretation": "Descriptive retained-flight analysis; no controller change or new acceptance result.",
+  "kind": "landing_contact_analysis",
+  "new_flights": 0,
+  "payload_bytes": 151740594,
+  "retained_flights": 24,
+  "schema_version": 1,
+  "analysis_baseline_commit": "3d9ed48f706509cc1cc896b7f5aeea0535b879a1",
+  "analyzed_on": "2026-10-06",
+  "retained_source_samples": 240024,
+  "landing_rows": 76824,
+  "phase_budgets": 72,
+  "readiness_bounds": {
+    "position_m": 0.35,
+    "speed_m_s": 0.2,
+    "tilt_deg": 3,
+    "dwell_s": 0.05
+  },
+  "validation": {
+    "independent_raw_rows": 76824,
+    "independent_phase_budgets": 72,
+    "independent_readiness_flights": 24,
+    "browser_contract_pairs": 12,
+    "actual_browser_3d_pairs": 12,
+    "actual_browser_errors": 0,
+    "desktop_3d_contained": true,
+    "mobile_320px_fits": true,
+    "review_download_rows": 6402,
+    "cpu_cases": 150,
+    "cpu_passed": 149,
+    "cpu_skipped": 1,
+    "frontend_passed": 40,
+    "native_passed": 2,
+    "legacy_viewer_passed": 3,
+    "browser_cases": 47,
+    "browser_passed": 44,
+    "browser_skipped": 3
+  }
+}

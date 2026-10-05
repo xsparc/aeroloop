@@ -33,8 +33,8 @@ Public deployment and merges are separate decisions.
 | AL-021 | Axis-specific feedback availability | Verified: 24 fresh flights; horizontal channel improves mission completion while pair/recovery failures remain |
 | AL-022 | Horizontal noise and delay sensitivity | Verified: 24 fresh flights; 23/24 missions and exact ideal continuity; all qualities retain pair/recovery failures |
 | AL-023 | Ten-feature flight diagnosis workspace | Verified locally: 24 retained flights, 240,024 full-rate samples, phase-separated landing analysis and working paired 3D; no new flights |
-
 | AL-024 | Vertical disturbance decay and ten-feature descent comparison | Verified experiment: 18 fresh flights, six retained baselines, 12 paired demo cases; candidate 8/12 missions, 5/6 outage pairs, 9/12 recovery windows; remains opt-in |
+| AL-025 | Ten-feature landing contact lab | Verified retained-flight analysis: 24 flights, 76,824 landing rows, 72 phase budgets; paired 3D and offline readiness, original failures unchanged |
 
 ## Next gate
 
@@ -194,3 +194,25 @@ criteria before proposing another bounded controller or supervisor change.
 Retain the seed-1 prediction regression, use pre-contact metrics separately
 from post-disarm drift, and predeclare further seeds before measurements.
 Keep the candidate opt-in, all original limits unchanged, and AL-010 open.
+
+AL-025 delivers the [landing contact lab](../landing-contact-lab.md) under
+[ADR 022](../architecture/decisions/022-landing-contact-lab.md). Its
+[validation](../evidence/landing-contact-validation.md) reconstructs all 24
+retained flights and independently checks horizontal landing rows, interval
+bookkeeping, 72 phase budgets and offline readiness.
+
+No-outage seeds 401/503 are already 0.574/0.354 m from home at first contact.
+Distance increases another 0.058/0.031 m before disarm and 0.029/0.044 m after it.
+At disarm they are tilted 13.09/12.54 degrees. These observations prioritize
+pre-contact horizontal tracking and contact orientation; changing disarm alone
+cannot be assumed to repair the approach. Only 5/24 recorded flights satisfy
+the default exploratory readiness predicate before actual disarm. That is an
+offline diagnostic count, not a new success rate or a tested alternative policy.
+
+Next: use the full-rate X/Y controller terms and force budget to identify when
+the gust overcomes corrective acceleration before contact. Predeclare one bounded
+approach-control or trajectory hypothesis and another seed cohort before a new
+PhysX experiment. Evaluate original mission, no-outage, pair and recovery gates,
+including seed-1 prediction and seeds 401/503. If contact friction is material to
+the hypothesis, capture its tangential impulse explicitly instead of treating
+the current residual as a measurement. Keep AL-010 open and defaults unchanged.

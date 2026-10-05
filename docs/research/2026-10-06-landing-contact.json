@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "3d9ed48f706509cc1cc896b7f5aeea0535b879a1",
+  "scanned_at": "2026-10-06",
+  "coverage": ["PhysX force and contact semantics", "Landing-state motion and dwell", "Retained horizontal landing failures"],
+  "findings": [{
+    "finding": "PhysX applies force and contact constraints during a simulation interval. Separating the preceding applied-force impulse from measured momentum change can expose an unexplained residual, but normal-force telemetry alone cannot identify tangential friction. Motion and dwell are useful separate landing diagnostics.",
+    "source_event_date": null,
+    "citations": ["https://nvidia-omniverse.github.io/PhysX/physx/5.4.0/docs/RigidBodyDynamics.html", "https://docs.px4.io/main/en/advanced_config/land_detector"],
+    "confidence": "high for interval bookkeeping; limited for causal attribution",
+    "relevance": "Additional no-outage seeds 401 and 503 violate final support position and are already displaced when the original supervisor disarms",
+    "direction_alignment": "Inspect horizontal control and contact before proposing another controller change",
+    "opportunity_or_risk": "A residual can be mistaken for a friction measurement and an offline predicate for an alternate simulated landing; both must remain explicitly descriptive",
+    "engineering_cost": "Ten related landing-analysis features, retained-recording reconstruction and browser validation; no simulation runtime change",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-025 adds the requested landing contact lab over the full retained AL-024 matrix",
+    "verification_needed": "Independent interval arithmetic, phase boundaries, interrupted contacts, strict data contracts, original failure preservation and actual paired 3D demonstration"
+  }],
+  "overall_recommendation": "Use retained physics to locate motion before contact, between contact and disarm, and after disarm. Require a separately predeclared physics experiment for any later supervisor change.",
+  "evidence_gaps": ["No separately recorded tangential contact impulse", "No causal identification from passive replay", "No counterfactual trajectory from offline readiness", "Ideal attitude/contact supervision and AL-010 yaw refinement remain limitations"]
+}
