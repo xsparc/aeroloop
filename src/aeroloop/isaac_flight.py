@@ -29,6 +29,8 @@ def flight(output: Path, launcher_args):
     monitor, paced = launcher_args.monitor, launcher_args.realtime
     profile = launcher_args.observation_profile
     predictive = getattr(launcher_args, "predictive_feedback", False)
+    decaying = getattr(launcher_args, "vertical_decay", False)
+    from .vertical_decay import VerticalDecay, configuration as decay_configuration
     guarded = getattr(launcher_args, "landing_guard", False)
     fresh_axis = getattr(launcher_args, "fresh_axis", None)
     channel_quality = getattr(launcher_args, "channel_quality", None)
@@ -75,7 +77,7 @@ def flight(output: Path, launcher_args):
                 route = mission.Mission() if contact_mission else None
                 tracking = wind_mission.TrackingController() if scenario == wind_mission.SCENARIO else None
                 previous_scale = 1.
-                predictor = Predictor() if predictive else None
+                predictor = VerticalDecay() if decaying else Predictor() if predictive else None
                 guard = LandingGuard() if guarded else None
                 from .channel_quality import QualityCaptures, configuration as quality_configuration
                 axes = QualityCaptures(channel_quality, seed) if channel_quality else AxisCaptures(fresh_axis) if fresh_axis else None
@@ -162,6 +164,8 @@ def flight(output: Path, launcher_args):
                             samples[-1]["landing_guard"] = guard_sample
                         if predictor:
                             samples[-1]["feedback"] = prediction_sample
+                            if decaying:
+                                samples[-1]["vertical_decay"] = predictor.telemetry
                         if observations:
                             samples[-1]["observation"] = observation_sample
                         if route:
@@ -226,7 +230,7 @@ def flight(output: Path, launcher_args):
                 if guard:
                     config["landing_guard_model"] = guard_configuration()
                 if predictor:
-                    config["feedback_model"] = predictor_configuration()
+                    config["feedback_model"] = decay_configuration() if decaying else predictor_configuration()
                 if observations:
                     config["observation_model"] = observations.config
                 if route:

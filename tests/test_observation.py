@@ -16,12 +16,13 @@ from aeroloop.rotors import RotorModel
 from aeroloop.simulation import encoded, metrics, record, sha256
 
 
-def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False, fresh_axis=None, channel_quality=None):
+def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False, fresh_axis=None, channel_quality=None, decaying=False):
     # Synthetic failed protocol fixture; deliberately no physical integration.
     state, route, tracking = mission.initial_state(seed), mission.Mission(), wind_mission.TrackingController()
     wind, rotors, observations = wind_mission.wind_model(), RotorModel(), make_observations(profile,seed)
     from aeroloop.predictor import Predictor, configuration as predictor_configuration
-    predictor = Predictor() if predictive else None
+    from aeroloop.vertical_decay import VerticalDecay, configuration as decay_configuration
+    predictor = VerticalDecay() if decaying else Predictor() if predictive else None
     from aeroloop.landing_guard import LandingGuard, configuration as guard_configuration
     guard = LandingGuard() if guarded else None
     from aeroloop.axis_feedback import AxisCaptures, combine, configuration as axis_configuration
@@ -53,6 +54,7 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
             moment_nm=moment,allocation_scale=scale,mission_phase=phase,contact_normal_force_n=[0]*3,
             support_clearance_m=bottom,observation=observed,**control))
         if predictor:samples[-1]["feedback"]=predicted
+        if decaying:samples[-1]["vertical_decay"]=predictor.telemetry
         if guard:samples[-1]["landing_guard"]=g
         if axes:samples[-1].update(axis_observation=captured,axis_feedback=applied_feedback)
     config=dict(model=asdict(Model()),initial_state=asdict(state),dt_s=.005,duration_s=50.,scenario=wind_mission.SCENARIO,
@@ -61,7 +63,7 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
         actuator=asdict(rotors),simulator_versions={"isaacsim":"6.1","isaaclab":"17.0","torch":"2.11"},
         physics_options={"gyroscopic_forces":True},mission=wind_mission.contact_configuration(),wind=asdict(wind),
         trajectory_control=wind_mission.control_configuration(),observation_model=configuration(profile))
-    if predictor:config["feedback_model"]=predictor_configuration()
+    if predictor:config["feedback_model"]=decay_configuration() if decaying else predictor_configuration()
     if guard:config["landing_guard_model"]=guard_configuration()
     if axes:config["axis_feedback_model"]=quality_configuration(channel_quality) if channel_quality else axis_configuration(fresh_axis)
     return dict(experiment="isaac-quadrotor",config=config,samples=samples,events=wind_mission.events(route.events,samples[-1]["time_s"]),

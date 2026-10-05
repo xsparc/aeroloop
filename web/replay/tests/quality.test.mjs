@@ -26,3 +26,15 @@ test('live v7 distinguishes noise and delay from ideal availability',()=>{
     const bad=structuredClone(live);mutate(bad);assert.throws(()=>validateLive(bad));
   }
 });
+
+test('live v8 validates decay arithmetic and rejects older schema aliases',()=>{
+  const {index,documents}=fixture(),s=JSON.parse(documents[index.cases[6].file]).candidate.samples.find(s=>s.time_s===41);
+  const live=liveFixture(8200);Object.assign(live,{schema_version:8,physics_dt_s:.005,observation_profile:s.observation.profile});
+  for(const k of ['observation','feedback','axis_observation','axis_feedback'])live.sample[k]=s[k];
+  const scale=Math.exp(-Math.max(0,s.observation.age_s-.015)/.2);
+  live.sample.vertical_decay={kind:'vertical-disturbance-decay-v1',scale,anchor_z_m_s2:0,effective_z_m_s2:0};
+  live.sample.feedback.disturbance_acceleration_m_s2[2]=0;validateLive(live);
+  for(const change of [v=>v.schema_version=7,v=>v.sample.vertical_decay.scale=1,v=>v.sample.vertical_decay.anchor_z_m_s2=1,v=>v.sample.vertical_decay.host='private']){
+    const bad=structuredClone(live);change(bad);assert.throws(()=>validateLive(bad));
+  }
+});

@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--solver-iterations", type=int, choices=(1, 4), default=4)
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
     parser.add_argument("--predictive-feedback", action="store_true")
+    parser.add_argument("--vertical-decay", action="store_true")
     parser.add_argument("--fresh-axis", choices=("vertical", "horizontal"))
     parser.add_argument("--channel-quality", choices=("ideal", "noise", "delay", "noise-delay"))
     parser.add_argument("--landing-guard", action="store_true")
@@ -39,6 +40,8 @@ def main():
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.vertical_decay and (not args.predictive_feedback or args.channel_quality != "noise-delay"):
+        parser.error("Vertical decay requires predictive feedback and noise-delay horizontal quality.")
     if args.channel_quality and args.fresh_axis != "horizontal":
         parser.error("Channel quality requires --fresh-axis horizontal.")
     if args.fresh_axis and (not args.predictive_feedback or args.landing_guard or args.observation_profile not in ("sample-hold", "hold-dropout-2000ms")):
@@ -76,6 +79,8 @@ def main():
             options += ["--observation-profile", args.observation_profile]
         if args.predictive_feedback:
             options += ["--predictive-feedback"]
+        if args.vertical_decay:
+            options += ["--vertical-decay"]
         if args.fresh_axis:
             options += ["--fresh-axis", args.fresh_axis]
         if args.channel_quality:
@@ -97,6 +102,7 @@ def main():
         if any((config := load_json(args.output / row["run_id"] / "config.json"))["physics_options"].get("physics_dt_s", .005) != args.physics_dt
                or config.get("observation_model", {}).get("profile") != args.observation_profile
                or ("feedback_model" in config) != args.predictive_feedback
+               or (config.get("feedback_model", {}).get("kind") == "vertical-disturbance-decay-v1") != args.vertical_decay
                or config.get("axis_feedback_model", {}).get("available_axes") != args.fresh_axis
                or config.get("axis_feedback_model", {}).get("quality") != args.channel_quality
                or ("landing_guard_model" in config) != args.landing_guard
