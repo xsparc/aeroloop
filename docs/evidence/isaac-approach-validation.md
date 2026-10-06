@@ -87,3 +87,19 @@ is retained per flight in the report; this is soft real-time execution.
 Small fixed cohorts, synthetic wind/noise/delay, ideal attitude/rates/contact
 supervision and simplified rotor/contact models limit interpretation. AL-010 yaw
 refinement remains open. Defaults and physical-flight scope are unchanged.
+
+## Clean-checkout test imports
+
+The PR 27 and merge CI runs exposed missing checkout import setup in the two
+new approach test modules. The earlier local CPU run inherited `PYTHONPATH`,
+which masked the problem. With that variable unset, discovery reproduced both
+`ModuleNotFoundError` failures before any approach test could run. Both modules
+now locate `src` relative to their own file, following the existing test-suite
+convention and removing dependence on discovery order or shell configuration.
+This repair changes test imports only; the frozen flight implementation and
+recorded physics evidence above are unchanged.
+
+Revalidation with `PYTHONPATH` unset: the complete CPU command passed 154 tests
+with the same Windows symlink-permission skip, and isolated discovery of the
+approach study module passed. Public-source, dependency-lock and dated project
+evidence checks passed; the generic identity mismatch remains as documented.
