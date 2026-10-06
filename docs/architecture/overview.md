@@ -180,3 +180,11 @@ v8 validates anchor, scale and effective acceleration. `decay_study` binds two
 cohorts and both modes, and exports bounded full-rate scalar traces plus separate
 3D poses. The descent browser verifies hashes, numeric identities, fixed gates,
 contact dwell and capture ages. See [decision 021](decisions/021-vertical-disturbance-decay.md).
+
+AL-026 adds an opt-in horizontal gain schedule and an eighteen-pair comparison
+workspace under [ADR 023](decisions/023-approach-gain-study.md). Recording v13
+reconstructs effective gains and commands; live v9 validates the same schedule.
+The study binds fixed cohorts, runtime and pre-ramp continuity, then exports
+42-column landing traces plus interpolated-display poses. Browser validation
+checks derived controller terms, interval integrals, contact/disarm state,
+original gates and evidence identities. See [operator guidance](../approach-gain-study.md).

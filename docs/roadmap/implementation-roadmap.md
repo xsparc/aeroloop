@@ -216,3 +216,21 @@ PhysX experiment. Evaluate original mission, no-outage, pair and recovery gates,
 including seed-1 prediction and seeds 401/503. If contact friction is material to
 the hypothesis, capture its tangential impulse explicitly instead of treating
 the current residual as a measurement. Keep AL-010 open and defaults unchanged.
+
+AL-026 evaluates [scheduled horizontal approach gains](../approach-gain-study.md)
+under [ADR 023](../architecture/decisions/023-approach-gain-study.md). The frozen
+protocol compares regression, known stress and predeclared additional seeds,
+retains failed trials and preserves original limits. Ten features cover the
+controller schedule, live gain telemetry, paired 3D, gate changes, squared-error
+and demand curves, clipping/allocation inspection, gust chapters, cohort filters
+and evidence-bound reviews. The
+[measured matrix](../evidence/isaac-approach-validation.md) improves mission
+passes from 12/18 to 15/18, with outage pairs 7/9 → 8/9 and recovery
+windows 14/18 → 15/18. This is mixed evidence; the candidate stays opt-in
+and AL-010 remains open.
+
+Next: separate airborne tracking from contact-to-disarm motion on seeds 401 and
+709, which still exceed final support position. Use the new full-rate gain,
+demand and outcome evidence to predeclare the next bounded hypothesis and
+additional seeds; preserve unresolved pair/recovery failures and all limits.
+Do not promote this schedule on mission count alone.

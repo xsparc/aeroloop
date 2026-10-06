@@ -31,6 +31,7 @@ def main():
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
     parser.add_argument("--predictive-feedback", action="store_true")
     parser.add_argument("--vertical-decay", action="store_true")
+    parser.add_argument("--approach-gains", action="store_true")
     parser.add_argument("--fresh-axis", choices=("vertical", "horizontal"))
     parser.add_argument("--channel-quality", choices=("ideal", "noise", "delay", "noise-delay"))
     parser.add_argument("--landing-guard", action="store_true")
@@ -40,6 +41,8 @@ def main():
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.approach_gains and not args.vertical_decay:
+        parser.error("Approach gains require --vertical-decay and its fixed horizontal quality.")
     if args.vertical_decay and (not args.predictive_feedback or args.channel_quality != "noise-delay"):
         parser.error("Vertical decay requires predictive feedback and noise-delay horizontal quality.")
     if args.channel_quality and args.fresh_axis != "horizontal":
@@ -79,6 +82,8 @@ def main():
             options += ["--observation-profile", args.observation_profile]
         if args.predictive_feedback:
             options += ["--predictive-feedback"]
+        if args.approach_gains:
+            options += ["--approach-gains"]
         if args.vertical_decay:
             options += ["--vertical-decay"]
         if args.fresh_axis:
@@ -103,6 +108,7 @@ def main():
                or config.get("observation_model", {}).get("profile") != args.observation_profile
                or ("feedback_model" in config) != args.predictive_feedback
                or (config.get("feedback_model", {}).get("kind") == "vertical-disturbance-decay-v1") != args.vertical_decay
+               or (config.get("trajectory_control", {}).get("kind") == "approach-gains-v1") != args.approach_gains
                or config.get("axis_feedback_model", {}).get("available_axes") != args.fresh_axis
                or config.get("axis_feedback_model", {}).get("quality") != args.channel_quality
                or ("landing_guard_model" in config) != args.landing_guard

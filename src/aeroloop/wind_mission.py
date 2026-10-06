@@ -41,10 +41,13 @@ def reference_derivatives(t):
 
 
 class TrackingController:
-    def __init__(self):
+    def __init__(self, approach=False):
         self.integral = (0., 0., 0.)
+        self.approach = approach
 
     def step(self, t, state, target, armed, dt=.005, allocation_saturated=False, reference=None):
+        from .approach_control import parameters
+        gains = parameters(t, armed) if self.approach else (0., 2.5, 2.8)
         velocity, feedforward = (reference if reference is not None else reference_derivatives(t)) if armed else ((0.,)*3, (0.,)*3)
         if not armed:
             self.integral = (0., 0., 0.)
@@ -52,8 +55,9 @@ class TrackingController:
         else:
             cfg = control_configuration()
             error = tuple(p-x for p, x in zip(target, state.position))
-            base = tuple(a + cfg["position_kp"]*e + cfg["velocity_kd"]*(v-actual)
-                         for a, e, v, actual in zip(feedforward, error, velocity, state.velocity))
+            base = tuple(a + (gains[1] if axis<2 else cfg["position_kp"])*e
+                         + (gains[2] if axis<2 else cfg["velocity_kd"])*(v-actual)
+                         for axis, (a, e, v, actual) in enumerate(zip(feedforward, error, velocity, state.velocity)))
             acceleration_limit = cfg["acceleration_limit_m_s2"]
             integral = []
             for i, (old, e, b) in enumerate(zip(self.integral, error, base)):
@@ -65,7 +69,8 @@ class TrackingController:
             acceleration = tuple(max(-acceleration_limit, min(acceleration_limit, b+i)) + (Model().gravity if axis == 2 else 0.)
                                  for axis, (b, i) in enumerate(zip(base, self.integral)))
             thrust, rate = acceleration_wrench(state, acceleration, Model())
-        return thrust, rate, {"target_velocity_m_s": velocity, "target_acceleration_m_s2": feedforward,
+        return thrust, rate, {**({"approach_control": gains} if self.approach else {}),
+                              "target_velocity_m_s": velocity, "target_acceleration_m_s2": feedforward,
                               "integral_acceleration_m_s2": self.integral}
 
 

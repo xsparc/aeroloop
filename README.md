@@ -157,3 +157,8 @@ simulate another controller or change acceptance.
 The [descent comparison workspace](docs/descent-comparison.md) tests an opt-in
 vertical disturbance predictor with ten related physics and evaluation features.
 The candidate remains experimental; original mission and recovery gates apply.
+
+The [approach gain study](docs/approach-gain-study.md) adds an opt-in horizontal
+landing-control schedule and ten related monitoring/evaluation features. Paired
+3D, tracking/demand curves and original-gate scorecards expose tradeoffs across
+regression, known stress and predeclared additional seed cohorts.

@@ -29,6 +29,8 @@ def flight(output: Path, launcher_args):
     monitor, paced = launcher_args.monitor, launcher_args.realtime
     profile = launcher_args.observation_profile
     predictive = getattr(launcher_args, "predictive_feedback", False)
+    approaching = getattr(launcher_args, "approach_gains", False)
+    from .approach_control import configuration as approach_configuration
     decaying = getattr(launcher_args, "vertical_decay", False)
     from .vertical_decay import VerticalDecay, configuration as decay_configuration
     guarded = getattr(launcher_args, "landing_guard", False)
@@ -75,7 +77,7 @@ def flight(output: Path, launcher_args):
             for seed in launcher_args.seeds:
                 duration = mission.DURATION if contact_mission else 35.
                 route = mission.Mission() if contact_mission else None
-                tracking = wind_mission.TrackingController() if scenario == wind_mission.SCENARIO else None
+                tracking = wind_mission.TrackingController(approach=approaching) if scenario == wind_mission.SCENARIO else None
                 previous_scale = 1.
                 predictor = VerticalDecay() if decaying else Predictor() if predictive else None
                 guard = LandingGuard() if guarded else None
@@ -241,7 +243,7 @@ def flight(output: Path, launcher_args):
                 if wind_model:
                     config["wind"] = asdict(wind_model)
                     if tracking:
-                        config["trajectory_control"] = wind_mission.control_configuration()
+                        config["trajectory_control"] = approach_configuration() if approaching else wind_mission.control_configuration()
                     else:
                         config["horizontal_position_hold"] = scenario == "turbulence-hold"
                 if provenance() != source:
