@@ -16,9 +16,9 @@ from aeroloop.rotors import RotorModel
 from aeroloop.simulation import encoded, metrics, record, sha256
 
 
-def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False, fresh_axis=None, channel_quality=None, decaying=False):
+def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded=False, fresh_axis=None, channel_quality=None, decaying=False, approaching=False):
     # Synthetic failed protocol fixture; deliberately no physical integration.
-    state, route, tracking = mission.initial_state(seed), mission.Mission(), wind_mission.TrackingController()
+    state, route, tracking = mission.initial_state(seed), mission.Mission(), wind_mission.TrackingController(approach=approaching)
     wind, rotors, observations = wind_mission.wind_model(), RotorModel(), make_observations(profile,seed)
     from aeroloop.predictor import Predictor, configuration as predictor_configuration
     from aeroloop.vertical_decay import VerticalDecay, configuration as decay_configuration
@@ -63,6 +63,9 @@ def fixture(profile="noise-delay", seed=73, predictive=False, count=410, guarded
         actuator=asdict(rotors),simulator_versions={"isaacsim":"6.1","isaaclab":"17.0","torch":"2.11"},
         physics_options={"gyroscopic_forces":True},mission=wind_mission.contact_configuration(),wind=asdict(wind),
         trajectory_control=wind_mission.control_configuration(),observation_model=configuration(profile))
+    if approaching:
+        from aeroloop.approach_control import configuration as approach_configuration
+        config["trajectory_control"]=approach_configuration()
     if predictor:config["feedback_model"]=decay_configuration() if decaying else predictor_configuration()
     if guard:config["landing_guard_model"]=guard_configuration()
     if axes:config["axis_feedback_model"]=quality_configuration(channel_quality) if channel_quality else axis_configuration(fresh_axis)

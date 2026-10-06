@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "2ddf9115eea172b842546a3a9317f0109d0dfed2",
+  "scanned_at": "2026-10-06",
+  "coverage": [
+    "Gain tuning response tradeoffs",
+    "Retained pre-contact horizontal drift"
+  ],
+  "findings": [
+    {
+      "finding": "Gain changes require observation of tracking, overshoot and noise response. This motivates a fixed simulation experiment, not adoption of numerical gains from another controller.",
+      "source_event_date": null,
+      "citations": [
+        "https://docs.px4.io/main/en/config_mc/pid_tuning_guide_multicopter"
+      ],
+      "confidence": "High for the need to measure tradeoffs; numeric gain hypothesis unvalidated",
+      "relevance": "AL-025 found horizontal displacement already present at first contact on stress seeds 401 and 503",
+      "direction_alignment": "Evaluate horizontal approach control with unchanged physics and original gates",
+      "opportunity_or_risk": "Higher gains can trade lower tracking error for greater effort or regressions",
+      "engineering_cost": "Opt-in schedule, strict recording/live contracts, 24 new final flights, ten-feature demo",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-026 predeclares scheduled approach gains and paired evaluation",
+      "verification_needed": "Fixed source and seed cohorts, pre-ramp identity, every original gate, live and 3D demonstration"
+    }
+  ],
+  "overall_recommendation": "Measure one frozen horizontal gain schedule across regression, known stress and predeclared additional seeds; preserve default and failed trials.",
+  "evidence_gaps": [
+    "No numeric gain validation before the experiment",
+    "Small synthetic cohorts",
+    "Ideal attitude/contact supervision and open AL-010 yaw refinement"
+  ]
+}

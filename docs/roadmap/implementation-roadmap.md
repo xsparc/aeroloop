@@ -216,3 +216,12 @@ PhysX experiment. Evaluate original mission, no-outage, pair and recovery gates,
 including seed-1 prediction and seeds 401/503. If contact friction is material to
 the hypothesis, capture its tangential impulse explicitly instead of treating
 the current residual as a measurement. Keep AL-010 open and defaults unchanged.
+
+AL-026 evaluates [scheduled horizontal approach gains](../approach-gain-study.md)
+under [ADR 023](../architecture/decisions/023-approach-gain-study.md). The frozen
+protocol compares regression, known stress and predeclared additional seeds,
+retains failed trials and preserves original limits. Ten features cover the
+controller schedule, live gain telemetry, paired 3D, gate changes, squared-error
+and demand curves, clipping/allocation inspection, gust chapters, cohort filters
+and evidence-bound reviews. Measurement and validation are in progress; the
+candidate is not a default and AL-010 stays open.
