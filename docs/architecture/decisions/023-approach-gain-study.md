@@ -12,7 +12,7 @@ and comparison workspace:
 4. Original-gate change scorecards, including regressions and missing values.
 5. Cumulative horizontal squared tracking-error curves from 34 s.
 6. Cumulative squared horizontal acceleration-demand curves from 34 s.
-7. Axis clipping occupancy and allocation headroom inspection.
+7. Axis clipping occupancy and retained actuator-authority inspection.
 8. Gust-relative time and gain-ramp, gust, contact and disarm chapters.
 9. Cohort summaries and mission-failure/regression filters.
 10. Evidence-version-bound review links and numeric comparison export.

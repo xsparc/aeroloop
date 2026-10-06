@@ -223,5 +223,14 @@ protocol compares regression, known stress and predeclared additional seeds,
 retains failed trials and preserves original limits. Ten features cover the
 controller schedule, live gain telemetry, paired 3D, gate changes, squared-error
 and demand curves, clipping/allocation inspection, gust chapters, cohort filters
-and evidence-bound reviews. Measurement and validation are in progress; the
-candidate is not a default and AL-010 stays open.
+and evidence-bound reviews. The
+[measured matrix](../evidence/isaac-approach-validation.md) improves mission
+passes from 12/18 to 15/18, with outage pairs 7/9 → 8/9 and recovery
+windows 14/18 → 15/18. This is mixed evidence; the candidate stays opt-in
+and AL-010 remains open.
+
+Next: separate airborne tracking from contact-to-disarm motion on seeds 401 and
+709, which still exceed final support position. Use the new full-rate gain,
+demand and outcome evidence to predeclare the next bounded hypothesis and
+additional seeds; preserve unresolved pair/recovery failures and all limits.
+Do not promote this schedule on mission count alone.

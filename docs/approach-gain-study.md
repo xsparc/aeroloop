@@ -59,3 +59,7 @@ motor allocation saturates, not spare thrust capacity. Missing coverage remains
 explicit. Same-mode outage pair/recovery gates remain independent of descriptive
 cross-mode improvements. Ideal attitude and contact supervision, synthetic wind
 and channels, limited cohorts and open AL-010 yaw refinement bound interpretation.
+
+[Measured results](evidence/isaac-approach-validation.md): mission passes 12/18 →
+15/18, outage pairs 7/9 → 8/9, recovery windows 14/18 → 15/18.
+Every failure is retained. The candidate is experimental and remains opt-in.
