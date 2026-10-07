@@ -57,7 +57,7 @@ Report tests cover pinned hashes, corrupted files and output preservation.
 Browser tests cover four-flight playback, phase windows, stale-load rejection,
 seed comparison, corrupt/incomplete input, exports and renderer fallback.
 
-Frontend suite: 54/54 passed. Browser suite: 51 passed, three existing
+Frontend suite: 54/54 passed. Local browser suite: 51 passed, three existing
 fixture-dependent replay skips. The production build passed with the existing
 renderer-size/directive warnings. The complete CPU suite ran with `PYTHONPATH`
 unset: 154 passed and one existing Windows symlink-permission skip. Public-source,
@@ -65,6 +65,12 @@ dependency-lock and dated AeroLoop evidence-index checks passed. Generic
 OpenSteward static and dated strict checks retain only the known
 `project.identity` mismatch requiring the plugin's own name. AeroLoop's identity
 is preserved; that generic gate is not claimed green.
+
+The first hosted run exposed a narrow-layout overflow under Linux native control
+sizing. The response toolbar now stacks labels over their selects and explicitly
+allows controls to shrink within the panel. The narrow browser assertion checks
+viewport width and identifies overflowing controls after responsive layout settles.
+All four response browser cases passed locally after that correction.
 
 ## Limits
 

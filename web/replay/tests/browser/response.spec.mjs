@@ -17,7 +17,15 @@ test('nine-seed table uses common window and stale loads cannot replace selectio
   await page.getByRole('button',{name:'regression · seed 0',exact:true}).click();await page.getByRole('button',{name:'additional · seed 907',exact:true}).click();await expect(page.getByTestId('response-selected')).toContainText('907');await page.waitForTimeout(800);await expect(page.getByTestId('response-selected')).toContainText('907');
   await page.getByRole('button',{name:'Compare nine seeds',exact:true}).click();await expect(page.getByRole('table',{name:'Seed response comparison'}).locator('tbody tr')).toHaveCount(9);await page.getByLabel('Sort seed comparison',{exact:true}).selectOption('interaction');
   await page.getByLabel('Window end',{exact:true}).fill('44');await expect(page.getByRole('table',{name:'Seed response comparison'})).toHaveCount(0);
-  for(const width of [320,390]){await page.setViewportSize({width,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);}
+  for(const width of [320,390]){
+    await page.setViewportSize({width,height:844});
+    await expect.poll(()=>page.evaluate(()=>({
+      width:innerWidth,scroll:document.documentElement.scrollWidth,
+      overflow:[...document.querySelectorAll('main > *, label, select, input')]
+        .filter(e=>e.getBoundingClientRect().right>innerWidth+.5)
+        .map(e=>e.tagName+':'+e.className),
+    }))).toMatchObject({width,scroll:width,overflow:[]});
+  }
 });
 test('incomplete and corrupt evidence keep missing results explicit',async({page})=>{
   await routeFixture(page,{incomplete:true});await page.goto('/response.html');await expect(page.getByRole('alert')).toContainText('not fully recorded');await expect(page.getByRole('button',{name:'Play four flights ½×',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'All disarmed',exact:true})).toBeDisabled();
