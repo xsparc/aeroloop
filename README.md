@@ -162,3 +162,8 @@ The [approach gain study](docs/approach-gain-study.md) adds an opt-in horizontal
 landing-control schedule and ten related monitoring/evaluation features. Paired
 3D, tracking/demand curves and original-gate scorecards expose tradeoffs across
 regression, known stress and predeclared additional seed cohorts.
+
+The [landing response lab](docs/landing-response-lab.md) compares all four gain/outage
+combinations for each seed. Shared phase windows, work/energy accounting, radial
+motion and full-rate interval exports explain retained failures without changing
+the controller or original acceptance gates.

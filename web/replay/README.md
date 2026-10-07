@@ -124,3 +124,12 @@ and replay schemas remain supported. Physics failures stay visible in every view
 The [axis availability demo](../../docs/axis-availability.md) uses `axis.html`
 and an ignored `axis-config.json`. It shares bounded paired playback and adds
 fresh-channel selection with actual applied-feedback errors.
+
+## Landing response workspace
+
+`/response.html` reuses `approach-config.json` and its verified bundle to compare
+four flights per seed. It adds matched windows, gain/outage contrasts, work and
+acceleration accounting, radial diagnostics, a nine-seed comparison and full-rate
+review exports. See [operator guidance](../../docs/landing-response-lab.md).
+After `npm run build`, `node tools/response_report.mjs` from the repository root
+reproduces numeric reports from an explicitly pinned bundle.
