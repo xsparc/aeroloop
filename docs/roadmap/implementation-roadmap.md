@@ -234,3 +234,18 @@ Next: separate airborne tracking from contact-to-disarm motion on seeds 401 and
 demand and outcome evidence to predeclare the next bounded hypothesis and
 additional seeds; preserve unresolved pair/recovery failures and all limits.
 Do not promote this schedule on mission count alone.
+
+AL-027 delivers the [ten-feature landing response lab](../landing-response-lab.md)
+under [ADR 024](../architecture/decisions/024-landing-response-lab.md). It joins
+all 36 retained AL-026 flights by seed and separates gain effects from outage
+effects on identical recorded windows. [Independent interval validation](../evidence/landing-response-validation.md)
+preserves original outcomes and exposes phase duration, work residuals and
+acceleration mismatch. There is no new flight or controller acceptance claim.
+
+Next: inspect common pre-contact windows for seeds 401 and 709 alongside their
+contact-to-disarm motion, including seed 709's large descriptive outage
+interaction. Form a bounded trajectory/control or contact hypothesis using the
+original gates and fixed seeds, then predeclare fresh seeds before measurement.
+Measure tangential contact impulse if a friction hypothesis is proposed; the
+current work residual cannot identify friction. Preserve all unresolved pair
+and recovery failures, the opt-in schedule and open AL-010 yaw refinement.

@@ -188,3 +188,10 @@ The study binds fixed cohorts, runtime and pre-ramp continuity, then exports
 42-column landing traces plus interpolated-display poses. Browser validation
 checks derived controller terms, interval integrals, contact/disarm state,
 original gates and evidence identities. See [operator guidance](../approach-gain-study.md).
+
+AL-027 adds a four-flight response workspace over the existing AL-026 export.
+Its strict join binds each seed's two profiles and both gain modes. Browser and
+command-line reporting share pure interval analysis, with an independent numeric
+audit of all retained rows. Bounded same-origin loads, source/runtime identity
+checks and original gates remain authoritative. See [ADR 024](decisions/024-landing-response-lab.md)
+and the [response lab guide](../landing-response-lab.md).

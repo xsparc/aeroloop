@@ -1,0 +1,1422 @@
+{
+  "schema_version": 1,
+  "kind": "landing_response_validation",
+  "measured_flights": "AL-026 retained recordings",
+  "new_flights": 0,
+  "index_sha256": "e7f4214d26f3ec65d263278e9d5a3aae1aab4a1d37bc685f3a1de57ff9fb0b83",
+  "method": {
+    "version": 1,
+    "mass_kg": 1,
+    "dt_s": 0.005,
+    "radial_epsilon_m": 1e-09,
+    "integration": "Preceding force dot observed displacement; preceding control over each [start,end) interval.",
+    "interaction": "(scheduled outage - scheduled intact) - (fixed outage - fixed intact)",
+    "limits": "Descriptive horizontal translation only. Residual is not measured friction; demand is not energy. No causal or population inference. Original gates are unchanged."
+  },
+  "window": {
+    "start": 40,
+    "end": 43
+  },
+  "independent_audit": {
+    "groups": 9,
+    "flights": 36,
+    "states": 115236,
+    "intervals": 115200,
+    "summary_windows": 216,
+    "status": "passed",
+    "absolute_tolerance": 2e-09,
+    "relative_tolerance": 2e-09
+  },
+  "browser": {
+    "groups": 9,
+    "flights": 36,
+    "canvases": 4,
+    "ranked_rows": 9,
+    "precontact_end_s": 41.42,
+    "cursor": "40.005 s",
+    "selection_restored": true,
+    "review_rows": 2404,
+    "csv_rows": 2404,
+    "mobile_fits": true,
+    "errors": []
+  },
+  "seeds": [
+    {
+      "id": "regression-s0",
+      "cohort": "regression",
+      "seed": 0,
+      "entries": [
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "regression",
+          "file": "regression-p0-s0.json",
+          "id": "regression-p0-s0",
+          "improved_gates": 0,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 0,
+          "sha256": "0dbbb7873a8010340181f321dc3811ca6740fd971639a7a6c06b767185007b0a"
+        },
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "regression",
+          "file": "regression-p1-s0.json",
+          "id": "regression-p1-s0",
+          "improved_gates": 0,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 0,
+          "sha256": "bc56a20787d45eda59c0923f9a272b973108438be893f37fc2d69ed4d46731c1"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.2422985843686354,
+            "demand_rms_m_s2": 1.2811801498689106,
+            "peak_error_m": 0.37510418211599145,
+            "wind_work_j": 0.44009783566745053,
+            "thrust_work_j": -0.3959209391999223,
+            "kinetic_change_j": 0.03986358215296523,
+            "residual_j": -0.004313314314562999,
+            "demand_error_rms_m_s2": 1.1705055194675145,
+            "force_residual_rms_m_s2": 0.039335621817768264,
+            "airborne_s": 2.969999999999999,
+            "contact_s": 0.030000000000001137,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.2425247667997585,
+            "demand_rms_m_s2": 1.2811583767801302,
+            "peak_error_m": 0.37660528443850055,
+            "wind_work_j": 0.43401262048837375,
+            "thrust_work_j": -0.37707110506509234,
+            "kinetic_change_j": 0.056790093021808846,
+            "residual_j": -0.00015142240147258956,
+            "demand_error_rms_m_s2": 1.1671655445716858,
+            "force_residual_rms_m_s2": 2.000959007410068e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.1593337596160039,
+            "demand_rms_m_s2": 1.2945883625416195,
+            "peak_error_m": 0.24052495411965183,
+            "wind_work_j": 0.27399053661288897,
+            "thrust_work_j": -0.24912251723099962,
+            "kinetic_change_j": 0.02321487069213637,
+            "residual_j": -0.0016531486897529979,
+            "demand_error_rms_m_s2": 1.1915096765051558,
+            "force_residual_rms_m_s2": 0.027549544449525065,
+            "airborne_s": 2.990000000000002,
+            "contact_s": 0.00999999999999801,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.159728136903003,
+            "demand_rms_m_s2": 1.2973478011429158,
+            "peak_error_m": 0.24154986621109673,
+            "wind_work_j": 0.27143321203479104,
+            "thrust_work_j": -0.2418521555271354,
+            "kinetic_change_j": 0.029460007599540178,
+            "residual_j": -0.00012104890811545643,
+            "demand_error_rms_m_s2": 1.192355039619683,
+            "force_residual_rms_m_s2": 1.6609538168074825e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          }
+        ],
+        "rmse": {
+          "fixed": 0.00022618243112310088,
+          "scheduled": 0.00039437728699909247,
+          "interaction": 0.0001681948558759916
+        },
+        "demand": {
+          "fixed": -2.177308878037465e-05,
+          "scheduled": 0.002759438601296349,
+          "interaction": 0.0027812116900767236
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            false
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "id": "regression-s1",
+      "cohort": "regression",
+      "seed": 1,
+      "entries": [
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "regression",
+          "file": "regression-p0-s1.json",
+          "id": "regression-p0-s1",
+          "improved_gates": 0,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 1,
+          "sha256": "879c0b07cebbc723974bd910d03fc2849e8a3c1aaf3ed27f4edaf65514a2574a"
+        },
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "regression",
+          "file": "regression-p1-s1.json",
+          "id": "regression-p1-s1",
+          "improved_gates": 0,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 1,
+          "sha256": "eb8609073d99d207a414416834924d673359f23e1689cb6a522a2f11be7cd66f"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.08318787808992047,
+            "demand_rms_m_s2": 0.8231901382905177,
+            "peak_error_m": 0.1308938152702842,
+            "wind_work_j": 0.11878885781221585,
+            "thrust_work_j": -0.11613308398902827,
+            "kinetic_change_j": 0.002568001427791701,
+            "residual_j": -8.777239539586867e-05,
+            "demand_error_rms_m_s2": 0.8228034453241945,
+            "force_residual_rms_m_s2": 1.2875798506898494e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.08470811280975914,
+            "demand_rms_m_s2": 0.6197681168516069,
+            "peak_error_m": 0.11023652909727372,
+            "wind_work_j": 0.16461267965392404,
+            "thrust_work_j": -0.14292063173357128,
+            "kinetic_change_j": -0.0016711827584676093,
+            "residual_j": -0.023363230678820374,
+            "demand_error_rms_m_s2": 1.1942417773846914,
+            "force_residual_rms_m_s2": 1.0938383726218879,
+            "airborne_s": 1.414999999999992,
+            "contact_s": 0.06500000000000483,
+            "disarmed_s": 1.5200000000000031
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.0567832970668404,
+            "demand_rms_m_s2": 0.8544696299062824,
+            "peak_error_m": 0.08906538943236941,
+            "wind_work_j": 0.052592444443484994,
+            "thrust_work_j": -0.052860229763738505,
+            "kinetic_change_j": -0.00038639526537431745,
+            "residual_j": -0.00011860994512080669,
+            "demand_error_rms_m_s2": 0.8754911941830954,
+            "force_residual_rms_m_s2": 1.0614183240464967e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.06448924305426752,
+            "demand_rms_m_s2": 0.6867772763223248,
+            "peak_error_m": 0.07369552499216998,
+            "wind_work_j": 0.09969005631987501,
+            "thrust_work_j": -0.09340472854564465,
+            "kinetic_change_j": -0.0008299074705029244,
+            "residual_j": -0.007115235244733287,
+            "demand_error_rms_m_s2": 1.1892261647484121,
+            "force_residual_rms_m_s2": 1.0401401670626016,
+            "airborne_s": 1.3900000000000006,
+            "contact_s": 0.06499999999999773,
+            "disarmed_s": 1.5450000000000017
+          }
+        ],
+        "rmse": {
+          "fixed": 0.00152023471983867,
+          "scheduled": 0.007705945987427125,
+          "interaction": 0.006185711267588455
+        },
+        "demand": {
+          "fixed": -0.20342202143891075,
+          "scheduled": -0.16769235358395762,
+          "interaction": 0.03572966785495313
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "passed",
+          "outage_pair_passed": false,
+          "recovery_passed": [
+            true,
+            false
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": false,
+          "recovery_passed": [
+            true,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "id": "regression-s2",
+      "cohort": "regression",
+      "seed": 2,
+      "entries": [
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "regression",
+          "file": "regression-p0-s2.json",
+          "id": "regression-p0-s2",
+          "improved_gates": 0,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 2,
+          "sha256": "cb3ca7867a335dc6a5e7a9fc44364ad48365c4a8384a52e25d2815f63a05fa46"
+        },
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "regression",
+          "file": "regression-p1-s2.json",
+          "id": "regression-p1-s2",
+          "improved_gates": 0,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 2,
+          "sha256": "80939c234611764e77ef544c79f81a80af9f680a875c6db052a2b9515c4fc34d"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.24840617516780847,
+            "demand_rms_m_s2": 1.0176741114440326,
+            "peak_error_m": 0.38928377522659235,
+            "wind_work_j": -0.32462246270529094,
+            "thrust_work_j": 0.30005864376606906,
+            "kinetic_change_j": -0.024751475664535075,
+            "residual_j": -0.0001876567253131789,
+            "demand_error_rms_m_s2": 0.9341188665159581,
+            "force_residual_rms_m_s2": 1.7843417657642464e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.24808583384630656,
+            "demand_rms_m_s2": 1.0164392289370172,
+            "peak_error_m": 0.3892350491591463,
+            "wind_work_j": -0.32348541942738246,
+            "thrust_work_j": 0.29886933835349805,
+            "kinetic_change_j": -0.024799663562124062,
+            "residual_j": -0.00018358248823963086,
+            "demand_error_rms_m_s2": 0.9317304911171335,
+            "force_residual_rms_m_s2": 1.834677832749912e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.15532896544371858,
+            "demand_rms_m_s2": 1.0062806928217298,
+            "peak_error_m": 0.271637584302201,
+            "wind_work_j": -0.2297724033837854,
+            "thrust_work_j": 0.2274383387521243,
+            "kinetic_change_j": -0.0025509470982556515,
+            "residual_j": -0.00021688246659454236,
+            "demand_error_rms_m_s2": 1.0087846816730417,
+            "force_residual_rms_m_s2": 1.5306341814945918e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.15498398050903842,
+            "demand_rms_m_s2": 1.0039925916795924,
+            "peak_error_m": 0.2716361324723546,
+            "wind_work_j": -0.22885665256734775,
+            "thrust_work_j": 0.22590891497811735,
+            "kinetic_change_j": -0.0031600910654810688,
+            "residual_j": -0.00021235347625067624,
+            "demand_error_rms_m_s2": 1.0052425355226207,
+            "force_residual_rms_m_s2": 1.56319290094167e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          }
+        ],
+        "rmse": {
+          "fixed": -0.0003203413215019102,
+          "scheduled": -0.00034498493468015923,
+          "interaction": -2.4643613178249035e-05
+        },
+        "demand": {
+          "fixed": -0.0012348825070154223,
+          "scheduled": -0.0022881011421374,
+          "interaction": -0.0010532186351219774
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stress-s401",
+      "cohort": "stress",
+      "seed": 401,
+      "entries": [
+        {
+          "baseline_status": "failed",
+          "candidate_status": "failed",
+          "cohort": "stress",
+          "file": "stress-p0-s401.json",
+          "id": "stress-p0-s401",
+          "improved_gates": 0,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 401,
+          "sha256": "4189f1a1fc47adcc3f49def99e956b604502265b097b548e15207698a2497209"
+        },
+        {
+          "baseline_status": "failed",
+          "candidate_status": "failed",
+          "cohort": "stress",
+          "file": "stress-p1-s401.json",
+          "id": "stress-p1-s401",
+          "improved_gates": 0,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 401,
+          "sha256": "a023c5028cb5223fb77eced7b70ef6fe033143714f31a0b47cc0254de0bb4562"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.5134928375659188,
+            "demand_rms_m_s2": 1.712350717069316,
+            "peak_error_m": 0.6612629113680433,
+            "wind_work_j": 1.1704960297503495,
+            "thrust_work_j": -1.1043438910522807,
+            "kinetic_change_j": -8.88216910561833e-05,
+            "residual_j": -0.06624096038912497,
+            "demand_error_rms_m_s2": 2.6917177727206365,
+            "force_residual_rms_m_s2": 2.202989274298093,
+            "airborne_s": 1.5799999999999983,
+            "contact_s": 0.10000000000000142,
+            "disarmed_s": 1.3200000000000003
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.5060582191154582,
+            "demand_rms_m_s2": 1.6477898858842053,
+            "peak_error_m": 0.6456649898802823,
+            "wind_work_j": 1.1458538094773232,
+            "thrust_work_j": -1.0652664052708831,
+            "kinetic_change_j": -8.882237050282591e-05,
+            "residual_j": -0.08067622657694296,
+            "demand_error_rms_m_s2": 2.3727055464731426,
+            "force_residual_rms_m_s2": 1.907618765284652,
+            "airborne_s": 1.5149999999999935,
+            "contact_s": 0.06500000000000483,
+            "disarmed_s": 1.4200000000000017
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.36801579806888857,
+            "demand_rms_m_s2": 1.8116204443359691,
+            "peak_error_m": 0.4576808011487181,
+            "wind_work_j": 0.8400534937193995,
+            "thrust_work_j": -0.8082705849523645,
+            "kinetic_change_j": -4.254250927264272e-05,
+            "residual_j": -0.03182545127630765,
+            "demand_error_rms_m_s2": 2.256042045532107,
+            "force_residual_rms_m_s2": 1.5557512861429579,
+            "airborne_s": 1.585000000000008,
+            "contact_s": 0.09499999999999176,
+            "disarmed_s": 1.3200000000000003
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.37029423953802404,
+            "demand_rms_m_s2": 1.759366777373588,
+            "peak_error_m": 0.4591034477645262,
+            "wind_work_j": 0.8500944737758802,
+            "thrust_work_j": -0.8064696825299938,
+            "kinetic_change_j": -4.254095052454186e-05,
+            "residual_j": -0.043667332196410946,
+            "demand_error_rms_m_s2": 2.8384884919694633,
+            "force_residual_rms_m_s2": 2.396123343219609,
+            "airborne_s": 1.5,
+            "contact_s": 0.06499999999999773,
+            "disarmed_s": 1.4350000000000023
+          }
+        ],
+        "rmse": {
+          "fixed": -0.007434618450460562,
+          "scheduled": 0.0022784414691354726,
+          "interaction": 0.009713059919596034
+        },
+        "demand": {
+          "fixed": -0.06456083118511069,
+          "scheduled": -0.05225366696238121,
+          "interaction": 0.012307164222729483
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "failed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "failed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "failed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "failed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stress-s503",
+      "cohort": "stress",
+      "seed": 503,
+      "entries": [
+        {
+          "baseline_status": "failed",
+          "candidate_status": "passed",
+          "cohort": "stress",
+          "file": "stress-p0-s503.json",
+          "id": "stress-p0-s503",
+          "improved_gates": 1,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 503,
+          "sha256": "47349b6a6842adec2022bd4b26a17a0836170f336188b2683c2439b7fa77e826"
+        },
+        {
+          "baseline_status": "failed",
+          "candidate_status": "passed",
+          "cohort": "stress",
+          "file": "stress-p1-s503.json",
+          "id": "stress-p1-s503",
+          "improved_gates": 1,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 503,
+          "sha256": "50b08163e1bb425a5c1a24c2381d580a054a4a4811aecd26e642d7d84a1e4cab"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.3664000849191674,
+            "demand_rms_m_s2": 1.1243072582974751,
+            "peak_error_m": 0.42794177519820226,
+            "wind_work_j": 0.5021111564284174,
+            "thrust_work_j": -0.3876296057361239,
+            "kinetic_change_j": -0.012702694448928738,
+            "residual_j": -0.12718424514122223,
+            "demand_error_rms_m_s2": 3.458217603702276,
+            "force_residual_rms_m_s2": 3.4449669038195925,
+            "airborne_s": 1,
+            "contact_s": 0.06499999999999773,
+            "disarmed_s": 1.9350000000000023
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.3271987754534413,
+            "demand_rms_m_s2": 0.9459746856701867,
+            "peak_error_m": 0.3739394373935413,
+            "wind_work_j": 0.3933860351366483,
+            "thrust_work_j": -0.25720078153518694,
+            "kinetic_change_j": -0.012702652187825215,
+            "residual_j": -0.14888790578928662,
+            "demand_error_rms_m_s2": 2.622071213188126,
+            "force_residual_rms_m_s2": 2.6777833134177436,
+            "airborne_s": 0.8599999999999994,
+            "contact_s": 0.054999999999999716,
+            "disarmed_s": 2.085000000000001
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.28821662583876756,
+            "demand_rms_m_s2": 1.2433077221694184,
+            "peak_error_m": 0.338222985864709,
+            "wind_work_j": 0.4762865168590348,
+            "thrust_work_j": -0.3873234899503888,
+            "kinetic_change_j": -0.020976999386577284,
+            "residual_j": -0.10994002629522326,
+            "demand_error_rms_m_s2": 2.6115015175693226,
+            "force_residual_rms_m_s2": 2.551671197309321,
+            "airborne_s": 0.9200000000000017,
+            "contact_s": 0.06499999999999773,
+            "disarmed_s": 2.0150000000000006
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.2626873739462218,
+            "demand_rms_m_s2": 1.0757801198468424,
+            "peak_error_m": 0.30366870262680884,
+            "wind_work_j": 0.4036135648862518,
+            "thrust_work_j": -0.2823092718253828,
+            "kinetic_change_j": -0.02097706657445121,
+            "residual_j": -0.14228135963532018,
+            "demand_error_rms_m_s2": 2.708171967585542,
+            "force_residual_rms_m_s2": 2.704808192430456,
+            "airborne_s": 0.8149999999999977,
+            "contact_s": 0.054999999999999716,
+            "disarmed_s": 2.1300000000000026
+          }
+        ],
+        "rmse": {
+          "fixed": -0.03920130946572614,
+          "scheduled": -0.025529251892545735,
+          "interaction": 0.013672057573180407
+        },
+        "demand": {
+          "fixed": -0.1783325726272884,
+          "scheduled": -0.16752760232257602,
+          "interaction": 0.010804970304712391
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "failed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "failed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            false
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stress-s607",
+      "cohort": "stress",
+      "seed": 607,
+      "entries": [
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "stress",
+          "file": "stress-p0-s607.json",
+          "id": "stress-p0-s607",
+          "improved_gates": 0,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 607,
+          "sha256": "a23610c5d59153cb7a352d480218620e549cbeeade65352c3ac436882c2c4cad"
+        },
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "stress",
+          "file": "stress-p1-s607.json",
+          "id": "stress-p1-s607",
+          "improved_gates": 0,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 607,
+          "sha256": "df98f938f66905449017b7fed36e24f3c855ab3869afe067204c8755074ee567"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.13406968824601873,
+            "demand_rms_m_s2": 0.9867673094310869,
+            "peak_error_m": 0.2241250097760634,
+            "wind_work_j": 0.220821973974523,
+            "thrust_work_j": -0.20672538624469525,
+            "kinetic_change_j": 0.01395650815422253,
+            "residual_j": -0.00014007957560521755,
+            "demand_error_rms_m_s2": 0.9470499543527083,
+            "force_residual_rms_m_s2": 1.8597270176094643e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.1341659107947781,
+            "demand_rms_m_s2": 0.9870939747326619,
+            "peak_error_m": 0.22396742788363957,
+            "wind_work_j": 0.2213574250928806,
+            "thrust_work_j": -0.20694860613302293,
+            "kinetic_change_j": 0.01426970409059633,
+            "residual_j": -0.00013911486926132532,
+            "demand_error_rms_m_s2": 0.9468102823979954,
+            "force_residual_rms_m_s2": 1.8553842901690953e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.09312871487988912,
+            "demand_rms_m_s2": 1.0450618010954273,
+            "peak_error_m": 0.18294248157105952,
+            "wind_work_j": 0.1410777256805177,
+            "thrust_work_j": -0.13599038009397468,
+            "kinetic_change_j": 0.004917379049214188,
+            "residual_j": -0.0001699665373288417,
+            "demand_error_rms_m_s2": 1.0090993251840534,
+            "force_residual_rms_m_s2": 1.50915712051087e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.09309261103493337,
+            "demand_rms_m_s2": 1.0445866241710473,
+            "peak_error_m": 0.18265469851737318,
+            "wind_work_j": 0.1413010418314536,
+            "thrust_work_j": -0.13620457571125877,
+            "kinetic_change_j": 0.004928282404041771,
+            "residual_j": -0.00016818371615304195,
+            "demand_error_rms_m_s2": 1.0084017335282303,
+            "force_residual_rms_m_s2": 1.4831374121350916e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          }
+        ],
+        "rmse": {
+          "fixed": 9.622254875937819e-05,
+          "scheduled": -3.6103844955753805e-05,
+          "interaction": -0.000132326393715132
+        },
+        "demand": {
+          "fixed": 0.00032666530157499096,
+          "scheduled": -0.00047517692438003856,
+          "interaction": -0.0008018422259550295
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "id": "additional-s709",
+      "cohort": "additional",
+      "seed": 709,
+      "entries": [
+        {
+          "baseline_status": "failed",
+          "candidate_status": "failed",
+          "cohort": "additional",
+          "file": "additional-p0-s709.json",
+          "id": "additional-p0-s709",
+          "improved_gates": 1,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 709,
+          "sha256": "76c1b8dc04275445856027aabe89552fb498ab4590788b9e5971bea15ea40fb9"
+        },
+        {
+          "baseline_status": "failed",
+          "candidate_status": "passed",
+          "cohort": "additional",
+          "file": "additional-p1-s709.json",
+          "id": "additional-p1-s709",
+          "improved_gates": 1,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 709,
+          "sha256": "d255461463ceb401913a41a9e0036ec4cd2d215bfca2df7bd950404fba7aae2c"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.30626075272051756,
+            "demand_rms_m_s2": 1.09091348911252,
+            "peak_error_m": 0.4463511703031349,
+            "wind_work_j": 0.7023288093645409,
+            "thrust_work_j": -0.47634052119755427,
+            "kinetic_change_j": -0.010814883169125213,
+            "residual_j": -0.2368031713361119,
+            "demand_error_rms_m_s2": 3.197676457282504,
+            "force_residual_rms_m_s2": 3.0013086915319658,
+            "airborne_s": 1.6300000000000026,
+            "contact_s": 0.0799999999999983,
+            "disarmed_s": 1.2899999999999991
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.188022529971175,
+            "demand_rms_m_s2": 0.6527448741577686,
+            "peak_error_m": 0.2532933310269737,
+            "wind_work_j": 0.4040875679558228,
+            "thrust_work_j": -0.1346891585900134,
+            "kinetic_change_j": -0.010814915609815018,
+            "residual_j": -0.2802133249756244,
+            "demand_error_rms_m_s2": 2.2936046561397863,
+            "force_residual_rms_m_s2": 2.3479873334581276,
+            "airborne_s": 1.3449999999999989,
+            "contact_s": 0.054999999999999716,
+            "disarmed_s": 1.6000000000000014
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.25475797974632264,
+            "demand_rms_m_s2": 1.1470377507203016,
+            "peak_error_m": 0.36128741395488284,
+            "wind_work_j": 0.5724610836667969,
+            "thrust_work_j": -0.4055386931417129,
+            "kinetic_change_j": -0.0109514957441736,
+            "residual_j": -0.17787388626925765,
+            "demand_error_rms_m_s2": 3.594877139709596,
+            "force_residual_rms_m_s2": 3.421568834340545,
+            "airborne_s": 1.5649999999999977,
+            "contact_s": 0.07000000000000028,
+            "disarmed_s": 1.365000000000002
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.17060215209699084,
+            "demand_rms_m_s2": 0.7558673694466648,
+            "peak_error_m": 0.2269126052993657,
+            "wind_work_j": 0.34599950576498456,
+            "thrust_work_j": -0.163774706687429,
+            "kinetic_change_j": -0.010951618394753046,
+            "residual_j": -0.19317641747230863,
+            "demand_error_rms_m_s2": 2.705605447091277,
+            "force_residual_rms_m_s2": 2.729526308569692,
+            "airborne_s": 1.3250000000000028,
+            "contact_s": 0.054999999999999716,
+            "disarmed_s": 1.6199999999999974
+          }
+        ],
+        "rmse": {
+          "fixed": -0.11823822274934256,
+          "scheduled": -0.0841558276493318,
+          "interaction": 0.034082395100010765
+        },
+        "demand": {
+          "fixed": -0.43816861495475146,
+          "scheduled": -0.3911703812736368,
+          "interaction": 0.046998233681114665
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "failed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "failed",
+          "outage_pair_passed": false,
+          "recovery_passed": [
+            true,
+            false
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "failed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            false
+          ]
+        }
+      ]
+    },
+    {
+      "id": "additional-s811",
+      "cohort": "additional",
+      "seed": 811,
+      "entries": [
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "additional",
+          "file": "additional-p0-s811.json",
+          "id": "additional-p0-s811",
+          "improved_gates": 0,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 811,
+          "sha256": "295f8b0bcbe605ec8bab10aa83194d55ac246989deb448c656bc1349105fc5dd"
+        },
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "additional",
+          "file": "additional-p1-s811.json",
+          "id": "additional-p1-s811",
+          "improved_gates": 0,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 811,
+          "sha256": "faec82b811c3ca070032acf5d988b865ae80e9bc70c595064b2b571fc62fb3d6"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.19158462303648052,
+            "demand_rms_m_s2": 1.134263297283333,
+            "peak_error_m": 0.32406824203460577,
+            "wind_work_j": 0.20538709732267438,
+            "thrust_work_j": -0.1955534263182633,
+            "kinetic_change_j": 0.009684982624554885,
+            "residual_j": -0.00014868837985618222,
+            "demand_error_rms_m_s2": 1.046756662150545,
+            "force_residual_rms_m_s2": 2.1464911638372278e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.1916699399296563,
+            "demand_rms_m_s2": 1.1348397495502833,
+            "peak_error_m": 0.3244116118092786,
+            "wind_work_j": 0.20583490257470052,
+            "thrust_work_j": -0.19591477508361155,
+            "kinetic_change_j": 0.009772565229081981,
+            "residual_j": -0.0001475622620069894,
+            "demand_error_rms_m_s2": 1.0474166037093884,
+            "force_residual_rms_m_s2": 2.226535867408549e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.14329529811610095,
+            "demand_rms_m_s2": 1.1654644309725515,
+            "peak_error_m": 0.25930632836960266,
+            "wind_work_j": 0.12961556143156563,
+            "thrust_work_j": -0.12821924395448822,
+            "kinetic_change_j": 0.001239524828066975,
+            "residual_j": -0.00015679264901044543,
+            "demand_error_rms_m_s2": 1.0937054051820458,
+            "force_residual_rms_m_s2": 1.912041186455952e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.14340961604374333,
+            "demand_rms_m_s2": 1.1666731427678185,
+            "peak_error_m": 0.25962189008771824,
+            "wind_work_j": 0.12994246854511365,
+            "thrust_work_j": -0.1284874395863575,
+            "kinetic_change_j": 0.0012982212505859708,
+            "residual_j": -0.0001568077081701702,
+            "demand_error_rms_m_s2": 1.0947875120982211,
+            "force_residual_rms_m_s2": 1.8960773939471122e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          }
+        ],
+        "rmse": {
+          "fixed": 8.531689317578528e-05,
+          "scheduled": 0.00011431792764238224,
+          "interaction": 2.9001034466596964e-05
+        },
+        "demand": {
+          "fixed": 0.0005764522669502448,
+          "scheduled": 0.0012087117952670479,
+          "interaction": 0.0006322595283168031
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "id": "additional-s907",
+      "cohort": "additional",
+      "seed": 907,
+      "entries": [
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "additional",
+          "file": "additional-p0-s907.json",
+          "id": "additional-p0-s907",
+          "improved_gates": 0,
+          "profile": "sample-hold",
+          "regressed_gates": 0,
+          "seed": 907,
+          "sha256": "cadae63bb74ce1119a121034e502246fdd9d52ed10279029b08d78291752db03"
+        },
+        {
+          "baseline_status": "passed",
+          "candidate_status": "passed",
+          "cohort": "additional",
+          "file": "additional-p1-s907.json",
+          "id": "additional-p1-s907",
+          "improved_gates": 0,
+          "profile": "hold-dropout-2000ms",
+          "regressed_gates": 0,
+          "seed": 907,
+          "sha256": "d509d016c038ca1cf36cb8fcd71e618e606a500d6f139d52261d18d0f8545732"
+        }
+      ],
+      "analysis": {
+        "window": {
+          "start": 40,
+          "end": 43
+        },
+        "cells": [
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.3138227346450719,
+            "demand_rms_m_s2": 1.5922057407329135,
+            "peak_error_m": 0.49741452603242775,
+            "wind_work_j": 0.4808587163394261,
+            "thrust_work_j": -0.4326725137913382,
+            "kinetic_change_j": 0.04794113993163593,
+            "residual_j": -0.00024506261645196314,
+            "demand_error_rms_m_s2": 1.4452829656232555,
+            "force_residual_rms_m_s2": 2.498165681001913e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.31499349678513106,
+            "demand_rms_m_s2": 1.595626554843503,
+            "peak_error_m": 0.497735070609711,
+            "wind_work_j": 0.484056767367703,
+            "thrust_work_j": -0.43253261239857277,
+            "kinetic_change_j": 0.05128597247519959,
+            "residual_j": -0.00023818249393059432,
+            "demand_error_rms_m_s2": 1.4456372599311664,
+            "force_residual_rms_m_s2": 2.3940107246066595e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.2142524924424897,
+            "demand_rms_m_s2": 1.6418085406179788,
+            "peak_error_m": 0.365547409936684,
+            "wind_work_j": 0.2882579798495374,
+            "thrust_work_j": -0.2813122859312834,
+            "kinetic_change_j": 0.006651653465608757,
+            "residual_j": -0.00029404045264525003,
+            "demand_error_rms_m_s2": 1.5282992587224877,
+            "force_residual_rms_m_s2": 2.0714842098728895e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          },
+          {
+            "complete": true,
+            "states": 601,
+            "intervals": 600,
+            "duration_s": 3,
+            "rmse_m": 0.2148836555835993,
+            "demand_rms_m_s2": 1.6423184139206997,
+            "peak_error_m": 0.36516622860141124,
+            "wind_work_j": 0.29052755180336803,
+            "thrust_work_j": -0.28224516587834964,
+            "kinetic_change_j": 0.007998697536880064,
+            "residual_j": -0.00028368838813835895,
+            "demand_error_rms_m_s2": 1.526228974444498,
+            "force_residual_rms_m_s2": 1.9878181935540755e-05,
+            "airborne_s": 3,
+            "contact_s": 0,
+            "disarmed_s": 0
+          }
+        ],
+        "rmse": {
+          "fixed": 0.0011707621400591783,
+          "scheduled": 0.0006311631411095864,
+          "interaction": -0.000539598998949592
+        },
+        "demand": {
+          "fixed": 0.0034208141105893652,
+          "scheduled": 0.0005098733027208979,
+          "interaction": -0.0029109408078684673
+        }
+      },
+      "original_results": [
+        {
+          "cell": "fixed-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "fixed-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        },
+        {
+          "cell": "scheduled-intact",
+          "status": "passed",
+          "outage_pair_passed": null,
+          "recovery_passed": null
+        },
+        {
+          "cell": "scheduled-outage",
+          "status": "passed",
+          "outage_pair_passed": true,
+          "recovery_passed": [
+            true,
+            true
+          ]
+        }
+      ]
+    }
+  ]
+}

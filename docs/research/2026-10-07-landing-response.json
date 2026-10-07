@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "cec7e1060f9ab46381fdc222ce6ed336f12323e3",
+  "scanned_at": "2026-10-07",
+  "coverage": ["Factorial comparison interpretation", "PhysX applied forces and contact constraints", "Retained landing failures"],
+  "findings": [{
+    "finding": "Descriptive gain-by-outage contrasts and interval force accounting can separate recorded response differences without claiming significance or measured friction.",
+    "source_event_date": null,
+    "citations": ["https://www.itl.nist.gov/div898/handbook/pri/section6/pri615.htm", "https://nvidia-omniverse.github.io/PhysX/physx/5.4.0/docs/RigidBodyDynamics.html"],
+    "confidence": "High for distinctions; physical interpretation requires local arithmetic checks",
+    "relevance": "AL-026 leaves seed 401 and 709 support-position failures and independent pair/recovery failures",
+    "direction_alignment": "Explain retained failures before proposing another controller change",
+    "opportunity_or_risk": "Shared windows avoid unequal exposure; residual work and interaction can be misread as friction or causality",
+    "engineering_cost": "Bounded analysis and ten-feature browser workspace on existing measured exports",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-027 landing response lab under the approved continuation",
+    "verification_needed": "Exact interval boundaries, independent arithmetic, four-flight identity checks and actual 3D browser review"
+  }],
+  "overall_recommendation": "Inspect all nine matched seed groups without changing original acceptance or controller defaults.",
+  "evidence_gaps": ["No tangential contact impulse measurement", "Small synthetic cohorts and two outages per flight", "Ideal attitude/contact supervision and open AL-010 yaw refinement"]
+}
