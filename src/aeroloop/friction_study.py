@@ -12,7 +12,7 @@ COLUMNS = ['time_s','x_m','y_m','z_m','qw','qx','qy','qz','vx_m_s','vy_m_s','vz_
            'nx_n','ny_n','nz_n','fx_n','fy_n','fz_n','ax_n','ay_n','az_n',
            'residual_x_ns','residual_y_ns','residual_z_ns','without_friction_ns','with_friction_ns',
            'wind_work_j','thrust_work_j','friction_work_j','kinetic_change_j','work_residual_j',
-           'friction_ratio','com_alignment','anchors','contact','landed']
+           'friction_ratio','com_alignment','anchors','contact','landed','target_x_m','target_y_m','target_z_m']
 
 
 def trace(samples, contact, mass=1., gravity=9.81):
@@ -40,7 +40,7 @@ def trace(samples, contact, mass=1., gravity=9.81):
                 alignment = max(-1.,min(1.,(vx*f[0]+vy*f[1])/speed/force))
         rows.append([s['time_s'],*s['position_m'],*s['quaternion_wxyz'],*s['velocity_m_s'],
                      *n,*f,*a,*residual,before,after,wind,thrust,work,kinetic,remaining,
-                     ratio,alignment,r[7],int(n[2]>.1),int(s['mission_phase']=='landed')])
+                     ratio,alignment,r[7],int(n[2]>.1),int(s['mission_phase']=='landed'),*s['target_m']])
     return rows
 
 
@@ -61,7 +61,42 @@ def summary(rows, start=0., end=50.):
             **{COLUMNS[c]:sum(r[c] for r in intervals) for c in range(25,30)}}
 
 
-def export(sessions, destination):
+def rejected_capture(session):
+    """Describe a hash-intact rejected normal-force trace, without promoting it."""
+    from .evidence import read_run, FILES
+    root = Path(session)
+    require(not (root/'result.json').exists(), 'completed session is not a rejected capture')
+    runs = list(root.glob('isaac-ground-mission-wind-*'))
+    runs = [p for p in runs if p.is_dir()]
+    require(len(runs)==1 and not root.is_symlink() and not runs[0].is_symlink(), 'invalid rejected session')
+    run=runs[0];checksums=load_json(run/'checksums.json',4096)
+    require(set(checksums)==FILES,'invalid rejected checksums')
+    data={}
+    for name in FILES:
+        path=run/name
+        require(not path.is_symlink() and path.stat().st_size<=32*1024*1024,'invalid rejected file')
+        require(sha256(path.read_bytes())==checksums[name],'rejected trace hash mismatch')
+        data[name]=load_json(path)
+    m,c,s=data['manifest.json'],data['config.json'],data['samples.json']
+    require(m['source_dirty'] is False and m['scenario']=='ground-mission-wind' and c['seed']==301 and
+            c['physics_options']['physics_dt_s']==.00125 and len(s)==10001,'unexpected rejected protocol')
+    try:
+        read_run(run)
+    except ValueError as exc:
+        require(str(exc)=='invalid ground normal force','different rejection reason')
+    else:
+        require(False,'rejected capture unexpectedly verified')
+    bad=[r for r in s if r['contact_normal_force_n'][2]<-1e-6]
+    require(bool(bad),'no rejected negative normal')
+    return {'id':'ideal-intact-s301-dt1250','seed':301,'physics_dt_s':.00125,
+            'status':'unverified','reason':'invalid_ground_normal_force',
+            'first_invalid_time_s':bad[0]['time_s'],
+            'minimum_normal_z_n':min(r['contact_normal_force_n'][2] for r in bad),
+            'invalid_intervals':len(bad),'checksums_sha256':sha256((run/'checksums.json').read_bytes()),
+            'source_commit':m['source_commit']}
+
+
+def export(sessions, destination, rejected_sessions=()):
     destination = Path(destination)
     require(not destination.exists(), 'contact export already exists')
     documents, entries = {}, []
@@ -91,9 +126,11 @@ def export(sessions, destination):
     import json
     identity=lambda d: [d[k] for k in ('source','controller_binary_sha256','versions')]
     require(all(identity(json.loads(v))==identity(json.loads(next(iter(documents.values())))) for v in documents.values()),'contact identities differ')
+    rejected=[rejected_capture(p) for p in rejected_sessions]
+    require(len(rejected)<=1 and all(r['id'] not in documents and r['source_commit']==json.loads(next(iter(documents.values())))['source']['source_commit'] for r in rejected),'invalid rejected identity')
     destination.mkdir(parents=True)
     for id,content in documents.items():
         (destination/(id+'.json')).write_bytes(content)
-    index = {'schema_version':1,'kind':'friction_index','cases':entries}
+    index = {'schema_version':1,'kind':'friction_index','cases':entries,'rejected':rejected}
     raw=encoded(index);(destination/'index.json').write_bytes(raw)
-    return {'index_sha256':sha256(raw),'cases':len(entries),'intervals':sum(e['summary']['intervals'] for e in entries)}
+    return {'index_sha256':sha256(raw),'cases':len(entries),'rejected':len(rejected),'intervals':sum(e['summary']['intervals'] for e in entries)}

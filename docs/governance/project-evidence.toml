@@ -6,7 +6,7 @@ source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation
 dhf_is_authoritative = false
 
 [review]
-last_reviewed = "2026-10-08"
+last_reviewed = "2026-10-09"
 review_due = "2026-10-27"
 
 [[objectives]]
@@ -733,12 +733,12 @@ decision_ref = "docs/architecture/decisions/024-landing-response-lab.md"
 [[work_items]]
 id = "AL-028"
 title = "Ten-feature measured contact-friction physics lab"
-status = "in-progress"
+status = "verified"
 requirement_ids = ["REQ-DRONE-CONTROL", "REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY", "REQ-LIVE-FLIGHT-TESTS"]
 roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
 approval_ref = "conversation:2026-10-08-post-pr30-ten-features-draft-pr"
 acceptance_refs = ["docs/architecture/decisions/025-contact-friction-audit.md"]
-evidence_refs = ["docs/research/2026-10-08-contact-friction.json"]
+evidence_refs = ["docs/research/2026-10-08-contact-friction.json", "docs/evidence/contact-friction-001.json", "docs/evidence/contact-friction-validation.md"]
 
 [[research_decisions]]
 id = "RD-CONTACT-FRICTION"

@@ -124,8 +124,15 @@ def main():
             return 1
         if args.contact_forces:
             from aeroloop.contact_forces import read_capture
-            for row in result["results"]:
-                read_capture(args.output, row["run_id"])
+            try:
+                for row in result["results"]:
+                    read_capture(args.output, row["run_id"])
+            except (OSError, ValueError, TypeError, KeyError):
+                if args.monitor:
+                    from aeroloop.live import finish_monitor
+                    finish_monitor(args.output, False)
+                print("Contact capture did not verify.", file=sys.stderr)
+                return 1
         scenarios = SCENARIOS if args.scenario == "all" else WIND_SCENARIOS if args.scenario == "turbulence" else (args.scenario,)
         if {(row["scenario"], row["seed"]) for row in result["results"]} != {(scenario, seed) for scenario in scenarios for seed in args.seeds}:
             print("Isaac flight did not retain the complete requested trial set.", file=sys.stderr)

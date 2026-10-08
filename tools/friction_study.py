@@ -10,9 +10,10 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--sessions',type=Path,nargs='+',required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--rejected-sessions',type=Path,nargs='*',default=[])
     args=parser.parse_args()
     try:
-        print(encoded(export(args.sessions,args.output)).decode(),end='')
+        print(encoded(export(args.sessions,args.output,args.rejected_sessions)).decode(),end='')
     except (OSError,ValueError,TypeError,KeyError):
         print('Contact evidence is incomplete or invalid; no verified bundle available.',file=sys.stderr)
         return 1

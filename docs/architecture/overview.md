@@ -195,3 +195,14 @@ command-line reporting share pure interval analysis, with an independent numeric
 audit of all retained rows. Bounded same-origin loads, source/runtime identity
 checks and original gates remain authoritative. See [ADR 024](decisions/024-landing-response-lab.md)
 and the [response lab guide](../landing-response-lab.md).
+
+
+AL-028 adds opt-in filtered contact-force sidecars while preserving flight schema
+versions and controller logic. `contact_forces` binds the original recording and
+captures substep mean normal/friction/applied forces with capacity guards.
+`friction_study` reconstructs valid flights and exports full-rate scalar/pose
+rows; hash-intact rejected refinements stay explicitly unverified. The browser
+checks hashes, cadence, fixed column names, source identity and summary arithmetic.
+A bounded loopback contact endpoint complements the existing 3D flight monitor.
+See [ADR 025](decisions/025-contact-friction-audit.md) and the
+[contact lab guide](../contact-physics-lab.md).

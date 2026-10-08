@@ -169,3 +169,10 @@ The [landing response lab](docs/landing-response-lab.md) compares all four gain/
 combinations for each seed. Shared phase windows, work/energy accounting, radial
 motion and full-rate interval exports explain retained failures without changing
 the controller or original acceptance gates.
+
+
+The [contact physics lab](docs/contact-physics-lab.md) adds measured ground
+friction, momentum closure, translational work, slip diagnostics, 3D force replay,
+live monitoring and timestep comparison. Its [19-flight study](docs/evidence/contact-friction-validation.md)
+retains 18 verified recordings and one rejected finest-step capture. Original
+mission failures and the unresolved normal-force anomaly remain visible.

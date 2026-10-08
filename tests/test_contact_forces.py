@@ -16,7 +16,7 @@ def samples():
     # 1 kg sliding at 1 m/s, decelerating by 2 m/s2 under measured friction.
     return [{'time_s':i*.005,'position_m':[i*.005-(i*.005)**2,0,.05],
              'velocity_m_s':[1-2*i*.005,0,0],'quaternion_wxyz':[1,0,0,0],
-             'external_force_n':[0,0,0],'mission_phase':'landed'} for i in range(3)]
+             'external_force_n':[0,0,0],'target_m':[0,0,.05],'mission_phase':'landed'} for i in range(3)]
 
 
 class ContactTests(unittest.TestCase):
@@ -62,3 +62,27 @@ class ContactTests(unittest.TestCase):
                 value=json.loads((root/'contact-live.json').read_text());value['private_path']='private'
                 with self.assertRaises(ValidationError):validate_live(value)
             finally:server.shutdown();server.server_close();thread.join()
+
+    def test_sidecar_binds_exact_flight_and_rejects_mismatched_normal_source_and_time(self):
+        from unittest.mock import patch
+        from aeroloop.contact_forces import COLUMNS,read_capture
+        from aeroloop.simulation import encoded,sha256
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);run_id='isaac-ground-mission-wind-1-'+('a'*12)
+            run=root/run_id;run.mkdir();(run/'checksums.json').write_bytes(b'{}')
+            rows=[[0.]*7+[0]+[0.]*3,[.005,0,0,9.81,-2,0,0,2,0,0,0]]
+            source={'source_commit':'a'*40,'source_dirty':False,'source_tree_sha256':'b'*64,'lock_sha256':'c'*64}
+            capture={'schema_version':1,'kind':'ground_contact_forces','columns':COLUMNS,'source':source,
+                     'physics_dt_s':.005,'capacity':64,'filter':'ground','ground_kind':'stationary-kinematic',
+                     'interval':'preceding-control-interval-mean','run_id':run_id,
+                     'checksums_sha256':sha256(b'{}'),'rows':rows}
+            data={'config.json':{'physics_options':{}},'manifest.json':dict(source),
+                  'samples.json':[{'time_s':i*.005,'contact_normal_force_n':r[1:4]} for i,r in enumerate(rows)]}
+            path=root/(run_id+'-contact.json')
+            with patch('aeroloop.contact_forces.read_run',return_value=data):
+                path.write_bytes(encoded(capture));read_capture(root,run_id)
+                for mutate in (lambda v:v.update(checksums_sha256='f'*64),lambda v:v['source'].update(source_dirty=True),
+                               lambda v:v.update(physics_dt_s=.0025),lambda v:v['rows'][1].__setitem__(3,8),
+                               lambda v:v.update(ground_kind='static'),lambda v:v.update(private_path='private')):
+                    bad=copy.deepcopy(capture);mutate(bad);path.write_bytes(encoded(bad))
+                    with self.assertRaises(ValidationError):read_capture(root,run_id)

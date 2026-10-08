@@ -84,3 +84,16 @@ unfiltered runs used a static collider. The twelve retained comparisons measure
 this combined setup/instrumentation change, not instrumentation alone. Default
 unfiltered flights keep their static ground. No claim of exact noninterference
 is made without measured comparison.
+
+## Measured closeout and unresolved refinement
+
+The 2026-10-09 suite attempted all 19 declared flights. Eighteen completed
+verification (nine mission passes, nine mission failures). The 1.25 ms seed 301
+flight reached 50 s but sidecar completion rejected a negative normal force;
+the unchanged original flight reader independently rejects the same sample.
+The browser shows this third timestep as unverified with its recording digest,
+invalid time and raw anomaly, without inventing friction/work metrics or replay.
+No normal-force contract or acceptance limit was relaxed. The 18 valid captures
+support all measured contact features; the failed refinement remains an open
+physics question alongside AL-010. Numerical sensitivity is not certified as
+converged. See the [validation record](../../evidence/contact-friction-validation.md).
