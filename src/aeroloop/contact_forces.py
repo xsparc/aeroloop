@@ -32,7 +32,7 @@ def write_capture(directory, run, rows, source, physics_dt):
     validate_rows(rows)
     value = {'schema_version': 1, 'kind': 'ground_contact_forces', 'columns': COLUMNS,
              'source': source, 'physics_dt_s': physics_dt, 'capacity': CAPACITY,
-             'filter': 'ground', 'interval': 'preceding-control-interval-mean',
+             'filter': 'ground', 'ground_kind': 'stationary-kinematic', 'interval': 'preceding-control-interval-mean',
              'run_id': run.name,
              'checksums_sha256': sha256((run/'checksums.json').read_bytes()), 'rows': rows}
     (Path(directory)/(run.name+'-contact.json')).write_bytes(encoded(value))
@@ -45,9 +45,9 @@ def read_capture(directory, run_id):
     path = root/(run_id+'-contact.json')
     require(not path.is_symlink() and not root.is_symlink(), 'linked contact capture')
     value = load_json(path, 8*1024*1024)
-    require(set(value) == {'schema_version','kind','columns','source','physics_dt_s','capacity','filter','interval','run_id','checksums_sha256','rows'}, 'invalid contact fields')
+    require(set(value) == {'schema_version','kind','columns','source','physics_dt_s','capacity','filter','ground_kind','interval','run_id','checksums_sha256','rows'}, 'invalid contact fields')
     require(value['schema_version'] == 1 and value['kind'] == 'ground_contact_forces' and value['columns'] == COLUMNS and
-            value['capacity'] == CAPACITY and value['filter'] == 'ground' and value['interval'] == 'preceding-control-interval-mean' and
+            value['ground_kind'] == 'stationary-kinematic' and value['capacity'] == CAPACITY and value['filter'] == 'ground' and value['interval'] == 'preceding-control-interval-mean' and
             value['run_id'] == run_id, 'invalid contact contract')
     run = read_run(root/run_id)
     require(value['checksums_sha256'] == sha256((root/run_id/'checksums.json').read_bytes()), 'contact flight digest differs')

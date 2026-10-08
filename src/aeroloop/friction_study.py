@@ -79,7 +79,7 @@ def export(sessions, destination):
             rows = trace(run['samples.json'],capture['rows'],c['model']['mass'],c['model']['gravity'])
             metrics = summary(rows)
             document = {'schema_version':1,'kind':'friction_case','id':id,'seed':seed,'mode':mode,'profile':profile,
-                        'physics_dt_s':dt,'source':capture['source'],'controller_binary_sha256':m['controller_binary_sha256'],
+                        'physics_dt_s':dt,'ground_kind':capture['ground_kind'],'source':capture['source'],'controller_binary_sha256':m['controller_binary_sha256'],
                         'versions':c['simulator_versions'],'capture_sha256':sha256((Path(session)/(trial['run_id']+'-contact.json')).read_bytes()),
                         'flight_checksums_sha256':capture['checksums_sha256'],'columns':COLUMNS,'rows':rows,
                         'status':m['status'],'failure_reason':m['failure_reason'],'gates':gates(run),'summary':metrics}

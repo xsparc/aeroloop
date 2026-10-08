@@ -66,6 +66,8 @@ def flight(output: Path, launcher_args):
             vehicle.spawn.physics_material = material
             vehicle.spawn.activate_contact_sensors = True
             ground = sim_utils.CuboidCfg(size=tuple(contact_cfg["ground_size_m"]), collision_props=collision, physics_material=material)
+            if contact_forces:
+                ground.rigid_props = sim_utils.RigidBodyPropertiesCfg(kinematic_enabled=True, disable_gravity=True)
             ground.func("/World/Ground", ground, translation=tuple(contact_cfg["ground_position_m"]))
             from isaaclab.sensors import ContactSensor, ContactSensorCfg
         body = RigidObject(vehicle)

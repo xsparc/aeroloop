@@ -73,3 +73,14 @@ record it separately from AeroLoop's project evidence gate.
 Risks: contact instrumentation could perturb repeatability; filtered buffer
 semantics are runtime-specific; COM proxies can be misread as contact-point
 measurements. Preserve hashes, original gates, omitted intervals and limitations.
+
+## Development sensor compatibility finding
+
+The excluded development seed 83 probe rejected static-cuboid ground filtering
+on the installed GPU backend. Opt-in contact capture therefore adds a stationary
+kinematic rigid body to the same ground cuboid. Geometry, pose and materials stay
+fixed. Sidecars explicitly record `ground_kind: stationary-kinematic`; historical
+unfiltered runs used a static collider. The twelve retained comparisons measure
+this combined setup/instrumentation change, not instrumentation alone. Default
+unfiltered flights keep their static ground. No claim of exact noninterference
+is made without measured comparison.
