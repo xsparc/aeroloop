@@ -14,6 +14,7 @@ export type Sample = {
   external_moment_nm?: Vec3;
   mission_phase?: string;
   contact_normal_force_n?: Vec3;
+  contact_friction_force_n?: Vec3;
   support_clearance_m?: number;
 };
 export type Entry = {

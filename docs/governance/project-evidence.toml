@@ -6,7 +6,7 @@ source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation
 dhf_is_authoritative = false
 
 [review]
-last_reviewed = "2026-10-07"
+last_reviewed = "2026-10-08"
 review_due = "2026-10-27"
 
 [[objectives]]
@@ -729,3 +729,23 @@ observed_on = "2026-10-07"
 reviewed_on = "2026-10-07"
 review_due = "2026-11-06"
 decision_ref = "docs/architecture/decisions/024-landing-response-lab.md"
+
+[[work_items]]
+id = "AL-028"
+title = "Ten-feature measured contact-friction physics lab"
+status = "in-progress"
+requirement_ids = ["REQ-DRONE-CONTROL", "REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY", "REQ-LIVE-FLIGHT-TESTS"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-10-08-post-pr30-ten-features-draft-pr"
+acceptance_refs = ["docs/architecture/decisions/025-contact-friction-audit.md"]
+evidence_refs = ["docs/research/2026-10-08-contact-friction.json"]
+
+[[research_decisions]]
+id = "RD-CONTACT-FRICTION"
+finding = "Filtered ground friction supports interval momentum closure while COM work and slip remain proxies for contact-point mechanics."
+disposition = "adopted"
+source_urls = ["https://isaac-sim.github.io/IsaacLab/v3.0.0-EA/source/concepts/sensors/contact_sensor.html", "https://nvidia-omniverse.github.io/PhysX/physx/5.4.0/docs/RigidBodyDynamics.html"]
+observed_on = "2026-10-08"
+reviewed_on = "2026-10-08"
+review_due = "2026-11-07"
+decision_ref = "docs/architecture/decisions/025-contact-friction-audit.md"

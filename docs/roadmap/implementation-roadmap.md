@@ -249,3 +249,10 @@ original gates and fixed seeds, then predeclare fresh seeds before measurement.
 Measure tangential contact impulse if a friction hypothesis is proposed; the
 current work residual cannot identify friction. Preserve all unresolved pair
 and recovery failures, the opt-in schedule and open AL-010 yaw refinement.
+
+### AL-028: measured contact-friction lab (in progress)
+
+Implement the ten features in ADR 025, then capture the frozen 19-flight matrix
+and timestep sweep. Keep original mission results and controller defaults.
+Next decisions depend on measured momentum closure and repeatability; AL-010
+yaw refinement remains open.

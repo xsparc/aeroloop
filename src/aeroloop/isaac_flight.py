@@ -28,6 +28,8 @@ def flight(output: Path, launcher_args):
     substeps = round(dt / physics_dt)
     monitor, paced = launcher_args.monitor, launcher_args.realtime
     profile = launcher_args.observation_profile
+    contact_forces = getattr(launcher_args, "contact_forces", False)
+    from .contact_forces import CAPACITY, write_capture, write_live
     predictive = getattr(launcher_args, "predictive_feedback", False)
     approaching = getattr(launcher_args, "approach_gains", False)
     from .approach_control import configuration as approach_configuration
@@ -67,7 +69,9 @@ def flight(output: Path, launcher_args):
             ground.func("/World/Ground", ground, translation=tuple(contact_cfg["ground_position_m"]))
             from isaaclab.sensors import ContactSensor, ContactSensorCfg
         body = RigidObject(vehicle)
-        sensor = ContactSensor(ContactSensorCfg(prim_path="/World/Vehicle", update_period=0., history_length=1, debug_vis=False)) if contact_mission else None
+        sensor = ContactSensor(ContactSensorCfg(prim_path="/World/Vehicle", update_period=0., history_length=1, debug_vis=False,
+            **({"track_friction_forces": True, "filter_prim_paths_expr": ["/World/Ground"],
+                "max_contact_data_count_per_prim": CAPACITY} if contact_forces else {}))) if contact_mission else None
         set_inertia(sim.stage, "/World/Vehicle")
         sim.reset()
         package_versions = versions()
@@ -104,6 +108,8 @@ def flight(output: Path, launcher_args):
                 winds = list(wind_model.velocities(seed, dt, round(duration/dt)+1)) if wind_model else None
                 clock = FlightClock(paced)
                 interval_normal = (0., 0., 0.)
+                contact_rows = []
+                interval_contact = [0.]*6+[0]+[0.]*3
                 with RateController() as controller:
                     library_hash = sha256(controller.path.read_bytes())
                     for step in range(round(duration/dt)+1):
@@ -176,6 +182,10 @@ def flight(output: Path, launcher_args):
                             samples[-1].update(tracking_sample)
                         if wind_model:
                             samples[-1].update(wind_velocity_m_s=winds[step], external_moment_nm=external_moment)
+                        if contact_forces:
+                            contact_rows.append([t, *interval_contact])
+                            if monitor and step % 20 == 0:
+                                write_live(output, seed, contact_rows[-1])
                         if monitor and step % 20 == 0:
                             write_snapshot(output, clock.snapshot(seed, physics_dt, samples[-1], observation_profile=profile))
                         if state.position[2] <= 0 or sum(v*v for v in state.position) > 100**2:
@@ -184,12 +194,15 @@ def flight(output: Path, launcher_args):
                         if step == round(duration/dt):
                             break
                         torques[0, 0] = torch.tensor(tuple(m+e for m, e in zip(moment, external_moment)), device=sim.device)
-                        normals = []
+                        normals, frictions, applied, anchors = [], [], [], []
                         for substep in range(substeps):
                             attitude = state.quaternion
                             if substep:
                                 xyzw = body.data.root_quat_w.torch[0].cpu().tolist()
                                 attitude = normalize((xyzw[3], *xyzw[:3]))
+                            if contact_forces:
+                                thrust_world = rotate(attitude, (0., 0., thrust))
+                                applied.append(tuple(a+b for a,b in zip(thrust_world, external)))
                             inverse = (attitude[0], *(-v for v in attitude[1:]))
                             body_external = rotate(inverse, external)
                             forces[0, 0] = torch.tensor((body_external[0], body_external[1], thrust+body_external[2]), device=sim.device)
@@ -201,8 +214,21 @@ def flight(output: Path, launcher_args):
                             if sensor:
                                 sensor.update(physics_dt, force_recompute=True)
                                 normals.append(tuple(sensor.data.net_normal_forces_w.torch[0, 0].cpu().tolist()))
+                                if contact_forces:
+                                    frictions.append(tuple(sensor.data.friction_force_matrix_w.torch[0, 0, 0].cpu().tolist()))
+                                    filtered = sensor.data.normal_force_matrix_w.torch[0, 0, 0].cpu().tolist()
+                                    if any(abs(a-b)>1e-5 for a,b in zip(filtered,normals[-1])):
+                                        raise RuntimeError("Ground filter does not cover all contact")
+                                    _, _, counts, _ = sensor.contact_view.get_friction_data(dt=physics_dt)
+                                    count = int(counts.numpy().sum())
+                                    if count >= CAPACITY:
+                                        raise RuntimeError("Contact buffer saturated")
+                                    anchors.append(count)
                         if normals:
                             interval_normal = tuple(sum(row[axis] for row in normals)/substeps for axis in range(3))
+                        if contact_forces:
+                            mean = lambda rows: [sum(r[a] for r in rows)/substeps for a in range(3)]
+                            interval_contact = [*interval_normal, *mean(frictions), max(anchors), *mean(applied)]
                         previous_rate = rate
                         previous_scale = scale
                 if route:
@@ -253,6 +279,8 @@ def flight(output: Path, launcher_args):
                 run = record({"experiment": "isaac-quadrotor", "config": config, "samples": samples,
                     "events": events, "metrics": measured, "status": status, "failure_reason": reason,
                     "controller_binary_sha256": library_hash}, output)
+                if contact_forces:
+                    write_capture(output, run, contact_rows, source, physics_dt)
                 summary = {"run_id": run.name, "scenario": scenario, "seed": seed, "status": status, "metrics": measured}
                 summary["timing"] = {"paced": paced, "elapsed_s": clock.elapsed,
                     "simulation_s": samples[-1]["time_s"], "max_lag_s": clock.max_lag,

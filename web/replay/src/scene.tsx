@@ -188,7 +188,8 @@ export default function Scene({
       0.07,
       0.04,
     );
-    scene.add(windArrow, dragArrow, supportArrow);
+    const frictionArrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0),new THREE.Vector3(),1,0xff7b9c,.07,.04);
+    scene.add(windArrow, dragArrow, supportArrow, frictionArrow);
     const target = new THREE.Mesh(
       new THREE.SphereGeometry(0.07, 12, 8),
       new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true }),
@@ -225,6 +226,7 @@ export default function Scene({
       for (const [arrow, value, scale, height] of [
         [windArrow, s.wind_velocity_m_s, 0.13, 0.38],
         [dragArrow, s.external_force_n, 0.5, -0.1],
+        [frictionArrow, s.contact_friction_force_n, 0.12, 0.02],
       ] as const) {
         const magnitude = value ? Math.hypot(...value) : 0;
         arrow.visible = magnitude > 1e-8;

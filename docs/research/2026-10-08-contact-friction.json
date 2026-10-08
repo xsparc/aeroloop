@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "f7efe92fe5b1045717479de04262b5ef1baf5d00",
+  "scanned_at": "2026-10-08",
+  "coverage": [
+    "Isaac Lab filtered contact sensor semantics",
+    "PhysX contact constraints",
+    "Retained landing momentum/work gaps"
+  ],
+  "findings": [
+    {
+      "finding": "Filtered ground friction and substep applied-force recording enable direct interval momentum accounting, with COM work explicitly distinct from contact-point energy.",
+      "source_event_date": null,
+      "citations": [
+        "https://isaac-sim.github.io/IsaacLab/v3.0.0-EA/source/concepts/sensors/contact_sensor.html",
+        "https://nvidia-omniverse.github.io/PhysX/physx/5.4.0/docs/RigidBodyDynamics.html"
+      ],
+      "confidence": "High for API semantics; local GPU measurement required",
+      "relevance": "AL-027 residual work cannot identify ground friction",
+      "direction_alignment": "Measure contact before changing flight control",
+      "opportunity_or_risk": "Filtered buffers have capacity and timing constraints; COM proxies are not contact-point slip",
+      "engineering_cost": "Opt-in instrumentation, fresh 19-flight suite and bounded review workspace",
+      "disposition": "adopt",
+      "roadmap_delta": "AL-028 contact-friction audit under the approved ten-feature continuation",
+      "verification_needed": "Runtime capture, complete interval coverage, independent momentum/work arithmetic, noninterference and actual browser checks"
+    }
+  ],
+  "overall_recommendation": "Capture filtered friction while preserving controller logic and original gates.",
+  "evidence_gaps": [
+    "No physical-airframe calibration",
+    "No rotational/contact-point energy accounting",
+    "AL-010 yaw refinement remains open"
+  ]
+}
