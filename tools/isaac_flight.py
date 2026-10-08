@@ -26,12 +26,15 @@ def main():
     parser.add_argument("--fresh-axis", choices=("vertical", "horizontal"))
     parser.add_argument("--channel-quality", choices=("ideal", "noise", "delay", "noise-delay"))
     parser.add_argument("--landing-guard", action="store_true")
+    parser.add_argument("--contact-forces", action="store_true")
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     add_launcher_args(parser)
     parser.set_defaults(headless=True, visualizer=["none"], device="cuda:0", livestream=0)
     args = parser.parse_args()
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.contact_forces and (args.scenario != "ground-mission-wind"):
+        parser.error("Contact forces require turbulent ground flight.")
     if args.approach_gains and not args.vertical_decay:
         parser.error("Approach gains require --vertical-decay and its fixed horizontal quality.")
     if args.vertical_decay and (not args.predictive_feedback or args.channel_quality != "noise-delay"):

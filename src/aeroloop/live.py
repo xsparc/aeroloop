@@ -143,6 +143,8 @@ def monitor_server(directory, assets, port=8771):
     """Only explicit built assets and sanitized telemetry can leave this server."""
     directory, assets = Path(directory).absolute(), Path(assets).resolve()
     files = {"/": assets / "monitor.html"}
+    if (assets/"friction-live.html").is_file():
+        files["/friction-live.html"] = assets/"friction-live.html"
     for path in (assets / "assets").glob("*"):
         if path.suffix in (".js", ".css"):
             files["/assets/" + path.name] = path
@@ -162,7 +164,21 @@ def monitor_server(directory, assets, port=8771):
                     or self.headers.get("Sec-Fetch-Site") == "cross-site"):
                 self.respond(403, b"Forbidden", "text/plain")
                 return
-            if self.path == "/api/live":
+            if self.path == "/api/contact":
+                try:
+                    from .contact_forces import validate_live
+                    path = directory/"contact-live.json"
+                    if directory.is_symlink() or path.is_symlink() or directory.resolve()!=directory:
+                        raise ValidationError("linked session")
+                    value = validate_live(load_json(path, 4096))
+                    age = max(0.,time.perf_counter()-value.pop("updated_monotonic_s"))
+                    value.update(age_s=age,stale=age>1.)
+                    self.respond(200,encoded(value),"application/json")
+                except FileNotFoundError:
+                    self.respond(200,encoded({"state":"waiting"}),"application/json")
+                except (OSError,ValueError,TypeError):
+                    self.respond(503,encoded({"state":"unavailable"}),"application/json")
+            elif self.path == "/api/live":
                 try:
                     path = directory / "live.json"
                     if directory.is_symlink() or path.is_symlink() or directory.resolve() != directory:

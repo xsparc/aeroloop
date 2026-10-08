@@ -1,0 +1,735 @@
+{
+  "schema_version": 1,
+  "kind": "contact_friction_numerical_audit",
+  "independent_intervals": 180000,
+  "maximum_arithmetic_error": 1.1102230246251565e-16,
+  "index_sha256": "5c97bf7862b3e4ddcdf3346d7287051288e2db166456629c229aebda940f1b1e",
+  "cases": [
+    {
+      "id": "fixed-intact-s1-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 24,
+        "contact_intervals": 1704,
+        "end_s": 50.0,
+        "friction_work_j": -0.0030590067691983946,
+        "intervals": 10000,
+        "kinetic_change_j": 5.7209251337457294e-09,
+        "mean_com_alignment": -0.8778106989464121,
+        "momentum_with_friction_rms_ns": 9.400778985723026e-08,
+        "momentum_without_friction_rms_ns": 0.0011170062821999791,
+        "peak_anchors": 2,
+        "peak_friction_n": 12.23180971396145,
+        "peak_friction_ratio": 0.4999998930391178,
+        "start_s": 0.0,
+        "thrust_work_j": -0.17207137637186373,
+        "wind_work_j": 0.17491645997205005,
+        "work_residual_j": 0.00021392888993722531
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "63b93e7d909575488b8e6c284717077218bd8cd59fca1b92d618a9617f2e11b0",
+      "capture_sha256": "767b9b6d88a619356452af22689e5d0598ff96f894e12dbb099f2a07dbcb504b",
+      "failed_gates": []
+    },
+    {
+      "id": "fixed-intact-s401-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 95,
+        "contact_intervals": 2097,
+        "end_s": 50.0,
+        "friction_work_j": -0.04790637316740298,
+        "intervals": 10000,
+        "kinetic_change_j": 7.207598474893214e-10,
+        "mean_com_alignment": -0.976516230585052,
+        "momentum_with_friction_rms_ns": 1.1716309090673375e-07,
+        "momentum_without_friction_rms_ns": 0.002889693890979711,
+        "peak_anchors": 2,
+        "peak_friction_n": 52.1805401819213,
+        "peak_friction_ratio": 0.5813699579792354,
+        "start_s": 0.0,
+        "thrust_work_j": -1.7556470524176477,
+        "wind_work_j": 1.8235740996347138,
+        "work_residual_j": -0.02002067332890322
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "1cddc22d0ab6c61419dead845a9fa4a08e1cb6f6b1310d7b969a8f7334a8717b",
+      "capture_sha256": "533a363a8843a6ea7e0c2fe0ed474a185a0a7ca830473c35c0c31569c41b0639",
+      "failed_gates": [
+        "final_support_peak_xy_error_m"
+      ]
+    },
+    {
+      "id": "fixed-intact-s709-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 116,
+        "contact_intervals": 2102,
+        "end_s": 50.0,
+        "friction_work_j": -0.21498136054377698,
+        "intervals": 10000,
+        "kinetic_change_j": 1.3938784919686198e-09,
+        "mean_com_alignment": -0.9669928221856814,
+        "momentum_with_friction_rms_ns": 1.1295521947822533e-07,
+        "momentum_without_friction_rms_ns": 0.003918142902397345,
+        "peak_anchors": 2,
+        "peak_friction_n": 52.855063546861224,
+        "peak_friction_ratio": 0.5468169409597456,
+        "start_s": 0.0,
+        "thrust_work_j": -1.1397372715461682,
+        "wind_work_j": 1.3804740139288052,
+        "work_residual_j": -0.02575538044498148
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "a018f56e73620beac3b420693436ac65d18669fbc5ce3ae58e7fa401c3e7769a",
+      "capture_sha256": "01b3da42e2322e7c0ce770bb0842e3a5a2539f877fafa235eb20fd3f4bc1fd60",
+      "failed_gates": [
+        "horizontal",
+        "final_support_peak_xy_error_m"
+      ]
+    },
+    {
+      "id": "fixed-intact-s1009-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 78,
+        "contact_intervals": 1686,
+        "end_s": 50.0,
+        "friction_work_j": -0.007521205196555184,
+        "intervals": 10000,
+        "kinetic_change_j": 7.716499594874224e-10,
+        "mean_com_alignment": -0.9982075813891473,
+        "momentum_with_friction_rms_ns": 1.0755501716257759e-07,
+        "momentum_without_friction_rms_ns": 0.0009193009078209361,
+        "peak_anchors": 2,
+        "peak_friction_n": 2.776291564859205,
+        "peak_friction_ratio": 0.5644873490858692,
+        "start_s": 0.0,
+        "thrust_work_j": -0.9428515201957757,
+        "wind_work_j": 0.9517643721755609,
+        "work_residual_j": -0.0013916460115800625
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "f4dd5e22bb74a6bc94eb512b695e86dd32d9e9e36960ef9b5c92f1043d87d9b3",
+      "capture_sha256": "5a6814d419415afd1372305abc242a60496f544657607063574a1d9bf6b87430",
+      "failed_gates": []
+    },
+    {
+      "id": "fixed-outage-s1-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 32,
+        "contact_intervals": 2134,
+        "end_s": 50.0,
+        "friction_work_j": -0.019151485172068883,
+        "intervals": 10000,
+        "kinetic_change_j": 5.6720440974956365e-09,
+        "mean_com_alignment": -0.9693176664271669,
+        "momentum_with_friction_rms_ns": 9.349784487629694e-08,
+        "momentum_without_friction_rms_ns": 0.001619983885908274,
+        "peak_anchors": 2,
+        "peak_friction_n": 23.79113402329628,
+        "peak_friction_ratio": 0.4999999981392632,
+        "start_s": 0.0,
+        "thrust_work_j": -0.2170803931268849,
+        "wind_work_j": 0.24155066250350316,
+        "work_residual_j": -0.005318778532505288
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "d49710022a8f9e370c4d20982bf1df3d8fff4ac4b551e131f9242f54fe142814",
+      "capture_sha256": "7e3bfac646b01274f9a19917432ade1406896ba1f16433424c36a9346f40bd18",
+      "failed_gates": []
+    },
+    {
+      "id": "fixed-outage-s401-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 65,
+        "contact_intervals": 2112,
+        "end_s": 50.0,
+        "friction_work_j": -0.054416148715944315,
+        "intervals": 10000,
+        "kinetic_change_j": 7.065499042397711e-10,
+        "mean_com_alignment": -0.97232158508965,
+        "momentum_with_friction_rms_ns": 1.1827223133053313e-07,
+        "momentum_without_friction_rms_ns": 0.0025552107723731464,
+        "peak_anchors": 2,
+        "peak_friction_n": 40.00110236672731,
+        "peak_friction_ratio": 0.5813699579792354,
+        "start_s": 0.0,
+        "thrust_work_j": -1.7162810974574931,
+        "wind_work_j": 1.7986322405337665,
+        "work_residual_j": -0.027934993653779255
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "a88578f5ce073e327a63e837ba974a84cf119de754459e495ca8817fc1a0d5e7",
+      "capture_sha256": "53b17480feaf97434726edcfdc912331785a44226b388d9b45812d318c17f772",
+      "failed_gates": [
+        "final_support_peak_xy_error_m"
+      ]
+    },
+    {
+      "id": "fixed-outage-s709-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 96,
+        "contact_intervals": 2161,
+        "end_s": 50.0,
+        "friction_work_j": -0.26564527129464394,
+        "intervals": 10000,
+        "kinetic_change_j": 1.37243055141754e-09,
+        "mean_com_alignment": -0.9999224125081717,
+        "momentum_with_friction_rms_ns": 1.072519665009644e-07,
+        "momentum_without_friction_rms_ns": 0.0031795643721620236,
+        "peak_anchors": 2,
+        "peak_friction_n": 49.9445016310153,
+        "peak_friction_ratio": 0.5468169409597456,
+        "start_s": 0.0,
+        "thrust_work_j": -0.7985249855894059,
+        "wind_work_j": 1.0826750862685133,
+        "work_residual_j": -0.01850482801203284
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "68be8396ac59464d7541cb2c299b6087888ec53e90197f5e77d5814cf48679d5",
+      "capture_sha256": "48dae049d0c3bd1dab94611d654909fc28520359d0a40211f8e3b0ae876a153a",
+      "failed_gates": [
+        "horizontal"
+      ]
+    },
+    {
+      "id": "fixed-outage-s1009-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 34,
+        "contact_intervals": 1654,
+        "end_s": 50.0,
+        "friction_work_j": -0.0018767873027541518,
+        "intervals": 10000,
+        "kinetic_change_j": 8.068446593471268e-10,
+        "mean_com_alignment": -0.9860805181561346,
+        "momentum_with_friction_rms_ns": 1.0779130119757877e-07,
+        "momentum_without_friction_rms_ns": 0.0009761677429616499,
+        "peak_anchors": 2,
+        "peak_friction_n": 8.561790087608703,
+        "peak_friction_ratio": 0.5644873490858692,
+        "start_s": 0.0,
+        "thrust_work_j": -0.9515346548373833,
+        "wind_work_j": 0.9556270673868956,
+        "work_residual_j": -0.002215624439913496
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "7d1ad03493adf7d9ab7734c7fcfd1d796a66a3f612fd187b8ae4348d19906489",
+      "capture_sha256": "90f9e3a0ca4cc5480136b8ebe3a982edc0c25fc4c1e90aba03e1adab87dbaf69",
+      "failed_gates": []
+    },
+    {
+      "id": "scheduled-intact-s1-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 25,
+        "contact_intervals": 1707,
+        "end_s": 50.0,
+        "friction_work_j": -0.005092775611299296,
+        "intervals": 10000,
+        "kinetic_change_j": 5.753529772190597e-09,
+        "mean_com_alignment": -0.889911336958768,
+        "momentum_with_friction_rms_ns": 9.278189104560046e-08,
+        "momentum_without_friction_rms_ns": 0.0013051692698037277,
+        "peak_anchors": 2,
+        "peak_friction_n": 17.74946928374486,
+        "peak_friction_ratio": 0.527002225264235,
+        "start_s": 0.0,
+        "thrust_work_j": -0.12785248797755625,
+        "wind_work_j": 0.13140263944813763,
+        "work_residual_j": 0.0015426298942477063
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "1ad0d3ed7226e36a9bd4b63d5c0fca2a2e8a216381856c88f64ee2d4931bae7c",
+      "capture_sha256": "f7316e5f22539f11372588d248cf922ab45456f907c6b1929a526056cbc698c0",
+      "failed_gates": []
+    },
+    {
+      "id": "scheduled-intact-s401-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 110,
+        "contact_intervals": 2097,
+        "end_s": 50.0,
+        "friction_work_j": -0.03151066145763491,
+        "intervals": 10000,
+        "kinetic_change_j": 7.05413367234867e-10,
+        "mean_com_alignment": -0.8373110293271326,
+        "momentum_with_friction_rms_ns": 1.1499145215502235e-07,
+        "momentum_without_friction_rms_ns": 0.0021682090376896486,
+        "peak_anchors": 2,
+        "peak_friction_n": 22.93311566399616,
+        "peak_friction_ratio": 0.5813699579792354,
+        "start_s": 0.0,
+        "thrust_work_j": -1.4662133458528173,
+        "wind_work_j": 1.499792792377557,
+        "work_residual_j": -0.0020687843616912834
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "3a6120bfed6ad134340556fedfbab5bed008579cf077ba1248f19a6687d8b565",
+      "capture_sha256": "0fd22948c856d744d191fe8f31f3a386184f0e3b3c6232ecc5572db17a05f167",
+      "failed_gates": [
+        "final_support_peak_xy_error_m"
+      ]
+    },
+    {
+      "id": "scheduled-intact-s709-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 94,
+        "contact_intervals": 2116,
+        "end_s": 50.0,
+        "friction_work_j": -0.1377070762369792,
+        "intervals": 10000,
+        "kinetic_change_j": 1.3619936463845893e-09,
+        "mean_com_alignment": -0.9958654759254494,
+        "momentum_with_friction_rms_ns": 1.0679767013815608e-07,
+        "momentum_without_friction_rms_ns": 0.004404629712546419,
+        "peak_anchors": 2,
+        "peak_friction_n": 82.19157051157137,
+        "peak_friction_ratio": 0.5468169409597456,
+        "start_s": 0.0,
+        "thrust_work_j": -1.049346807261125,
+        "wind_work_j": 1.2311708264061043,
+        "work_residual_j": -0.04411694154600652
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "0e2880cf9b5dca243e607f7eccd0e8554e0cd07fcc457870a6602a3a1d89836f",
+      "capture_sha256": "f92370281397ea954bdaf2716c472be3a06c5dfdad20dfd0387d6704cbac09d0",
+      "failed_gates": [
+        "final_support_peak_xy_error_m"
+      ]
+    },
+    {
+      "id": "scheduled-intact-s1009-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 60,
+        "contact_intervals": 1705,
+        "end_s": 50.0,
+        "friction_work_j": -0.013733485552547787,
+        "intervals": 10000,
+        "kinetic_change_j": 7.648021655714525e-10,
+        "mean_com_alignment": -0.9953620678658915,
+        "momentum_with_friction_rms_ns": 1.0342351585232013e-07,
+        "momentum_without_friction_rms_ns": 0.0010279113478565798,
+        "peak_anchors": 2,
+        "peak_friction_n": 4.1216129189452415,
+        "peak_friction_ratio": 0.5644873490858692,
+        "start_s": 0.0,
+        "thrust_work_j": -0.7031075906225138,
+        "wind_work_j": 0.7183553054001757,
+        "work_residual_j": -0.0015142284603119102
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "26660e2f2c163a90d00b23875a310e34f48ecef79cc4b64487d762875a00a996",
+      "capture_sha256": "618c2a534efc01426da8d941aff244d11fa6d9918e2ec62b5d4a256d6647b6b7",
+      "failed_gates": []
+    },
+    {
+      "id": "scheduled-outage-s1-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 35,
+        "contact_intervals": 2139,
+        "end_s": 50.0,
+        "friction_work_j": -0.003762847806032792,
+        "intervals": 10000,
+        "kinetic_change_j": 5.6054041019739914e-09,
+        "mean_com_alignment": -0.7895927098464045,
+        "momentum_with_friction_rms_ns": 9.285819444182014e-08,
+        "momentum_without_friction_rms_ns": 0.0015660333143615534,
+        "peak_anchors": 2,
+        "peak_friction_n": 22.481220618908964,
+        "peak_friction_ratio": 0.4999998930391178,
+        "start_s": 0.0,
+        "thrust_work_j": -0.17894299323002993,
+        "wind_work_j": 0.1872285763987651,
+        "work_residual_j": -0.004522729757298267
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "b3f36c9a3e6e5f0b58c89ec1cfd2d67f4073f79b786cdf0ea6891c16471efdab",
+      "capture_sha256": "1d80a0fbde6d3c18bf3afc80c68f0ccc55fdd2fef533865b3e8348b5c11129ed",
+      "failed_gates": []
+    },
+    {
+      "id": "scheduled-outage-s401-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 65,
+        "contact_intervals": 2115,
+        "end_s": 50.0,
+        "friction_work_j": -0.008564197086738324,
+        "intervals": 10000,
+        "kinetic_change_j": 7.111138066868003e-10,
+        "mean_com_alignment": -0.7120744962011633,
+        "momentum_with_friction_rms_ns": 1.1571038383087506e-07,
+        "momentum_without_friction_rms_ns": 0.003111703417358396,
+        "peak_anchors": 2,
+        "peak_friction_n": 51.298571622693466,
+        "peak_friction_ratio": 0.5813699579792354,
+        "start_s": 0.0,
+        "thrust_work_j": -1.464123393807839,
+        "wind_work_j": 1.509533743335323,
+        "work_residual_j": -0.03684615172963183
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "f2719bb0001f63d8b8e8d445f73b620de45335488fbed1d9f681ff8a21c72f21",
+      "capture_sha256": "91d3ce7ae6fedd20b144bb009125eb67367672fdc7e3251e10b7a6ff72324b36",
+      "failed_gates": [
+        "final_support_peak_xy_error_m"
+      ]
+    },
+    {
+      "id": "scheduled-outage-s709-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 91,
+        "contact_intervals": 2165,
+        "end_s": 50.0,
+        "friction_work_j": -0.21317413846901995,
+        "intervals": 10000,
+        "kinetic_change_j": 1.3541067045632165e-09,
+        "mean_com_alignment": -0.9983414385321491,
+        "momentum_with_friction_rms_ns": 1.0572237190555735e-07,
+        "momentum_without_friction_rms_ns": 0.003607704581908946,
+        "peak_anchors": 2,
+        "peak_friction_n": 56.06452874395325,
+        "peak_friction_ratio": 0.5468169409597456,
+        "start_s": 0.0,
+        "thrust_work_j": -0.8080216520397798,
+        "wind_work_j": 1.0051512456508316,
+        "work_residual_j": 0.016044546212075024
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "664a3c6ecff7d3841cb46ceec1f66691684ec0901b72584180975712a3dc0940",
+      "capture_sha256": "06e6b5d9f076beedb7703292fceba714006cbfc4d32a84cceac97ef2009d86f3",
+      "failed_gates": []
+    },
+    {
+      "id": "scheduled-outage-s1009-dt5000",
+      "status": "passed",
+      "summary": {
+        "alignment_intervals": 46,
+        "contact_intervals": 1674,
+        "end_s": 50.0,
+        "friction_work_j": -0.013549894139549632,
+        "intervals": 10000,
+        "kinetic_change_j": 7.669496002976721e-10,
+        "mean_com_alignment": -0.9988118020316913,
+        "momentum_with_friction_rms_ns": 1.0258523087050819e-07,
+        "momentum_without_friction_rms_ns": 0.0013675076226968466,
+        "peak_anchors": 2,
+        "peak_friction_n": 20.585149721860645,
+        "peak_friction_ratio": 0.5644873490858692,
+        "start_s": 0.0,
+        "thrust_work_j": -0.717655511283133,
+        "wind_work_j": 0.7354036377860236,
+        "work_residual_j": -0.004198231596391396
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "f1291470c49699bd5b1035e005cbe7207eecf4e3b834dde408d02738d48f3e2e",
+      "capture_sha256": "2323b15b3d6c60911893bd59ad4e5dcf5cd36cf0d248847251ce9e9285d2810c",
+      "failed_gates": []
+    },
+    {
+      "id": "ideal-intact-s301-dt5000",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 85,
+        "contact_intervals": 2198,
+        "end_s": 50.0,
+        "friction_work_j": -0.13367755078313578,
+        "intervals": 10000,
+        "kinetic_change_j": 5.062068157004352e-10,
+        "mean_com_alignment": -0.9780781800898365,
+        "momentum_with_friction_rms_ns": 1.046182204019659e-07,
+        "momentum_without_friction_rms_ns": 0.004447183901610931,
+        "peak_anchors": 2,
+        "peak_friction_n": 79.28811158403214,
+        "peak_friction_ratio": 0.5211414513276591,
+        "start_s": 0.0,
+        "thrust_work_j": -1.2669594641826456,
+        "wind_work_j": 1.4108303535842626,
+        "work_residual_j": -0.010193338112274446
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "f74ab8afbb9a5309f483413ab0c03b8e065acd31719b517424f048097e134161",
+      "capture_sha256": "24bf068ee9bed6b66204469fb6d174db49fca44d48e8e1c736789e68d97f5294",
+      "failed_gates": [
+        "final_support_peak_xy_error_m"
+      ]
+    },
+    {
+      "id": "ideal-intact-s301-dt2500",
+      "status": "failed",
+      "summary": {
+        "alignment_intervals": 60,
+        "contact_intervals": 2204,
+        "end_s": 50.0,
+        "friction_work_j": -0.11984434790433696,
+        "intervals": 10000,
+        "kinetic_change_j": 1.2793604938818895e-10,
+        "mean_com_alignment": -0.9995554931518076,
+        "momentum_with_friction_rms_ns": 1.582100638108263e-07,
+        "momentum_without_friction_rms_ns": 0.004215550234103248,
+        "peak_anchors": 2,
+        "peak_friction_n": 76.09983261238446,
+        "peak_friction_ratio": 0.601251142755342,
+        "start_s": 0.0,
+        "thrust_work_j": -1.2147539141206622,
+        "wind_work_j": 1.350352105778145,
+        "work_residual_j": -0.015753843625209617
+      },
+      "source": {
+        "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+        "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+        "source_dirty": false,
+        "source_tree_sha256": "676094b6f6f23518be80f98798509950c2861a48fe900c0cd2b4d83a803acc8f"
+      },
+      "flight_checksums_sha256": "dafeeaced9ae80a4a3b20aac62bde5d2f31a957449b69930676327e796b051c8",
+      "capture_sha256": "989595ea84cb33862b818a82290a17e854b07fef4d0936c9338ce631a1314d32",
+      "failed_gates": [
+        "final_support_peak_xy_error_m"
+      ]
+    }
+  ],
+  "repeatability": [
+    {
+      "id": "fixed-intact-s1-dt5000",
+      "original_status": "passed",
+      "new_status": "passed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "5f71233ed934b270f468b6a08fdb99b659ffecd521bdb044696d46ea033d4772"
+    },
+    {
+      "id": "fixed-intact-s401-dt5000",
+      "original_status": "failed",
+      "new_status": "failed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "743e21622a48adc41a91cecea7163877d5b74748bb7a2ff78afcc10dc679a6e0"
+    },
+    {
+      "id": "fixed-intact-s709-dt5000",
+      "original_status": "failed",
+      "new_status": "failed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "637138ab97004504c0e6f248cd171c1549f93d63ff7e7b80483a0dfcfb8f996c"
+    },
+    {
+      "id": "fixed-outage-s1-dt5000",
+      "original_status": "passed",
+      "new_status": "passed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "3949f42e54acbdabd28286dcc73319de285e18a3e489f77dbce318ad7c3f5937"
+    },
+    {
+      "id": "fixed-outage-s401-dt5000",
+      "original_status": "failed",
+      "new_status": "failed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "cb8969f11f552573933d4f8ff3ed2d9f09bb2a71d40a00103a011fabf912bea3"
+    },
+    {
+      "id": "fixed-outage-s709-dt5000",
+      "original_status": "failed",
+      "new_status": "failed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "aacb075d2445285b6365105186389e054f99e8b5e61d7ba507003c1fae0cc3f0"
+    },
+    {
+      "id": "scheduled-intact-s1-dt5000",
+      "original_status": "passed",
+      "new_status": "passed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "71551eeedad9f0527404691c0bd13da3e628f2cab31032c025d0afd2c8470bc7"
+    },
+    {
+      "id": "scheduled-intact-s401-dt5000",
+      "original_status": "failed",
+      "new_status": "failed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "0825516d46a8b557b02abf4b82cf6569e7bb0ebd3b7e68820d8793fd9a7f0ea1"
+    },
+    {
+      "id": "scheduled-intact-s709-dt5000",
+      "original_status": "failed",
+      "new_status": "failed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "6aebd8d847b590de05c0ed39c5ac615723e455992bd5df9d5d2ce64051307ba4"
+    },
+    {
+      "id": "scheduled-outage-s1-dt5000",
+      "original_status": "passed",
+      "new_status": "passed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "53e1c7b0dc187b2fc7d08c168aa3b93e23dc43da2d3d10f9e8dc63ddf0b63ab7"
+    },
+    {
+      "id": "scheduled-outage-s401-dt5000",
+      "original_status": "failed",
+      "new_status": "failed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "a8e5fe02eef27723780ad659ac0b44c42136760f4f24cf2db98e2238b843911c"
+    },
+    {
+      "id": "scheduled-outage-s709-dt5000",
+      "original_status": "passed",
+      "new_status": "passed",
+      "exact_samples": true,
+      "first_difference_s": null,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0,
+      "original_checksums_sha256": "4af811fe6dad94d8c3a3cbff9f38318b9f941e7c877039bd028aa2cfd27b2c81"
+    }
+  ],
+  "measured_on": "2026-10-09",
+  "baseline_commit": "f7efe92fe5b1045717479de04262b5ef1baf5d00",
+  "attempted_flights": 19,
+  "verified_recordings": 18,
+  "mission_passes": 9,
+  "mission_failures": 9,
+  "rejected": [
+    {
+      "checksums_sha256": "819bcd3647e44a881e8e2975fe085fa5bcb153d4ef2854b5bd8bb40290a2651e",
+      "first_invalid_time_s": 2.32,
+      "id": "ideal-intact-s301-dt1250",
+      "invalid_intervals": 1,
+      "minimum_normal_z_n": -0.015082357451319695,
+      "physics_dt_s": 0.00125,
+      "reason": "invalid_ground_normal_force",
+      "seed": 301,
+      "source_commit": "c0be5717c1b58869ee8d8ab7aa53438b85324c14",
+      "status": "unverified"
+    }
+  ],
+  "versions": {
+    "isaaclab": "17.0.2",
+    "isaacsim": "6.1.0.0",
+    "torch": "2.11.0+cu128"
+  },
+  "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+  "ground_kind": "stationary-kinematic"
+}

@@ -35,12 +35,15 @@ def main():
     parser.add_argument("--fresh-axis", choices=("vertical", "horizontal"))
     parser.add_argument("--channel-quality", choices=("ideal", "noise", "delay", "noise-delay"))
     parser.add_argument("--landing-guard", action="store_true")
+    parser.add_argument("--contact-forces", action="store_true")
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     args = parser.parse_args()
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
+    if args.contact_forces and (args.scenario != "ground-mission-wind" or args.mode != "flight"):
+        parser.error("Contact forces require turbulent ground flight.")
     if args.approach_gains and not args.vertical_decay:
         parser.error("Approach gains require --vertical-decay and its fixed horizontal quality.")
     if args.vertical_decay and (not args.predictive_feedback or args.channel_quality != "noise-delay"):
@@ -82,6 +85,8 @@ def main():
             options += ["--observation-profile", args.observation_profile]
         if args.predictive_feedback:
             options += ["--predictive-feedback"]
+        if args.contact_forces:
+            options += ["--contact-forces"]
         if args.approach_gains:
             options += ["--approach-gains"]
         if args.vertical_decay:
@@ -117,6 +122,17 @@ def main():
                 from aeroloop.live import finish_monitor
                 finish_monitor(args.output, False)
             return 1
+        if args.contact_forces:
+            from aeroloop.contact_forces import read_capture
+            try:
+                for row in result["results"]:
+                    read_capture(args.output, row["run_id"])
+            except (OSError, ValueError, TypeError, KeyError):
+                if args.monitor:
+                    from aeroloop.live import finish_monitor
+                    finish_monitor(args.output, False)
+                print("Contact capture did not verify.", file=sys.stderr)
+                return 1
         scenarios = SCENARIOS if args.scenario == "all" else WIND_SCENARIOS if args.scenario == "turbulence" else (args.scenario,)
         if {(row["scenario"], row["seed"]) for row in result["results"]} != {(scenario, seed) for scenario in scenarios for seed in args.seeds}:
             print("Isaac flight did not retain the complete requested trial set.", file=sys.stderr)

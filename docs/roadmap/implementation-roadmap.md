@@ -249,3 +249,16 @@ original gates and fixed seeds, then predeclare fresh seeds before measurement.
 Measure tangential contact impulse if a friction hypothesis is proposed; the
 current work residual cannot identify friction. Preserve all unresolved pair
 and recovery failures, the opt-in schedule and open AL-010 yaw refinement.
+
+### AL-028: measured contact-friction lab (implemented)
+
+Ten features in ADR 025 are implemented and exercised against the declared
+19-flight study: 18 verified recordings, nine mission passes, nine mission
+failures and one unverified 1.25 ms capture. All twelve retained trajectory
+comparisons match exactly. Direct friction closes 180,000 measured impulse
+intervals; original gates and defaults remain unchanged.
+
+Next physics work: isolate the signed normal-force sample at takeoff in the
+finest timestep, preserve the original acceptance contract, and determine whether
+it reflects sensor reporting or solver behavior before claiming convergence.
+Rotational/contact-point work remains unmeasured. AL-010 yaw refinement stays open.
