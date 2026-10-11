@@ -262,3 +262,11 @@ Next physics work: isolate the signed normal-force sample at takeoff in the
 finest timestep, preserve the original acceptance contract, and determine whether
 it reflects sensor reporting or solver behavior before claiming convergence.
 Rotational/contact-point work remains unmeasured. AL-010 yaw refinement stays open.
+
+### AL-029: signed contact liftoff probe (in progress)
+
+Implement the ten features in ADR 026 to isolate the finest-step liftoff anomaly
+using three-second native-controller captures, copied raw impulse buffers,
+solver/timestep repeats and a verified 3D review workspace. Retain signed data
+outside the flight-acceptance schema. Execute the declared twelve-case matrix
+from clean source before drawing a measurement conclusion.

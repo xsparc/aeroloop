@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "56c7df609d54f212d289958d177e2578d4378b87",
+  "scanned_at": "2026-10-11",
+  "coverage": ["Omni Physics tensor contact API", "PhysX contact patches and friction", "Installed Isaac Lab shared-buffer and force-iteration semantics"],
+  "findings": [{
+    "finding": "Detailed signed contact impulses can be compared to aggregate and filtered sensor forces at physics-substep resolution; shared contact/friction count buffers must be copied before the next query.",
+    "source_event_date": null,
+    "citations": ["https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.3/extensions/runtime/source/omni.physics.tensors/docs/api/python.html", "https://nvidia-omniverse.github.io/PhysX/physx/5.4.0/docs/RigidBodyDynamics.html"],
+    "confidence": "High for documented conversion and buffer indexing; signed liftoff behavior requires measurement",
+    "relevance": "AL-028 retained a negative normal that prevents finest-step flight verification",
+    "direction_alignment": "Isolate the physics/reporting anomaly before changing control or acceptance",
+    "opportunity_or_risk": "Related backend APIs are not independent solver validation; deprecated force integration is diagnostic only",
+    "engineering_cost": "Bounded three-second native-controller probes and a twelve-capture review workspace",
+    "disposition": "adopt",
+    "roadmap_delta": "AL-029 under the approved ten-feature continuation",
+    "verification_needed": "Fresh complete matrix, independent arithmetic, historical trajectory checks, schema/privacy and browser validation"
+  }],
+  "overall_recommendation": "Retain signed measurements in a separate diagnostic schema without relaxing flight contracts.",
+  "evidence_gaps": ["Hosted Isaac Lab EA module page unavailable during scan; installed backend inspected", "No physical-airframe calibration", "API agreement cannot establish solver causality", "AL-010 yaw refinement remains open"]
+}

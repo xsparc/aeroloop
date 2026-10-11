@@ -6,7 +6,7 @@ source_priority = ["docs/architecture/overview.md", "docs/roadmap/implementation
 dhf_is_authoritative = false
 
 [review]
-last_reviewed = "2026-10-09"
+last_reviewed = "2026-10-11"
 review_due = "2026-10-27"
 
 [[objectives]]
@@ -749,3 +749,23 @@ observed_on = "2026-10-08"
 reviewed_on = "2026-10-08"
 review_due = "2026-11-07"
 decision_ref = "docs/architecture/decisions/025-contact-friction-audit.md"
+
+[[work_items]]
+id = "AL-029"
+title = "Ten-feature signed contact and liftoff probe workspace"
+status = "in-progress"
+requirement_ids = ["REQ-DRONE-CONTROL", "REQ-FLIGHT-EVALUATION", "REQ-REUSABLE-REPLAY"]
+roadmap_refs = ["docs/roadmap/implementation-roadmap.md"]
+approval_ref = "conversation:2026-10-11-post-pr31-ten-features-draft-pr"
+acceptance_refs = ["docs/architecture/decisions/026-contact-liftoff-probe.md"]
+evidence_refs = ["docs/research/2026-10-11-contact-probe.json"]
+
+[[research_decisions]]
+id = "RD-CONTACT-PROBE"
+finding = "Signed substep contact buffers permit reporting and momentum cross-checks without weakening flight acceptance."
+disposition = "adopted"
+source_urls = ["https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.3/extensions/runtime/source/omni.physics.tensors/docs/api/python.html", "https://nvidia-omniverse.github.io/PhysX/physx/5.4.0/docs/RigidBodyDynamics.html"]
+observed_on = "2026-10-11"
+reviewed_on = "2026-10-11"
+review_due = "2026-11-10"
+decision_ref = "docs/architecture/decisions/026-contact-liftoff-probe.md"
