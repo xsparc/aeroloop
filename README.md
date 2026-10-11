@@ -176,3 +176,10 @@ friction, momentum closure, translational work, slip diagnostics, 3D force repla
 live monitoring and timestep comparison. Its [19-flight study](docs/evidence/contact-friction-validation.md)
 retains 18 verified recordings and one rejected finest-step capture. Original
 mission failures and the unresolved normal-force anomaly remain visible.
+
+The [liftoff contact probe](docs/liftoff-contact-probe.md) resolves that anomaly
+to individual reported contact impulses. Twelve fresh three-second captures
+compare timestep, external-force integration and repeatability. The 3D workspace
+shows contact points, friction anchors, signed normals, momentum balance and
+reported points outside the collider. This is diagnostic evidence; the original
+flight rejection remains in force.

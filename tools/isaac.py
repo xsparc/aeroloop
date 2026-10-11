@@ -40,6 +40,10 @@ def main():
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     args = parser.parse_args()
+    if args.mode == "contact" and (args.scenario != "all" or args.seeds != list(range(5))):
+        parser.error("Contact probes use the fixed seed-301 turbulent liftoff protocol; omit --scenario and --seeds.")
+    if args.mode != "contact" and args.repeat != 1:
+        parser.error("Repeated probe identifiers require contact mode.")
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES

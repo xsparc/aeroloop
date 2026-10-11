@@ -34,6 +34,13 @@ demo with `npm run demo:build` in `web/replay` and serve it on loopback. Open
 3D. The collider, raw contact points and separate friction anchors follow the
 same recorded cursor as the force, momentum and clearance plots.
 
+Use **Fit reported contacts** to include anomalous points far from the vehicle;
+**Aircraft view** returns to the collider. The contact table computes Euclidean
+distance outside the oriented 0.4 by 0.4 by 0.1 m box. It is a geometric diagnostic,
+not a new contact rejection threshold. Pink marks downward vertical impulses.
+Dashed connectors help locate reports more than 1 cm outside the collider; they
+are display guides, not force vectors or physical connections.
+
 ## Measurement contract
 
 Rows describe the preceding physics interval, (t-dt,t]. Sensor values are N.

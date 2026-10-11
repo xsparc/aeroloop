@@ -59,3 +59,14 @@ incomplete captures, exact cohort coverage, frontend contracts, actual measured
 browser replay/mobile/exports, independent arithmetic and retained trajectories.
 Run CPU/native/frontend/browser/build/privacy/project-evidence checks and record
 the generic governance checker's known project-identity incompatibility.
+
+## Measured closeout
+
+All twelve declared probes completed from clean source; every repeated pair
+matched exactly. Both default 1.25 ms captures reproduced a downward geometric
+normal and a reported point 4.898484 m outside the collider. Raw reconstruction
+and measured linear momentum agree; solver causality is not established. The
+three default cases also match their retained first-three-second state histories.
+See the [validation record](../../evidence/contact-probe-validation.md). The
+display now supports fitting distant reported points, computing their distance
+outside the oriented collider and preserving this geometry in CSV/JSON reviews.

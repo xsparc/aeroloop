@@ -1,6 +1,8 @@
 import copy
 from pathlib import Path
 import tempfile
+import subprocess
+import sys
 import unittest
 
 from aeroloop.contact_probe import configuration, measurements, summary, validate, export, read_probe, capture_details
@@ -23,6 +25,15 @@ def fixture(dt=.005, mode="per-iteration", repeat=1):
 
 
 class ContactProbeTests(unittest.TestCase):
+    def test_cli_rejects_silently_ignored_probe_options(self):
+        tool = Path(__file__).resolve().parents[1]/"tools/isaac.py"
+        for mode, options in (("contact", ["--seeds", "5"]), ("contact", ["--scenario", "hover"]),
+                              ("flight", ["--repeat", "2"])):
+            result = subprocess.run([sys.executable, str(tool), mode, "--output", "runs/unused-probe-test", *options],
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("error:", result.stderr)
+
     def test_shared_contact_counts_copied_before_friction_read(self):
         class Buffer:
             def __init__(self, values): self.values = values
