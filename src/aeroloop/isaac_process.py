@@ -9,7 +9,7 @@ from .contracts import ValidationError, load_json
 ROOT = Path(__file__).resolve().parents[2]
 KINDS = {"smoke": "isaac_physics_smoke", "train": "isaac_hover_training",
          "evaluate": "isaac_hover_evaluation", "flight": "isaac_quadrotor_flight", "physics": "isaac_physics_accuracy",
-         "yaw": "isaac_yaw_diagnostics"}
+         "yaw": "isaac_yaw_diagnostics", "contact": "isaac_contact_probe"}
 
 
 def _execute(command, timeout):
@@ -37,14 +37,14 @@ def run_worker(python, mode, output, options=(), timeout=3600):
     # An old successful result must never mask a failed new process.
     if output.exists():
         raise ValidationError("Isaac output directory already exists")
-    script = ROOT / "tools" / ("isaac_smoke.py" if mode == "smoke" else "isaac_flight.py" if mode == "flight" else "isaac_physics.py" if mode == "physics" else "isaac_yaw.py" if mode == "yaw" else "isaac_train.py")
+    script = ROOT / "tools" / ("isaac_contact.py" if mode == "contact" else "isaac_smoke.py" if mode == "smoke" else "isaac_flight.py" if mode == "flight" else "isaac_physics.py" if mode == "physics" else "isaac_yaw.py" if mode == "yaw" else "isaac_train.py")
     command = [str(Path(python).resolve()), str(script)]
     if mode in ("train", "evaluate"):
         command.append(mode)
     command.extend(["--output", str(output), *options])
     _execute(command, timeout)
     # Kit can report exit 0 after a failed startup. Require the completed artifact too.
-    result = load_json(output / "result.json")
+    result = load_json(output / "result.json", limit=16*1024*1024 if mode == "contact" else 32*1024*1024)
     if result.get("schema_version") != 1 or result.get("kind") != KINDS[mode]:
         raise ValidationError("missing or invalid Isaac completion artifact")
     if result.get("backend") != "isaacsim_physx":
@@ -59,6 +59,9 @@ def run_worker(python, mode, output, options=(), timeout=3600):
     if mode == "yaw":
         from .yaw_audit import read_yaw
         result, _ = read_yaw(output)
+    if mode == "contact":
+        from .contact_probe import read_probe
+        result = read_probe(output)
     return result
 
 

@@ -262,3 +262,19 @@ Next physics work: isolate the signed normal-force sample at takeoff in the
 finest timestep, preserve the original acceptance contract, and determine whether
 it reflects sensor reporting or solver behavior before claiming convergence.
 Rotational/contact-point work remains unmeasured. AL-010 yaw refinement stays open.
+
+### AL-029: signed contact liftoff probe (implemented)
+
+The ten features in ADR 026 are implemented with twelve fresh native-controller
+probes. All six repeated pairs match exactly, and all three default-mode traces
+match the retained first-three-second states. At 1.25 ms, a positive scalar impulse
+along a downward geometric normal accompanies a reported point 4.898484 m outside
+the oriented vehicle collider. Raw reconstruction, aggregate sensor and linear
+momentum are consistent. Both per-step comparison repeats lack this incident.
+
+Next: predeclare a contact-geometry isolation study around the liftoff state,
+varying ground representation/extent and contact margin separately. Test raw point
+placement, normals and angular momentum as well as translational balance before
+attributing the anomaly to a solver or selecting a change. Preserve defaults,
+the rejected full flight, original mission gates and open AL-010. No numerical
+convergence or calibrated-airframe claim follows from these short probes.

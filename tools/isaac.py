@@ -14,7 +14,7 @@ from aeroloop.observation import ALL_PROFILES
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", choices=("smoke", "train", "evaluate", "flight", "physics", "yaw"))
+    parser.add_argument("mode", choices=("smoke", "train", "evaluate", "flight", "physics", "yaw", "contact"))
     executable = "Scripts/python.exe" if sys.platform == "win32" else "bin/python"
     parser.add_argument("--python", type=Path, default=ROOT / ".local/IsaacLab/.venv" / executable)
     parser.add_argument("--output", type=Path, required=True)
@@ -27,6 +27,7 @@ def main():
     parser.add_argument("--seeds", type=int, nargs="+", default=list(range(5)))
     parser.add_argument("--physics-dt", type=float, choices=(.005, .0025, .00125), default=.005)
     parser.add_argument("--force-mode", choices=("per-iteration", "per-step"), default="per-iteration")
+    parser.add_argument("--repeat", type=int, choices=(1, 2), default=1)
     parser.add_argument("--solver-iterations", type=int, choices=(1, 4), default=4)
     parser.add_argument("--observation-profile", choices=ALL_PROFILES)
     parser.add_argument("--predictive-feedback", action="store_true")
@@ -39,6 +40,10 @@ def main():
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--realtime", action="store_true")
     args = parser.parse_args()
+    if args.mode == "contact" and (args.scenario != "all" or args.seeds != list(range(5))):
+        parser.error("Contact probes use the fixed seed-301 turbulent liftoff protocol; omit --scenario and --seeds.")
+    if args.mode != "contact" and args.repeat != 1:
+        parser.error("Repeated probe identifiers require contact mode.")
     if args.observation_profile and (args.scenario != "ground-mission-wind" or args.physics_dt != .005 or args.mode != "flight"):
         parser.error("Observation profiles require the 200 Hz turbulent contact flight mission.")
     from aeroloop.outage_study import PROFILES as OUTAGE_PROFILES
@@ -65,6 +70,8 @@ def main():
     if (args.monitor or args.realtime) and (args.mode != "flight" or args.scenario != "ground-mission-wind"):
         parser.error("Monitoring and pacing require flight --scenario ground-mission-wind.")
     options = []
+    if args.mode == "contact":
+        options = ["--physics-dt", str(args.physics_dt), "--force-mode", args.force_mode, "--repeat", str(args.repeat)]
     if args.mode == "physics":
         options = ["--physics-dt", str(args.physics_dt), "--force-mode", args.force_mode]
     if args.mode == "yaw":
@@ -107,6 +114,9 @@ def main():
         print(f"Isaac worker did not complete: {type(exc).__name__}. Inspect the local log.", file=sys.stderr)
         return 1
     print(f"Completed {result['kind']}. See {args.output / 'result.json'}.")
+    if args.mode == "contact" and (result["configuration"]["physics_dt_s"] != args.physics_dt
+            or result["configuration"]["force_mode"] != args.force_mode or result["repeat"] != args.repeat):
+        return 1
     if args.mode == "flight":
         from aeroloop.contracts import load_json
         if any((config := load_json(args.output / row["run_id"] / "config.json"))["physics_options"].get("physics_dt_s", .005) != args.physics_dt

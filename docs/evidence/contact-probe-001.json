@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "kind": "contact_probe_independent_audit",
+  "source": {
+    "lock_sha256": "e280d5e783d8f42f661aa933223edb7464787da33bd16c964c175aad2c982ce8",
+    "source_commit": "b4db3976fb2b9653e3c8224269ee869329ed6f47",
+    "source_dirty": false,
+    "source_tree_sha256": "b605ae44f77bc60eb0e257754e9b0fb919f6e29aa4aef75e653909be1a8d2e73"
+  },
+  "versions": {
+    "isaaclab": "17.0.2",
+    "isaacsim": "6.1.0.0",
+    "torch": "2.11.0+cu128"
+  },
+  "controller_binary_sha256": "b4543a2973dc424a7f398cf225a3088fefedd4053b2d3658eefd050f73d7c90f",
+  "intervals": 16800,
+  "arithmetic_tolerance": 2e-09,
+  "maximum_arithmetic_difference": 6.110383184929215e-20,
+  "historical_comparisons": [
+    {
+      "physics_dt_s": 0.005,
+      "control_samples_compared": 600,
+      "peak_state_component_difference": 0.0,
+      "checksums_sha256": "f74ab8afbb9a5309f483413ab0c03b8e065acd31719b517424f048097e134161",
+      "historical_status": "verified-failed"
+    },
+    {
+      "physics_dt_s": 0.0025,
+      "control_samples_compared": 600,
+      "peak_state_component_difference": 0.0,
+      "checksums_sha256": "dafeeaced9ae80a4a3b20aac62bde5d2f31a957449b69930676327e796b051c8",
+      "historical_status": "verified-failed"
+    },
+    {
+      "physics_dt_s": 0.00125,
+      "control_samples_compared": 600,
+      "peak_state_component_difference": 0.0,
+      "checksums_sha256": "819bcd3647e44a881e8e2975fe085fa5bcb153d4ef2854b5bd8bb40290a2651e",
+      "historical_status": "unverified"
+    }
+  ],
+  "cases": [
+    {
+      "id": "per-iteration-dt5000-r1",
+      "raw_sha256": "7842d26320a4845f6cb4845ace4d3b71eca475880548854fc0e70503a236df64",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 600,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 4.117670109272086e-08,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 2.2241115993835623e-10,
+        "peak_normal_error_ns": 1.4603137976632041e-08
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.0003382699930310181
+    },
+    {
+      "id": "per-iteration-dt5000-r2",
+      "raw_sha256": "cb48487fec01113a91dce6c4315bde372eaae3898c2e1b6d7afbd8679cd85d96",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 600,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 4.117670109272086e-08,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 2.2241115993835623e-10,
+        "peak_normal_error_ns": 1.4603137976632041e-08
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.0003382699930310181
+    },
+    {
+      "id": "per-step-dt5000-r1",
+      "raw_sha256": "142b6163d9b1c508232c41800b6b7e5535b16d435e04256f119b329901bf6c71",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 600,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 7.949097933900446e-09,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 2.2323833191855349e-10,
+        "peak_normal_error_ns": 6.146728993849937e-09
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.00033261178363297797
+    },
+    {
+      "id": "per-step-dt5000-r2",
+      "raw_sha256": "b173d6e66b06d08bb057864237821e7765e34a7e6ba067c13b85f044988dd8eb",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 600,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 7.949097933900446e-09,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 2.2323833191855349e-10,
+        "peak_normal_error_ns": 6.146728993849937e-09
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.00033261178363297797
+    },
+    {
+      "id": "per-iteration-dt2500-r1",
+      "raw_sha256": "b315f4041c3406a09ca6f56902bd43ec5ecc5d2f91f0adc9ba0121740b3fd570",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 1200,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 4.2466207952266906e-08,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 1.4443008600904354e-10,
+        "peak_normal_error_ns": 3.2186508180931384e-08
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.0001671142620600242
+    },
+    {
+      "id": "per-iteration-dt2500-r2",
+      "raw_sha256": "225ebb84e5527c53585e0325af7a638b324b17d5da98cd4fa6535e78638d5220",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 1200,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 4.2466207952266906e-08,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 1.4443008600904354e-10,
+        "peak_normal_error_ns": 3.2186508180931384e-08
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.0001671142620600242
+    },
+    {
+      "id": "per-step-dt2500-r1",
+      "raw_sha256": "9a948128baf3cc2106f478cf7ae2ae289594e3b4dd9d7868c7186b384af7fcd4",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 1200,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 4.182543290737567e-09,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 1.646361269958595e-10,
+        "peak_normal_error_ns": 1.7285346987083727e-08
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.00016865727874184342
+    },
+    {
+      "id": "per-step-dt2500-r2",
+      "raw_sha256": "4b0002eb8126233fa9f9da2a5165d2efc59771c7fadcc51d1a4cf9f09d4de3f7",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 1200,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 4.182543290737567e-09,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 1.646361269958595e-10,
+        "peak_normal_error_ns": 1.7285346987083727e-08
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 0.00016865727874184342
+    },
+    {
+      "id": "per-iteration-dt1250-r1",
+      "raw_sha256": "6b5c75c32e20999fd25ab9b313786a7837f2811df876c79a6e529145a67f1fe8",
+      "summary": {
+        "first_negative_s": 2.31875,
+        "intervals": 2400,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": -0.06032942980527878,
+        "momentum_rms_ns": 4.051482924961354e-08,
+        "negative_intervals": 1,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 3.083226337538363e-10,
+        "peak_normal_error_ns": 1.96695327803198e-08
+      },
+      "incidents": [
+        {
+          "time_s": 2.31875,
+          "position_m": [
+            0.002997555071488023,
+            0.009126895107328892,
+            0.05240154638886452
+          ],
+          "normal_force_n": [
+            -2.479223803675268e-05,
+            0.0,
+            -0.06032942980527878
+          ],
+          "contacts": [
+            [
+              7.541179365944117e-05,
+              5.101452827453613,
+              -0.190758615732193,
+              0.0010000604670494795,
+              -0.00041094759944826365,
+              0.0,
+              -0.9999999403953552,
+              -0.002036262536421418
+            ]
+          ],
+          "normal_reconstruction_error_ns": 1.907950538535196e-12,
+          "momentum_residual_ns": [
+            -2.2031056703454045e-08,
+            1.7761857127918156e-08,
+            -1.7935405451742015e-08
+          ],
+          "point_distance_outside_collider_m": [
+            4.8984841649165
+          ]
+        }
+      ],
+      "peak_point_distance_outside_collider_m": 4.8984841649165
+    },
+    {
+      "id": "per-iteration-dt1250-r2",
+      "raw_sha256": "bb8075f7c1cf082c32ddd01fbf554f7733b723b9421dd9481620f9e0c7ab5a4f",
+      "summary": {
+        "first_negative_s": 2.31875,
+        "intervals": 2400,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": -0.06032942980527878,
+        "momentum_rms_ns": 4.051482924961354e-08,
+        "negative_intervals": 1,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 3.083226337538363e-10,
+        "peak_normal_error_ns": 1.96695327803198e-08
+      },
+      "incidents": [
+        {
+          "time_s": 2.31875,
+          "position_m": [
+            0.002997555071488023,
+            0.009126895107328892,
+            0.05240154638886452
+          ],
+          "normal_force_n": [
+            -2.479223803675268e-05,
+            0.0,
+            -0.06032942980527878
+          ],
+          "contacts": [
+            [
+              7.541179365944117e-05,
+              5.101452827453613,
+              -0.190758615732193,
+              0.0010000604670494795,
+              -0.00041094759944826365,
+              0.0,
+              -0.9999999403953552,
+              -0.002036262536421418
+            ]
+          ],
+          "normal_reconstruction_error_ns": 1.907950538535196e-12,
+          "momentum_residual_ns": [
+            -2.2031056703454045e-08,
+            1.7761857127918156e-08,
+            -1.7935405451742015e-08
+          ],
+          "point_distance_outside_collider_m": [
+            4.8984841649165
+          ]
+        }
+      ],
+      "peak_point_distance_outside_collider_m": 4.8984841649165
+    },
+    {
+      "id": "per-step-dt1250-r1",
+      "raw_sha256": "541b5640d3ab5d5cc73f35e5902492c33913501c0d9c665a04c0ae2987a3c92c",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 2400,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 3.0643844786588518e-09,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 6.966462496950759e-11,
+        "peak_normal_error_ns": 4.917383167324374e-09
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 8.303274209572934e-05
+    },
+    {
+      "id": "per-step-dt1250-r2",
+      "raw_sha256": "a34260dd20197446776f1c7d0eb4beb7d8b96317d651f55ffd9a25d8752c266f",
+      "summary": {
+        "first_negative_s": null,
+        "intervals": 2400,
+        "minimum_contact_impulse_ns": 0.0,
+        "minimum_normal_z_n": 0.0,
+        "momentum_rms_ns": 3.0643844786588518e-09,
+        "negative_intervals": 0,
+        "peak_anchors": 2,
+        "peak_contacts": 5,
+        "peak_filter_error_ns": 0.0,
+        "peak_friction_error_ns": 6.966462496950759e-11,
+        "peak_normal_error_ns": 4.917383167324374e-09
+      },
+      "incidents": [],
+      "peak_point_distance_outside_collider_m": 8.303274209572934e-05
+    }
+  ],
+  "measured_on": "2026-10-11",
+  "work_item": "AL-029",
+  "baseline_commit": "56c7df609d54f212d289958d177e2578d4378b87",
+  "index_sha256": "e37b420ab2a68e8a2a20e8a6c0554635e468a6e45c0e1e5fea60af5a897a3200",
+  "repeatability": [
+    {
+      "physics_dt_s": 0.005,
+      "force_mode": "per-iteration",
+      "identical_rows": true,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0
+    },
+    {
+      "physics_dt_s": 0.005,
+      "force_mode": "per-step",
+      "identical_rows": true,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0
+    },
+    {
+      "physics_dt_s": 0.0025,
+      "force_mode": "per-iteration",
+      "identical_rows": true,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0
+    },
+    {
+      "physics_dt_s": 0.0025,
+      "force_mode": "per-step",
+      "identical_rows": true,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0
+    },
+    {
+      "physics_dt_s": 0.00125,
+      "force_mode": "per-iteration",
+      "identical_rows": true,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0
+    },
+    {
+      "physics_dt_s": 0.00125,
+      "force_mode": "per-step",
+      "identical_rows": true,
+      "peak_position_difference_m": 0.0,
+      "peak_velocity_difference_m_s": 0.0
+    }
+  ],
+  "attempted": 12,
+  "completed_diagnostics": 12,
+  "flight_acceptance": "not evaluated by three-second probes",
+  "excluded_development_captures": 1,
+  "interpretation": [
+    "Downward geometric contact normal with positive scalar impulse reproduces in both default 1.25 ms runs",
+    "Reconstructed normal impulse agrees with the aggregate sensor and measured linear momentum within reported errors",
+    "Reported incident contact point lies 4.898484 m outside the oriented collider",
+    "Per-step comparison lacks this incident in the declared cohort; no default change or physical-validity claim",
+    "Original full-flight rejection and AL-010 remain unresolved"
+  ]
+}

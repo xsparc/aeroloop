@@ -29,6 +29,8 @@ def flight(output: Path, launcher_args):
     monitor, paced = launcher_args.monitor, launcher_args.realtime
     profile = launcher_args.observation_profile
     contact_forces = getattr(launcher_args, "contact_forces", False)
+    probe = getattr(launcher_args, "contact_probe", False)
+    from .contact_probe import capture_details, write_probe
     from .contact_forces import CAPACITY, write_capture, write_live
     predictive = getattr(launcher_args, "predictive_feedback", False)
     approaching = getattr(launcher_args, "approach_gains", False)
@@ -47,7 +49,8 @@ def flight(output: Path, launcher_args):
         write_snapshot(output, FlightClock(paced).snapshot(launcher_args.seeds[0], physics_dt, state="starting", observation_profile=profile))
     model, rotors = Model(), RotorModel()
     results = []
-    with launch_simulation(PhysxCfg(), launcher_args) as physics_cfg:
+    physics = PhysxCfg(**({"enable_external_forces_every_iteration": launcher_args.force_mode == "per-iteration"} if probe else {}))
+    with launch_simulation(physics, launcher_args) as physics_cfg:
         # Kit must own USD before scene modules load on Windows.
         from isaaclab.assets import RigidObject
         import isaaclab.sim as sim_utils
@@ -82,6 +85,9 @@ def flight(output: Path, launcher_args):
         for scenario in launcher_args.scenarios:
             for seed in launcher_args.seeds:
                 duration = mission.DURATION if contact_mission else 35.
+                if probe:
+                    duration = 3.
+                probe_rows = []
                 route = mission.Mission() if contact_mission else None
                 tracking = wind_mission.TrackingController(approach=approaching) if scenario == wind_mission.SCENARIO else None
                 previous_scale = 1.
@@ -226,6 +232,16 @@ def flight(output: Path, launcher_args):
                                     if count >= CAPACITY:
                                         raise RuntimeError("Contact buffer saturated")
                                     anchors.append(count)
+                                    if probe:
+                                        contacts, friction_anchors = capture_details(sensor.contact_view)
+                                        xyzw = body.data.root_quat_w.torch[0].cpu().tolist()
+                                        probe_rows.append({"time_s": round(t+(substep+1)*physics_dt, 9),
+                                            "position": body.data.root_pos_w.torch[0].cpu().tolist(),
+                                            "quaternion": list(normalize((xyzw[3], *xyzw[:3]))),
+                                            "velocity": body.data.root_lin_vel_w.torch[0].cpu().tolist(),
+                                            "applied": list(applied[-1]), "normal": list(normals[-1]),
+                                            "filtered": filtered, "friction": list(frictions[-1]),
+                                            "contacts": contacts, "anchors": friction_anchors})
                         if normals:
                             interval_normal = tuple(sum(row[axis] for row in normals)/substeps for axis in range(3))
                         if contact_forces:
@@ -233,6 +249,12 @@ def flight(output: Path, launcher_args):
                             interval_contact = [*interval_normal, *mean(frictions), max(anchors), *mean(applied)]
                         previous_rate = rate
                         previous_scale = scale
+                if probe:
+                    if provenance() != source:
+                        raise RuntimeError("probe source changed during capture")
+                    write_probe(output, probe_rows, source, package_versions, library_hash, physics_dt,
+                                launcher_args.force_mode, launcher_args.repeat)
+                    return
                 if route:
                     events = wind_mission.events(route.events, samples[-1]["time_s"]) if tracking else route.events
                 measured = metrics(samples, scenario)

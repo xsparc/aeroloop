@@ -206,3 +206,13 @@ checks hashes, cadence, fixed column names, source identity and summary arithmet
 A bounded loopback contact endpoint complements the existing 3D flight monitor.
 See [ADR 025](decisions/025-contact-friction-audit.md) and the
 [contact lab guide](../contact-physics-lab.md).
+
+AL-029 reuses the native flight loop in a separate bounded `contact` worker mode.
+It stops at three seconds before flight scoring/recording and captures copied
+raw contact/friction impulse buffers at every physics step. A strict diagnostic
+reader retains signed data, and the exporter requires twelve distinct declared
+cases with common source/runtime/binary. Browser inspection recomputes linear
+momentum and sensor differences, distinguishes points from anchors, and exposes
+reported contact geometry outside the collider. Existing flight readers remain
+unchanged. See [ADR 026](decisions/026-contact-liftoff-probe.md) and the
+[probe guide](../liftoff-contact-probe.md).
